@@ -1,0 +1,24 @@
+#am_ucom_iptv_channelsort_code_SelectSortPopup .overlay {
+	background-image: url(images/bg_overlay4.png);
+	display: table-cell;
+	vertical-align: middle;
+	position: relative;
+}
+
+#am_ucom_iptv_channelsort_code_SelectSortPopup .popupContent>ul {
+	border-top: 2px solid #088c08;
+	padding-top: 5px;
+	clear: both;
+}
+
+#am_ucom_iptv_channelsort_code_SelectSortPopup .view {
+	width: 100%;
+	height: 100%;
+	display: table;
+	position: absolute;
+	background-image: none;
+}
+
+#am_ucom_iptv_channelsort_code_SelectSortPopup .popupContent {
+	width: 200px;
+}

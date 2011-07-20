@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+  <wb-module deploy-name="portal-ucom-channel-sort-war">
+    <property context-root="portal-ucom-channel-sort-war"/>
+    <wb-resource deploy-path="/" source-path="src/main/webapp"/>
+    <property name="java-output-path" value="/target/eclipse-out"/>
+    <dependent-module archiveName="aopalliance-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/aopalliance/aopalliance/1.0/aopalliance-1.0.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="commons-beanutils-1.7.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="commons-collections-3.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/commons-collections/commons-collections/3.2/commons-collections-3.2.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="commons-lang-2.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/commons-lang/commons-lang/2.3/commons-lang-2.3.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="commons-logging-1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/commons-logging/commons-logging/1.1/commons-logging-1.1.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="ezmorph-1.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/net/sf/ezmorph/ezmorph/1.0.3/ezmorph-1.0.3.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="iap-accountidentity-user-jar-3.4.22.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/ericsson/iptv/iap/accountidentity/iap-accountidentity-user-jar/3.4.22/iap-accountidentity-user-jar-3.4.22.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="iap-config-user-dependency-jar-3.4.22.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/ericsson/iptv/iap/config/iap-config-user-dependency-jar/3.4.22/iap-config-user-dependency-jar-3.4.22.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="iap-config-user-jar-3.4.22.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/ericsson/iptv/iap/config/iap-config-user-jar/3.4.22/iap-config-user-jar-3.4.22.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="iap-exception-user-jar-3.4.22.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/ericsson/iptv/iap/exception/iap-exception-user-jar/3.4.22/iap-exception-user-jar-3.4.22.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="iap-provisioning-user-jar-3.4.22.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/ericsson/iptv/iap/provisioning/iap-provisioning-user-jar/3.4.22/iap-provisioning-user-jar-3.4.22.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="iap-subscriber-user-jar-3.4.22.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/ericsson/iptv/iap/subscriber/iap-subscriber-user-jar/3.4.22/iap-subscriber-user-jar-3.4.22.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="json-lib-2.1-jdk15.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/net/sf/json-lib/json-lib/2.1/json-lib-2.1-jdk15.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="portal-artifacts-jar-3.4.22.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/ericsson/iptv/portal/common/portal-artifacts-jar/3.4.22/portal-artifacts-jar-3.4.22.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="portal-backend-jar-3.4.22.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/ericsson/iptv/portal/common/portal-backend-jar/3.4.22/portal-backend-jar-3.4.22.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="portal-config-jar-3.4.22.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/ericsson/iptv/portal/common/portal-config-jar/3.4.22/portal-config-jar-3.4.22.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="portal-fw-client-jar-3.4.22.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/ericsson/iptv/portal/fw/portal-fw-client-jar/3.4.22/portal-fw-client-jar-3.4.22.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="portal-fw-jar-3.4.22.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/com/ericsson/iptv/portal/fw/portal-fw-jar/3.4.22/portal-fw-jar-3.4.22.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="spring-2.5.6.SEC01.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring/2.5.6.SEC01/spring-2.5.6.SEC01.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="spring-beans-2.5.6.SEC01.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-beans/2.5.6.SEC01/spring-beans-2.5.6.SEC01.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="spring-context-2.5.6.SEC01.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-context/2.5.6.SEC01/spring-context-2.5.6.SEC01.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="spring-context-support-2.5.6.SEC01.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-context-support/2.5.6.SEC01/spring-context-support-2.5.6.SEC01.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="spring-core-2.5.6.SEC01.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-core/2.5.6.SEC01/spring-core-2.5.6.SEC01.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="spring-web-2.5.6.SEC01.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-web/2.5.6.SEC01/spring-web-2.5.6.SEC01.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="spring-webmvc-2.5.6.SEC01.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-webmvc/2.5.6.SEC01/spring-webmvc-2.5.6.SEC01.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/js"/>
+    <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/resources"/>
+    <wb-resource deploy-path="/WEB-INF/classes" source-path="target/generated-sources/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/js"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+  </wb-module>
+</project-modules>
