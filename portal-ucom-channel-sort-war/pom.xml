@@ -1,0 +1,78 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<properties>
+		<disableInterfaceCheck>false</disableInterfaceCheck>
+		<glassfish.domain.autodeploy.dir>C:\\glassfishv3\\glassfish\\domains\\domain1\\autodeploy</glassfish.domain.autodeploy.dir>
+	</properties>
+	
+    <parent>
+        <groupId>com.ericsson.iptv.portal</groupId>
+        <artifactId>parent</artifactId>
+        <version>3.4.22</version>
+    </parent>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>install</id>
+						<phase>install</phase>
+						<configuration>
+							<tasks>
+								<delete
+									file="${glassfish.domain.autodeploy.dir}/${project.artifactId}-${project.version}.war" />
+								<copy file="${basedir}/target/${project.artifactId}-${project.version}.war"
+									todir="${glassfish.domain.autodeploy.dir}" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>		
+			
+		</plugins>
+	</build>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.ucom.iptv.portal</groupId>
+    <artifactId>portal-ucom-channel-sort-war</artifactId>
+    <version>1.0</version>
+    <name>Portal Archetype Generated Application</name>
+    <packaging>war</packaging>
+
+    <dependencies>
+        <!-- Portal dependencies -->
+        <dependency>
+            <groupId>com.ericsson.iptv.portal.fw</groupId>
+            <artifactId>portal-fw-jar</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.ericsson.iptv.portal.fw</groupId>
+            <artifactId>portal-fw-client-jar</artifactId>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.ericsson.iptv.portal.coreapps</groupId>
+            <artifactId>portal-coreapps-war</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>com.ericsson.iptv.portal.fw</groupId>
+            <artifactId>portal-fw-war</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+           <groupId>com.ericsson.iptv.portal.imsapps</groupId>
+           <artifactId>portal-imsapps-war</artifactId>
+           <type>war</type>
+        </dependency>
+    </dependencies>
+</project>
