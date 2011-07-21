@@ -73,7 +73,7 @@
 		broadcastTV = module.dependencies.broadcastTV.handle;
 		preferenceMgr = module.dependencies.preferenceMgr.handle;
 		customPositionsMap = module.dependencies.customPositionsMap.handle.channelPositionsMap;
-
+		//TODO:
 		// var str = "";
 		// for ( var index = 1; index < customPositionsMap.mapSize; index++) {
 		// str += channelsPositionsMap.index + ", ";
