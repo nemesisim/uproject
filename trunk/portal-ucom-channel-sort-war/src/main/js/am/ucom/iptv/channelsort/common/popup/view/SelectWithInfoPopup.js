@@ -1,7 +1,7 @@
 (function(){
     var module = {
         //id: "am.ucom.iptv.channelsort.code.SelectSortPopup",
-    	id: "com.ericsson.iptv.portal.coreapps.common.popup.view.SelectWithInfoPopup",	
+    	id: "am.ucom.iptv.channelsort.common.popup.view.SelectWithInfoPopup",	
         version: [1, 0],
         type: "code",
         implementing: {
@@ -160,7 +160,7 @@
         };
         var Q = J.length;
         if (!args.dontShowCancel) {
-            Q++
+            Q++;
         }
         var R = args.selected ? L(J, args.selected) || 0 : 0;
         okCancelList.init(Q, R)

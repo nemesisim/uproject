@@ -1,6 +1,7 @@
 (function(){
     var module = {
         id: "am.ucom.iptv.channelsort.code.SelectSortPopup",
+    	//id: "am.ucom.iptv.channelsort.common.popup.view.SelectWithInfoPopup",	
         version: [1, 0],
         type: "code",
         implementing: {
@@ -17,8 +18,7 @@
         },
         dependencies: {
             css: {
-                //id: "am.ucom.iptv.channelsort.skin.interfaces.SkinIF",
-        		id: "com.ericsson.iptv.portal.coreapps.common.skin.interfaces.SkinIF",
+                id: "am.ucom.iptv.channelsort.skin.interfaces.SkinIF",
                 version: [1, 0]
             },
             dom: {
@@ -42,7 +42,7 @@
         resources: {
             html: {
                 type: "html",
-                url: "/am/ucom/iptv/channelsort/view/popup.html"
+                url: "/am/ucom/iptv/channelsort/view/view.html"
             }
         }
     };
@@ -80,7 +80,7 @@
             invoke: function(R){
                 okCancelList.onPreviousKey(R)
             },
-            keyEvents: ["KEY_DOWN"]
+            keyEvents: ["KEY_UP"]
         }, {
             id: "ACTION_NEXT",
             localizedLabel: undefined,
@@ -88,7 +88,7 @@
             invoke: function(R){
                 okCancelList.onNextKey(R)
             },
-            keyEvents: ["KEY_UP"]
+            keyEvents: ["KEY_DOWN"]
         }, {
             id: "ACTION_EXIT",
             localizedLabel: undefined,
@@ -160,7 +160,7 @@
         };
         var Q = J.length;
         if (!args.dontShowCancel) {
-            Q++
+            Q++;
         }
         var R = args.selected ? L(J, args.selected) || 0 : 0;
         okCancelList.init(Q, R)
