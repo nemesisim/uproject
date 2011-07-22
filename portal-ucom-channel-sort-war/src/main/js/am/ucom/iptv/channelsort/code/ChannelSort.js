@@ -167,7 +167,7 @@
 							dontShowCancel : false,
 							options : orderingTypes
 						});
-	}
+	} 
 
 	function showInfoPopup(text) {
 		viewManager.show(
