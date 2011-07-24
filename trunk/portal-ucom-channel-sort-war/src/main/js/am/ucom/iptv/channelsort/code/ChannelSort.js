@@ -134,7 +134,18 @@
 	function setOrdering(orderingType) {
 		if (orderingType == "Unsorted") {
 			return function() {
-				orderChannels(buildChannelsObjectDefault);
+				viewManager
+				 .show(
+						"am.ucom.iptv.channelsort.common.popup.view.SelectWithInfoPopup",
+						//"com.ericsson.iptv.portal.coreapps.common.popup.view.SelectWithInfoPopup",
+						{
+							id : "broadcast_programId_Popup",
+							title : lang.channelsReorderPopupTitle,
+							text : lang.channelsReorderPopupText,
+							dontShowCancel : false,
+							options : orderingTypes
+						});				
+				//orderChannels(buildChannelsObjectDefault);
 			}
 		} else if (orderingType == "Alphabetical") {
 			return function() {
@@ -153,6 +164,7 @@
 				showInfoPopup(lang.channelsOrderWrongMethodChosen);
 			}
 		}
+
 	}
 
 	function actionChannelSort(event, channelInfo, programInfo, mediaPlayer) {
