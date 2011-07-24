@@ -18,7 +18,7 @@
         },
         dependencies: {
             css: {
-                id: "am.ucom.iptv.channelsort.skin.interfaces.SkinIF",
+                id: "com.ericsson.iptv.portal.coreapps.common.skin.interfaces.SkinIF",
                 version: [1, 0]
             },
             dom: {
@@ -42,7 +42,7 @@
         resources: {
             html: {
                 type: "html",
-                url: "/am/ucom/iptv/channelsort/view/popup.html"
+                url: "/am/ucom/iptv/channelsort/view/view.html"
             }
         }
     };

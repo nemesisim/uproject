@@ -42,7 +42,7 @@
         resources: {
             html: {
                 type: "html",
-                url: "/am/ucom/iptv/channelsort/view/view.html"
+                url: "/am/ucom/iptv/channelsort/view/popup.html"
             }
         }
     };
@@ -113,6 +113,11 @@
         }];
         return Q
     }
+    var popupButtonRed;
+    var popupButtonGreen;
+    var popupButtonYellow;
+    var popupButtonBlue;
+    
     module.implementing.loading.publics.load = function(){
         dom = module.dependencies.dom.handle.getNodeFactory(module.resources.html.handle);
         mgr = module.dependencies.mgr.handle;
@@ -120,12 +125,18 @@
         css = module.dependencies.css.handle;
         actionMgr = module.dependencies.actionMgr.handle;
         okCancelList = dom.getListControllerNode("okCancelList", {
-            maxVisible: css.SELECTWITHINFOPOPUP_MAXVISIBLE,
+            maxVisible: 8,
             pageSize: 1,
             paintItem: I
         });
         okCancelTitle = dom.getTextNode("okCancelTitle");
         okCancelDescription = dom.getTextNode("okCancelDescription");
+        
+        popupButtonRed = dom.getImageNode("popupButtonRed");
+        popupButtonGreen = dom.getImageNode("popupButtonGreen");
+        popupButtonYellow = dom.getImageNode("popupButtonYellow");
+        popupButtonBlue = dom.getImageNode("popupButtonBlue");
+
         cancelObj = {
             id: "cancel",
             text: lang.commonCancel
@@ -145,7 +156,10 @@
     
     function L(P, R){
         for (var Q = 0; Q < P.length; Q++) {
+        	
+        	console.log(Q + " = " + P[Q].id)
             if (P[Q].id === R) {
+            	alert(Q);
                 return Q
             }
         }
@@ -154,6 +168,9 @@
         J = args.options;
         okCancelTitle.setText(args.title);
         okCancelDescription.setText(args.text);
+        popupButtonRed.setSrc("images/green.png");
+        popupButtonRed.activate();
+        
         module.resources.html.handle.firstChild.id = args.id;
         A = args.callback ||
         function(){
@@ -174,3 +191,4 @@
     };
     return module;
 });
+
