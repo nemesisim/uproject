@@ -45,23 +45,30 @@
 	padding: 12px 5px 4px 11px;
 	background-color: #6699cc;
 }
-
+#buttonContainer{
+	width: 20%;
+	height: 10%;
+}
+#buttonContainer td{
+	width: 20%;
+	height: 10%;
+}
 #popupButtonRed {
 	background-image: url(images/red.png);
-	position: absolute;
-	top: 102px;
-	height: 361px;
-	display: block;
+	background-repeat: no-repeat;
 }
 
 #popupButtonGreen {
 	background-image: url(images/green.png);
+	background-repeat: no-repeat;
 }
 
 #popupButtonYellow {
 	background-image: url(images/yellow.png);
+	background-repeat: no-repeat;
 }
 
 #popupButtonBlue {
 	background-image: url(images/blue.png);
+	background-repeat: no-repeat;
 }

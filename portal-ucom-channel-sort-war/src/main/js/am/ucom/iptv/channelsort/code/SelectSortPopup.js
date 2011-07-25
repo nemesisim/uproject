@@ -118,6 +118,12 @@
     var popupButtonYellow;
     var popupButtonBlue;
     
+    var popupButtonRedText;
+    var popupButtonGreenText;
+    var popupButtonYellowText;
+    var popupButtonBlueText;
+    
+    
     module.implementing.loading.publics.load = function(){
         dom = module.dependencies.dom.handle.getNodeFactory(module.resources.html.handle);
         mgr = module.dependencies.mgr.handle;
@@ -136,7 +142,12 @@
         popupButtonGreen = dom.getImageNode("popupButtonGreen");
         popupButtonYellow = dom.getImageNode("popupButtonYellow");
         popupButtonBlue = dom.getImageNode("popupButtonBlue");
-
+        
+        popupButtonRedText = dom.getImageNode("popupButtonRedText");
+        popupButtonGreenText = dom.getImageNode("popupButtonGreenText");
+        popupButtonYellowText = dom.getImageNode("popupButtonYellowText");
+        popupButtonBlueText = dom.getImageNode("popupButtonBlueText");
+        
         cancelObj = {
             id: "cancel",
             text: lang.commonCancel
@@ -168,8 +179,11 @@
         J = args.options;
         okCancelTitle.setText(args.title);
         okCancelDescription.setText(args.text);
-        popupButtonRed.setSrc("images/green.png");
-        popupButtonRed.activate();
+
+        popupButtonRedText.setText("Red");
+        popupButtonGreenText.setText("Green");
+        popupButtonYellowText.setText("Yellow");
+        popupButtonBlueText.setText("Blue");
         
         module.resources.html.handle.firstChild.id = args.id;
         A = args.callback ||
