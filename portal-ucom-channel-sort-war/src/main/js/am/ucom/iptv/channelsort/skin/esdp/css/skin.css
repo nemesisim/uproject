@@ -5,6 +5,10 @@
 	position: relative;
 }
 
+#am_ucom_iptv_channelsort_code_SelectSortPopup h1 {
+
+}
+
 #am_ucom_iptv_channelsort_code_SelectSortPopup .popupContent>ul {
 	border-top: 2px solid #088c08;
 	padding-top: 5px;
@@ -34,41 +38,47 @@
 }
 
 .sortPopup {
-	border-spacing: 0;
-	margin-left: 247px;
-	position: absolute;
-	top: 102px;
-	height: 361px;
+    border-spacing: 0;
+    margin-left: 251px;
+    position: absolute;
+    top: 105px;
+    width: 215px;
 }
 
 .sortPopupContent {
 	padding: 12px 5px 4px 11px;
-	background-color: #6699cc;
 }
 #buttonContainer{
-	width: 20%;
-	height: 10%;
+    height: 15%;
+    position: relative;
+    top: 40px;
+    width: 100%;
 }
 #buttonContainer td{
-	width: 20%;
-	height: 10%;
+    height: 10%;
+    width: 15%;
 }
-#popupButtonRed {
+.popupButtonRed {
 	background-image: url(images/red.png);
 	background-repeat: no-repeat;
 }
 
-#popupButtonGreen {
+.popupButtonGreen {
 	background-image: url(images/green.png);
 	background-repeat: no-repeat;
 }
 
-#popupButtonYellow {
+.popupButtonYellow {
 	background-image: url(images/yellow.png);
 	background-repeat: no-repeat;
 }
 
-#popupButtonBlue {
+.popupButtonBlue {
 	background-image: url(images/blue.png);
+	background-repeat: no-repeat;
+}
+
+.popupButtonDisable{
+	background-image: url(images/disable.png);
 	background-repeat: no-repeat;
 }
