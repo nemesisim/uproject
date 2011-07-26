@@ -59,7 +59,7 @@
     var cancelObj;
     
     function I(P, Q){
-        var R = J[Q] || cancelObj;
+        var R = J[Q];
         P.okCancelListInnerItem.setText(R.text || "\u00A0");
         P.okCancelListInnerItem.clearClass();
         if (R.id) {
@@ -73,27 +73,27 @@
         var P = function(S, R){
             S(true)
         };
-        var Q = [{
+        var actions = [{
             id: "ACTION_PREVIOUS",
             localizedLabel: undefined,
             isApplicable: P,
-            invoke: function(R){
-                okCancelList.onPreviousKey(R)
+            invoke: function(event){
+                okCancelList.onPreviousKey(event)
             },
             keyEvents: ["KEY_UP"]
         }, {
             id: "ACTION_NEXT",
             localizedLabel: undefined,
             isApplicable: P,
-            invoke: function(R){
-                okCancelList.onNextKey(R)
+            invoke: function(event){
+                okCancelList.onNextKey(event)
             },
             keyEvents: ["KEY_DOWN"]
         }, {
             id: "ACTION_EXIT",
             localizedLabel: undefined,
             isApplicable: P,
-            invoke: function(R){
+            invoke: function(event){
                 mgr.hide(module.id);
                 A()
             },
@@ -102,16 +102,65 @@
             id: "ACTION_OK",
             localizedLabel: undefined,
             isApplicable: P,
-            invoke: function(S){
-                var R = J[okCancelList.getIndex()] || cancelObj;
+            invoke: function(event){
+                var R = J[okCancelList.getIndex()];
                 mgr.hide(module.id);
                 if (R.callback) {
                     R.callback()
                 }
             },
             keyEvents: ["KEY_OK"]
-        }];
-        return Q
+        }
+        
+        , {
+            id: "ACTION_RED",
+            localizedLabel: undefined,
+            isApplicable: P,
+            invoke: function(event){
+        		if(popupButtonRed.getClass() == "popupButtonDisable")
+        			popupButtonRed.setClass("popupButtonRed");
+        		else
+        			popupButtonRed.setClass("popupButtonRed");
+            },
+            keyEvents: ["KEY_RED"]
+        }, {
+            id: "ACTION_GREEN",
+            localizedLabel: undefined,
+            isApplicable: P,
+            invoke: function(event){
+        		alert(popupButtonGreen.getClass());
+	    		if(popupButtonGreen.getClass() == "popupButtonDisable")
+	    			popupButtonGreen.setClass("popupButtonRed");
+	    		else
+	    			popupButtonGreen.setClass("popupButtonGreen");
+            },
+            keyEvents: ["KEY_GREEN"]
+        }, {
+            id: "ACTION_YELLOW",
+            localizedLabel: undefined,
+            isApplicable: P,
+            invoke: function(event){
+	    		if(popupButtonYellow.getClass() == "popupButtonDisable")
+	    			popupButtonYellow.setClass("popupButtonRed");
+	    		else
+	    			popupButtonYellow.setClass("popupButtonYellow");
+            },
+            keyEvents: ["KEY_YELLOW"]
+        }, {
+            id: "ACTION_BLUE",
+            localizedLabel: undefined,
+            isApplicable: P,
+            invoke: function(event){
+	    		if(popupButtonBlue.getClass() == "popupButtonDisable")
+	    			popupButtonBlue.setClass("popupButtonRed");
+	    		else
+	    			popupButtonBlue.setClass("popupButtonBlue");
+            },
+            keyEvents: ["KEY_BLUE"]
+        }
+        
+        ];
+        return actions;
     }
     var popupButtonRed;
     var popupButtonGreen;
@@ -143,15 +192,11 @@
         popupButtonYellow = dom.getImageNode("popupButtonYellow");
         popupButtonBlue = dom.getImageNode("popupButtonBlue");
         
-        popupButtonRedText = dom.getImageNode("popupButtonRedText");
-        popupButtonGreenText = dom.getImageNode("popupButtonGreenText");
-        popupButtonYellowText = dom.getImageNode("popupButtonYellowText");
-        popupButtonBlueText = dom.getImageNode("popupButtonBlueText");
-        
-        cancelObj = {
-            id: "cancel",
-            text: lang.commonCancel
-        };
+        popupButtonRedText = dom.getTextNode("popupButtonRedText");
+        popupButtonGreenText = dom.getTextNode("popupButtonGreenText");
+        popupButtonYellowText = dom.getTextNode("popupButtonYellowText");
+        popupButtonBlueText = dom.getTextNode("popupButtonBlueText");
+
         actionMgr.mapActions(module.id, E());
     };
     module.implementing.loading.publics.unload = function(){
@@ -186,15 +231,9 @@
         popupButtonBlueText.setText("Blue");
         
         module.resources.html.handle.firstChild.id = args.id;
-        A = args.callback ||
-        function(){
-        };
-        var Q = J.length;
-        if (!args.dontShowCancel) {
-            Q++;
-        }
+        A = args.callback || function(){};
         var R = args.selected ? L(J, args.selected) || 0 : 0;
-        okCancelList.init(Q, R)
+        okCancelList.init(J.length, R)
     };
     module.implementing.view.publics.onInput = function(event){
         actionMgr.matchInput(module.id, event);
