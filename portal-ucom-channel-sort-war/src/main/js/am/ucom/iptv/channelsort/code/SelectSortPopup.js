@@ -29,12 +29,24 @@
 				id : "com.ericsson.iptv.portal.fw.core.ViewManager",
 				version : [ 1, 0 ]
 			},
+			broadcastTV : {
+				id : "com.ericsson.iptv.portal.coreapps.common.data.interfaces.BroadcastTVIF",
+				version : [ 1, 0 ]
+			},
 			lang : {
-				id : "com.ericsson.iptv.portal.coreapps.common.lang.interfaces.MessagesIF",
+				id : "am.ucom.iptv.channelsort.lang.interfaces.LangIF",
 				version : [ 1, 0 ]
 			},
 			actionMgr : {
 				id : "com.ericsson.iptv.portal.fw.lib.ActionManager",
+				version : [ 1, 0 ]
+			},
+			customPositionsMap : {
+				id : "am.ucom.iptv.channelsort.code.CustomSortMap",
+				version : [ 1, 0 ]
+			},
+			log : {
+				id : "com.ericsson.iptv.portal.fw.core.Log",
 				version : [ 1, 0 ]
 			}
 		},
@@ -46,16 +58,24 @@
 			}
 		}
 	};
+	
 	var dom;
 	var mgr;
 	var lang;
 	var css;
+	var log;
 	var actionMgr;
+	var broadcastTV;
 	var okCancelList;
 	var okCancelTitle;
 	var okCancelDescription;
 	var listObj;
-	
+
+	var customSortMap;
+	var customPositionsMap;
+	var customPositionsMapRevert = {};
+	var locale = "en-US";
+
 	var popupButtonRed;
 	var popupButtonGreen;
 	var popupButtonYellow;
@@ -66,7 +86,7 @@
 	var popupButtonYellowText;
 	var popupButtonBlueText;
 	var orderings = [];
-	
+
 	module.implementing.loading.publics.load = function() {
 		dom = module.dependencies.dom.handle
 				.getNodeFactory(module.resources.html.handle);
@@ -74,6 +94,13 @@
 		lang = module.dependencies.lang.handle;
 		css = module.dependencies.css.handle;
 		actionMgr = module.dependencies.actionMgr.handle;
+		broadcastTV = module.dependencies.broadcastTV.handle;
+		log = module.dependencies.log.handle;
+		customSortMap = module.dependencies.customPositionsMap.handle;
+
+		customPositionsMap = customSortMap.getChannelMap();
+		customPositionsMapRevert = customSortMap.getChannelMapReverted();
+		
 		okCancelList = dom.getListControllerNode("okCancelList", {
 			maxVisible : 8,
 			pageSize : 1,
@@ -92,18 +119,20 @@
 		popupButtonYellowText = dom.getTextNode("popupButtonYellowText");
 		popupButtonBlueText = dom.getTextNode("popupButtonBlueText");
 
-		showPopupButtons({disabled : "default"});
-		
+		showPopupButtons( {
+			disabled : "default"
+		});
+
 		orderings.push( {
 			text : "Ucom Standard",
-			callback : setOrdering("Ucom Standard"),
+			callback : setOrdering("Standard"),
 			disabled : "default"
 		});
 
 		orderings.push( {
 			text : "By genre",
 			callback : setOrdering("By genre"),
-			disabled : "default"
+			disabled : "false"
 		});
 
 		orderings.push( {
@@ -136,7 +165,7 @@
 	module.implementing.view.publics.onHide = function() {
 		okCancelList.clear();
 	};
-	
+
 	function I(P, Q) {
 		var R = listObj[Q];
 		P.okCancelListInnerItem.setText(R.text || "\u00A0");
@@ -148,18 +177,18 @@
 			P.okCancelListInnerItem.addClass("enabled")
 		}
 	}
-	function showPopupButtons(selectedObj){
+	function showPopupButtons(selectedObj) {
 		if (selectedObj.disabled != "default") {
 			if (selectedObj.disabled == "true") {
 				popupButtonRed.setClass("popupButtonRed");
-				popupButtonYellow.setClass("popupButtonDisable");						
+				popupButtonYellow.setClass("popupButtonDisable");
 				popupButtonGreen.setClass("popupButtonDisable");
 			} else {
 				popupButtonRed.setClass("popupButtonDisable");
 				popupButtonGreen.setClass("popupButtonGreen");
-				popupButtonYellow.setClass("popupButtonYellow");						
+				popupButtonYellow.setClass("popupButtonYellow");
 			}
-		}else{
+		} else {
 			popupButtonRed.setClass("popupButtonDisable");
 			popupButtonYellow.setClass("popupButtonDisable");
 			popupButtonGreen.setClass("popupButtonDisable");
@@ -256,10 +285,62 @@
 		];
 		return actions;
 	}
-	function setOrdering(type) {
 
+	function showInfoPopup(text) {
+		mgr.show(
+				"com.ericsson.iptv.portal.coreapps.common.popup.view.Popup", {
+					id : "channelsOrdering_info_popup",
+					text : text
+				});
+	}
+	
+	function orderChannels(orderMethod) {
+		broadcastTV.getChannelList(function(channels) {
+			broadcastTV.setChannelList(function() {
+				showInfoPopup(lang.channelsOrderChannelsListSorted);
+			}, function() {
+				showInfoPopup(lang.channelsOrderUnableToSetChannelsList);
+			}, orderMethod(channels.channelList));
+		}, function() {
+			showInfoPopup(lang.channelsOrderUnableToGetChannelsList);
+		}, locale);
 	}
 
+	function setOrdering(type) {
+		if (type == "Standard") {
+			return function() {
+				orderChannels(buildChannelsObjectStandart);
+			}
+		} else {
+			return function() {
+				showInfoPopup(lang.channelsOrderWrongMethodChosen);
+			}
+		}
+	}
+
+	function buildChannelsObjectStandart(channelsInfo) {
+		var objStr = {};
+		channelsInfo.sort(sortByCustomMap);
+		for ( var i = 0; i < channelsInfo.length; i++) {
+			objStr[new String(i + 1)] = channelsInfo[i].channelId;
+		}
+		return objStr;
+	}
+
+	function sortByCustomMap(channelInfo1, channelInfo2) {
+		try {
+			var prop = "channelId";
+			var int1 = parseInt(customPositionsMapRevert[channelInfo1[prop]],
+					10);
+			var int2 = parseInt(customPositionsMapRevert[channelInfo2[prop]],
+					10);
+			return int1 - int2;
+		} catch (e) {
+			log.error(e);
+			return 0;
+		}
+	}
+	
 	function L(P, R) {
 		for ( var Q = 0; Q < P.length; Q++) {
 			alert(P[Q].text);
