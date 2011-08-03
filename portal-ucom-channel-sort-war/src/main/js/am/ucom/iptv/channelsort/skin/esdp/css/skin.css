@@ -110,3 +110,23 @@
 #am_ucom_iptv_channelsort_code_GenreSort .sortBackground {
 	background-image: url(images/genre.jpg);
 }
+
+#am_ucom_iptv_channelsort_code_GenreSort .sortPopup {
+    background-color: black;
+    border-spacing: 0;
+    left: 207px;
+    position: absolute;
+    top: 80px;
+    width: 292px;
+}
+#genreButtonContainer{
+    height: 17px;
+    left: 185px;
+    position: absolute;
+    top: 452px;
+    width: 210px;
+}
+
+#genreButtonContainer td{
+    padding: 22px;
+}
