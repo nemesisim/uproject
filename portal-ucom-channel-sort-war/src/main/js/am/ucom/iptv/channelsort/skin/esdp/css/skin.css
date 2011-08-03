@@ -106,3 +106,7 @@
 	background-image: url(images/disable.png);
 	background-repeat: no-repeat;
 }
+
+#am_ucom_iptv_channelsort_code_GenreSort .sortBackground {
+	background-image: url(images/genre.jpg);
+}

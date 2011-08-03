@@ -1,7 +1,6 @@
 (function() {
 	var module = {
-		id : "am.ucom.iptv.channelsort.code.SelectSortPopup",
-		// id: "am.ucom.iptv.channelsort.common.popup.view.SelectWithInfoPopup",
+		id : "am.ucom.iptv.channelsort.code.GenreSort",
 		version : [ 1, 0 ],
 		type : "code",
 		implementing : {
@@ -48,17 +47,13 @@
 			log : {
 				id : "com.ericsson.iptv.portal.fw.core.Log",
 				version : [ 1, 0 ]
-			},
-			viewManager : {
-				id : "com.ericsson.iptv.portal.fw.core.ViewManager",
-				version : [ 1, 0 ]
 			}
 		},
 		publics : {},
 		resources : {
 			html : {
 				type : "html",
-				url : "/am/ucom/iptv/channelsort/view/popup.html"
+				url : "/am/ucom/iptv/channelsort/view/genre.html"
 			}
 		}
 	};
@@ -68,8 +63,7 @@
 	var lang;
 	var css;
 	var log;
-	var actionMgr;
-	var viewManager;
+	var actionMgr;	
 	var broadcastTV;
 	var okCancelList;
 	var okCancelTitle;
@@ -80,11 +74,6 @@
 	var customPositionsMap;
 	var customPositionsMapRevert = {};
 	var locale = "en-US";
-
-	var popupButtonRed;
-	var popupButtonGreen;
-	var popupButtonYellow;
-	var popupButtonBlue;
 
 	var popupButtonRedText;
 	var popupButtonGreenText;
@@ -101,7 +90,6 @@
 		actionMgr = module.dependencies.actionMgr.handle;
 		broadcastTV = module.dependencies.broadcastTV.handle;
 		log = module.dependencies.log.handle;
-		viewManager = module.dependencies.viewManager.handle;
 		customSortMap = module.dependencies.customPositionsMap.handle;
 
 		customPositionsMap = customSortMap.getChannelMap();
@@ -115,15 +103,14 @@
 		okCancelTitle = dom.getTextNode("okCancelTitle");
 		okCancelDescription = dom.getTextNode("okCancelDescription");
 
-		popupButtonRed = dom.getImageNode("popupButtonRed");
-		popupButtonGreen = dom.getImageNode("popupButtonGreen");
-		popupButtonYellow = dom.getImageNode("popupButtonYellow");
-		popupButtonBlue = dom.getImageNode("popupButtonBlue");
-
 		popupButtonRedText = dom.getTextNode("popupButtonRedText");
 		popupButtonGreenText = dom.getTextNode("popupButtonGreenText");
 		popupButtonYellowText = dom.getTextNode("popupButtonYellowText");
 		popupButtonBlueText = dom.getTextNode("popupButtonBlueText");
+
+		showPopupButtons( {
+			disabled : "default"
+		});
 
 		orderings.push( {
 			text : "Ucom Standard",
@@ -188,21 +175,7 @@
 		}
 	}
 	function showPopupButtons(selectedObj) {
-		if (selectedObj.disabled != "default") {
-			if (selectedObj.disabled === "true") {
-				popupButtonRed.setClass("popupButtonRed");
-				popupButtonYellow.setClass("popupButtonDisable");
-				popupButtonGreen.setClass("popupButtonDisable");
-			} else {
-				popupButtonRed.setClass("popupButtonDisable");
-				popupButtonGreen.setClass("popupButtonGreen");
-				popupButtonYellow.setClass("popupButtonYellow");
-			}
-		} else {
-			popupButtonRed.setClass("popupButtonDisable");
-			popupButtonYellow.setClass("popupButtonDisable");
-			popupButtonGreen.setClass("popupButtonDisable");
-		}
+
 	}
 
 	function performAction(action, args) {
@@ -225,25 +198,18 @@
 			}
 			break;
 		case 'ACTION_RED':
-			if (listObj[okCancelList.getIndex()].disabled === "true") {
-
+			if (listObj[okCancelList.getIndex()].disabled) {
+				alert("R" + listObj[okCancelList.getIndex()].text);
 			}
 			break;
 		case 'ACTION_GREEN':
-			if (listObj[okCancelList.getIndex()].disabled === "false") {
+			if (!listObj[okCancelList.getIndex()].disabled) {
 				alert("G" + listObj[okCancelList.getIndex()].text);
 			}
 			break;
 		case 'ACTION_YELLOW':
-			if (listObj[okCancelList.getIndex()].disabled === "false") {
-				viewManager
-				 .show(
-						"am.ucom.iptv.channelsort.code.GenreSort",
-						{
-							id : "genre_sort_view",
-							title : lang.channelsReorderPopupTitle,
-							text : lang.channelsReorderPopupText
-						});		
+			if (!listObj[okCancelList.getIndex()].disabled) {
+				alert("Y" + listObj[okCancelList.getIndex()].text);
 			}
 			break;
 		case 'ACTION_BLUE':
