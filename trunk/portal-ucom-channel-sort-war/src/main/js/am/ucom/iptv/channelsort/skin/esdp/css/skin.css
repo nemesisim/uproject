@@ -112,12 +112,11 @@
 }
 
 #am_ucom_iptv_channelsort_code_GenreSort .sortPopup {
-    background-color: black;
     border-spacing: 0;
-    left: 207px;
+    left: 223px;
     position: absolute;
-    top: 80px;
-    width: 292px;
+    top: 113px;
+    width: 271px;
 }
 #genreButtonContainer{
     height: 17px;
@@ -129,4 +128,36 @@
 
 #genreButtonContainer td{
     padding: 22px;
+}
+
+#genereHeaderTitle{
+    color: white;
+    height: 17px;
+    left: 205px;
+    position: absolute;
+    top: 25px;
+    width: 210px;
+}
+#genereHeaderDescription{
+    color: white;
+    height: 17px;
+    left: 214px;
+    position: absolute;
+    top: 85px;
+    width: 210px;
+}
+
+.sortGenreContent div {
+	color: white;
+    height: 25px;
+    margin-top: 8px;
+    background-image: url(images/genre/icon_educchannels.gif);
+	background-repeat: no-repeat;
+	background-position: right;
+}
+
+.floatingRight{
+	background-image: url(images/genre/icon_educchannels.gif);
+	background-repeat: no-repeat;
+	float: right;
 }
