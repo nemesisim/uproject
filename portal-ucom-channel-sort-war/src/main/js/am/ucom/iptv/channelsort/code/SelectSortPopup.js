@@ -237,13 +237,7 @@
 		case 'ACTION_YELLOW':
 			if (listObj[okCancelList.getIndex()].disabled === "false") {
 				viewManager
-				 .show(
-						"am.ucom.iptv.channelsort.code.GenreSort",
-						{
-							id : "genre_sort_view",
-							title : lang.channelsReorderPopupTitle,
-							text : lang.channelsReorderPopupText
-						});		
+				 .show("am.ucom.iptv.channelsort.code.GenreSort");		
 			}
 			break;
 		case 'ACTION_BLUE':

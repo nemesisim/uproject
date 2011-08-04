@@ -94,56 +94,77 @@
 
 		customPositionsMap = customSortMap.getChannelMap();
 		customPositionsMapRevert = customSortMap.getChannelMapReverted();
-
+		module.resources.html.handle.firstChild.id = "genre_sort_view";
+		
 		okCancelList = dom.getListControllerNode("okCancelList", {
-			maxVisible : 8,
+			maxVisible : 9,
 			pageSize : 1,
 			paintItem : I
 		});
-		okCancelTitle = dom.getTextNode("okCancelTitle");
-		okCancelDescription = dom.getTextNode("okCancelDescription");
+		okCancelTitle = dom.getTextNode("genereHeaderTitle");
+		okCancelDescription = dom.getTextNode("genereHeaderDescription");
 
 		popupButtonRedText = dom.getTextNode("popupButtonRedText");
 		popupButtonGreenText = dom.getTextNode("popupButtonGreenText");
 		popupButtonYellowText = dom.getTextNode("popupButtonYellowText");
 		popupButtonBlueText = dom.getTextNode("popupButtonBlueText");
 
-		showPopupButtons( {
+		orderings.push( {
+			position: 1,
+			text : "Public Cannels",
 			disabled : "default"
 		});
 
 		orderings.push( {
-			text : "Ucom Standard",
-			callback : setOrdering("Standard"),
-			disabled : "default"
-		});
-
-		orderings.push( {
-			text : "By genre",
-			callback : setOrdering("By genre"),
+			position: 2,
+			text : "Music Channels",
 			disabled : "false"
 		});
 
 		orderings.push( {
-			text : "Custom 1",
-			callback : setOrdering("Custom 1"),
+			position: 3,
+			text : "Entertainment Channels",
 			disabled : "true"
 		});
 
 		orderings.push( {
-			text : "Custom 2",
-			callback : setOrdering("Custom 2"),
+			position: 4,
+			text : "Educational Channels",
 			disabled : "true"
 		});
 
 		orderings.push( {
-			text : "Custom 3",
-			callback : setOrdering("Custom 3"),
+			position: 5,
+			text : "Kid's Channels",
+			disabled : "true"
+		});
+
+		orderings.push( {
+			position: 6,
+			text : "News Channels",
+			disabled : "true"
+		});
+		
+		orderings.push( {
+			position: 7,
+			text : "Sport Channels",
+			disabled : "true"
+		});
+		
+		orderings.push( {
+			position: 8,
+			text : "Movie Channels",
+			disabled : "true"
+		});	
+		
+		orderings.push( {
+			position: 9,
+			text : "Adult Channels",
 			disabled : "true"
 		});
 		listObj = orderings;
-		okCancelTitle.setText("Channel management");
-		okCancelDescription.setText("Sorting");
+		okCancelTitle.setText("Sort by Genre");
+		okCancelDescription.setText("Geners");
 
 		popupButtonRedText.setText("Add");
 		popupButtonGreenText.setText("Remove");
@@ -165,7 +186,7 @@
 
 	function I(P, Q) {
 		var R = listObj[Q];
-		P.okCancelListInnerItem.setText(R.text || "\u00A0");
+		P.okCancelListInnerItem.setText(R.position + ". " + R.text);
 		P.okCancelListInnerItem.clearClass();
 		if (R.id) {
 			P.okCancelListInnerItem.addClass("selectPopupOption_" + R.id)
@@ -198,26 +219,45 @@
 			}
 			break;
 		case 'ACTION_RED':
-			if (listObj[okCancelList.getIndex()].disabled) {
-				alert("R" + listObj[okCancelList.getIndex()].text);
-			}
+			swapListItems(okCancelList.getIndex(), 0);
 			break;
 		case 'ACTION_GREEN':
-			if (!listObj[okCancelList.getIndex()].disabled) {
-				alert("G" + listObj[okCancelList.getIndex()].text);
-			}
+			swapListItems(okCancelList.getIndex(), 8);
 			break;
 		case 'ACTION_YELLOW':
-			if (!listObj[okCancelList.getIndex()].disabled) {
-				alert("Y" + listObj[okCancelList.getIndex()].text);
-			}
+			swapListItems(okCancelList.getIndex(), okCancelList.getIndex() - 1);
 			break;
 		case 'ACTION_BLUE':
-			mgr.hide(module.id);
+			swapListItems(okCancelList.getIndex(), okCancelList.getIndex() + 1);
 			break;
-		}
+		}		
 	}
 
+	function swapListItems(from, to){
+		var selected = listObj[from];
+		var currentText = selected.text;
+		selected.text = listObj[to].text;
+		listObj[to].text = currentText;
+		okCancelList.init(listObj.length, to);	
+	}
+	module.implementing.view.publics.onShow = function(args) {
+		okCancelList.init(listObj.length, 0)
+	};
+	module.implementing.view.publics.onInput = function(event) {
+		actionMgr.matchInput(module.id, event);
+		return true;
+	};
+	module.implementing.view.publics.getDomNode = function() {
+		return module.resources.html.handle;
+	};
+	
+	function showInfoPopup(text) {
+		mgr.show("com.ericsson.iptv.portal.coreapps.common.popup.view.Popup", {
+			id : "channelsOrdering_info_popup",
+			text : text
+		});
+	}
+	
 	function mapActionsFn() {
 		var P = function(S, R) {
 			S(true)
@@ -295,82 +335,6 @@
 		];
 		return actions;
 	}
-
-	function showInfoPopup(text) {
-		mgr.show("com.ericsson.iptv.portal.coreapps.common.popup.view.Popup", {
-			id : "channelsOrdering_info_popup",
-			text : text
-		});
-	}
-
-	function orderChannels(orderMethod) {
-		broadcastTV.getChannelList(function(channels) {
-			broadcastTV.setChannelList(function() {
-				showInfoPopup(lang.channelsOrderChannelsListSorted);
-			}, function() {
-				showInfoPopup(lang.channelsOrderUnableToSetChannelsList);
-			}, orderMethod(channels.channelList));
-		}, function() {
-			showInfoPopup(lang.channelsOrderUnableToGetChannelsList);
-		}, locale);
-	}
-
-	function setOrdering(type) {
-		if (type == "Standard") {
-			return function() {
-				orderChannels(buildChannelsObjectStandart);
-			}
-		} else {
-			return function() {
-				showInfoPopup(lang.channelsOrderWrongMethodChosen);
-			}
-		}
-	}
-
-	function buildChannelsObjectStandart(channelsInfo) {
-		var objStr = {};
-		channelsInfo.sort(sortByCustomMap);
-		for ( var i = 0; i < channelsInfo.length; i++) {
-			objStr[new String(i + 1)] = channelsInfo[i].channelId;
-		}
-		return objStr;
-	}
-
-	function sortByCustomMap(channelInfo1, channelInfo2) {
-		try {
-			var prop = "channelId";
-			var int1 = parseInt(customPositionsMapRevert[channelInfo1[prop]],
-					10);
-			var int2 = parseInt(customPositionsMapRevert[channelInfo2[prop]],
-					10);
-			return int1 - int2;
-		} catch (e) {
-			log.error(e);
-			return 0;
-		}
-	}
-
-	function L(P, R) {
-		for ( var Q = 0; Q < P.length; Q++) {
-			alert(P[Q].text);
-			if (P[Q].id === R) {
-				return Q
-			}
-		}
-	}
-	module.implementing.view.publics.onShow = function(args) {
-		showPopupButtons(listObj[0]);
-
-		module.resources.html.handle.firstChild.id = args.id;
-		var R = args.selected ? L(listObj, args.selected) || 0 : 0;
-		okCancelList.init(listObj.length, R)
-	};
-	module.implementing.view.publics.onInput = function(event) {
-		actionMgr.matchInput(module.id, event);
-		return true;
-	};
-	module.implementing.view.publics.getDomNode = function() {
-		return module.resources.html.handle;
-	};
+	
 	return module;
 });
