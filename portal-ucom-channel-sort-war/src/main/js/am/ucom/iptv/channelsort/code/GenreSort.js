@@ -63,7 +63,7 @@
 	var lang;
 	var css;
 	var log;
-	var actionMgr;	
+	var actionMgr;
 	var broadcastTV;
 	var okCancelList;
 	var okCancelTitle;
@@ -95,11 +95,11 @@
 		customPositionsMap = customSortMap.getChannelMap();
 		customPositionsMapRevert = customSortMap.getChannelMapReverted();
 		module.resources.html.handle.firstChild.id = "genre_sort_view";
-		
+
 		okCancelList = dom.getListControllerNode("okCancelList", {
 			maxVisible : 9,
 			pageSize : 1,
-			paintItem : I
+			paintItem : paintItem
 		});
 		okCancelTitle = dom.getTextNode("genereHeaderTitle");
 		okCancelDescription = dom.getTextNode("genereHeaderDescription");
@@ -110,66 +110,58 @@
 		popupButtonBlueText = dom.getTextNode("popupButtonBlueText");
 
 		orderings.push( {
-			position: 1,
+			position : 1,
 			text : "Public Cannels",
-			disabled : "default"
+			image : "publicChannels"
 		});
-
 		orderings.push( {
-			position: 2,
+			position : 2,
 			text : "Music Channels",
-			disabled : "false"
+			image : "musicChannels"
 		});
-
 		orderings.push( {
-			position: 3,
+			position : 3,
 			text : "Entertainment Channels",
-			disabled : "true"
+			image : "entertainmentChannels"
 		});
-
 		orderings.push( {
-			position: 4,
+			position : 4,
 			text : "Educational Channels",
-			disabled : "true"
+			image : "educationalChannels"
 		});
-
 		orderings.push( {
-			position: 5,
+			position : 5,
 			text : "Kid's Channels",
-			disabled : "true"
+			image : "kidsChannels"
 		});
-
 		orderings.push( {
-			position: 6,
+			position : 6,
 			text : "News Channels",
-			disabled : "true"
+			image : "newsChannels"
 		});
-		
 		orderings.push( {
-			position: 7,
+			position : 7,
 			text : "Sport Channels",
-			disabled : "true"
+			image : "sportsChannels"
 		});
-		
 		orderings.push( {
-			position: 8,
+			position : 8,
 			text : "Movie Channels",
-			disabled : "true"
-		});	
-		
+			image : "movieChannels"
+		});
 		orderings.push( {
-			position: 9,
+			position : 9,
 			text : "Adult Channels",
-			disabled : "true"
+			image : "adultChannels"
 		});
 		listObj = orderings;
 		okCancelTitle.setText("Sort by Genre");
 		okCancelDescription.setText("Geners");
 
-		popupButtonRedText.setText("Add");
-		popupButtonGreenText.setText("Remove");
-		popupButtonYellowText.setText("Edit");
-		popupButtonBlueText.setText("Cancel");
+		popupButtonRedText.setText("Set First");
+		popupButtonGreenText.setText("Set Last");
+		popupButtonYellowText.setText("Move Up");
+		popupButtonBlueText.setText("Move Down");
 
 		actionMgr.mapActions(module.id, mapActionsFn());
 	};
@@ -184,10 +176,11 @@
 		okCancelList.clear();
 	};
 
-	function I(P, Q) {
+	function paintItem(P, Q) {
 		var R = listObj[Q];
 		P.okCancelListInnerItem.setText(R.position + ". " + R.text);
 		P.okCancelListInnerItem.clearClass();
+		P.okCancelListInnerItem.addClass(R.image);
 		if (R.id) {
 			P.okCancelListInnerItem.addClass("selectPopupOption_" + R.id)
 		}
@@ -212,7 +205,7 @@
 		case 'ACTION_EXIT':
 			mgr.hide(module.id);
 			break;
-		case 'ACTION_OK':			
+		case 'ACTION_OK':
 			mgr.hide(module.id);
 			if (listObj[okCancelList.getIndex()].callback) {
 				listObj[okCancelList.getIndex()].callback()
@@ -230,16 +223,32 @@
 		case 'ACTION_BLUE':
 			swapListItems(okCancelList.getIndex(), okCancelList.getIndex() + 1);
 			break;
-		}		
+		}
 	}
 
-	function swapListItems(from, to){
+	function swapListItems(from, to) {
 		var selected = listObj[from];
 		var currentText = selected.text;
-		selected.text = listObj[to].text;
+		var currentPosition = selected.position;
+		var currentImage = selected.image;
+		if (from < to)
+			for ( var i = from; i < to; i++) {
+				listObj[i].text = listObj[i + 1].text;
+				listObj[i].position = listObj[i + 1].position;
+				listObj[i].image = listObj[i + 1].image;
+			}
+		else
+			for ( var i = from; i > to; i--) {
+				listObj[i].text = listObj[i - 1].text;
+				listObj[i].position = listObj[i - 1].position;
+				listObj[i].image = listObj[i - 1].image;
+			}
 		listObj[to].text = currentText;
-		okCancelList.init(listObj.length, to);	
+		listObj[to].position = currentPosition;
+		listObj[to].image = currentImage;
+		okCancelList.init(listObj.length, to);
 	}
+
 	module.implementing.view.publics.onShow = function(args) {
 		okCancelList.init(listObj.length, 0)
 	};
@@ -250,14 +259,14 @@
 	module.implementing.view.publics.getDomNode = function() {
 		return module.resources.html.handle;
 	};
-	
+
 	function showInfoPopup(text) {
 		mgr.show("com.ericsson.iptv.portal.coreapps.common.popup.view.Popup", {
 			id : "channelsOrdering_info_popup",
 			text : text
 		});
 	}
-	
+
 	function mapActionsFn() {
 		var P = function(S, R) {
 			S(true)
@@ -335,6 +344,6 @@
 		];
 		return actions;
 	}
-	
+
 	return module;
 });
