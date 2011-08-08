@@ -378,20 +378,11 @@
 		}
 	}
 
-	function L(P, R) {
-		for ( var Q = 0; Q < P.length; Q++) {
-			alert(P[Q].text);
-			if (P[Q].id === R) {
-				return Q
-			}
-		}
-	}
 	module.implementing.view.publics.onShow = function(args) {
 		showPopupButtons(listObj[0]);
 
 		module.resources.html.handle.firstChild.id = args.id;
-		var R = args.selected ? L(listObj, args.selected) || 0 : 0;
-		okCancelList.init(listObj.length, R)
+		okCancelList.init(listObj.length, 0)
 	};
 	module.implementing.view.publics.onInput = function(event) {
 		actionMgr.matchInput(module.id, event);

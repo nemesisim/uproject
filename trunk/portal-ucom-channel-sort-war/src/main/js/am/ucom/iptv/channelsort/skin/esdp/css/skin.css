@@ -112,52 +112,88 @@
 }
 
 #am_ucom_iptv_channelsort_code_GenreSort .sortPopup {
-    border-spacing: 0;
-    left: 223px;
-    position: absolute;
-    top: 113px;
-    width: 271px;
-}
-#genreButtonContainer{
-    height: 17px;
-    left: 185px;
-    position: absolute;
-    top: 452px;
-    width: 210px;
+	border-spacing: 0;
+	left: 223px;
+	position: absolute;
+	top: 113px;
+	width: 271px;
 }
 
-#genreButtonContainer td{
-    padding: 22px;
+#genreButtonContainer {
+	color: white;
+	font-weight: bold;
+	height: 17px;
+	left: 185px;
+	position: absolute;
+	text-align: center;
+	top: 452px;
+	width: 340px;
 }
 
-#genereHeaderTitle{
-    color: white;
-    height: 17px;
-    left: 205px;
-    position: absolute;
-    top: 25px;
-    width: 210px;
+#genreButtonContainer td {
+	font-size: 12pt;
+	padding-top: 20px;
+	width: 10%;
 }
-#genereHeaderDescription{
-    color: white;
-    height: 17px;
-    left: 214px;
-    position: absolute;
-    top: 85px;
-    width: 210px;
+
+#genereHeaderTitle {
+	color: white;
+	height: 17px;
+	left: 205px;
+	position: absolute;
+	top: 25px;
+	width: 210px;
+}
+
+#genereHeaderDescription {
+	color: white;
+	height: 17px;
+	left: 214px;
+	position: absolute;
+	top: 85px;
+	width: 210px;
 }
 
 .sortGenreContent div {
 	color: white;
-    height: 25px;
-    margin-top: 8px;
-    background-image: url(images/genre/icon_educchannels.gif);
+	height: 25px;
+	margin-top: 8px;
 	background-repeat: no-repeat;
 	background-position: right;
 }
 
-.floatingRight{
+.publicChannels {
+	background-image: url(images/genre/icon_publicchannels.gif);
+}
+
+.musicChannels {
+	background-image: url(images/genre/icon_musicchannels.gif);
+}
+
+.entertainmentChannels {
+	background-image: url(images/genre/icon_entertainchannels.gif);
+}
+
+.educationalChannels {
 	background-image: url(images/genre/icon_educchannels.gif);
-	background-repeat: no-repeat;
-	float: right;
+}
+
+.kidsChannels {
+	background-image: url(images/genre/icon_kidschannels.gif);
+}
+
+.newsChannels {
+	background-image: url(images/genre/icon_newschannels.gif);
+}
+
+.sportsChannels {
+	background-image: url(images/genre/icon_sportchannels.gif);
+}
+
+.movieChannels {
+	background-image: url(images/genre/icon_moviechannels.gif);
+}
+
+.adultChannels {
+	background-image: url(images/genre/icon_movieadultchannels.gif);
 }
