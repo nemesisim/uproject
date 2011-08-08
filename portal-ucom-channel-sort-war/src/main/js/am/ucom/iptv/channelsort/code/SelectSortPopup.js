@@ -79,6 +79,7 @@
 	var customSortMap;
 	var customPositionsMap;
 	var customPositionsMapRevert = {};
+	var genrePositionMap = {};
 	var locale = "en-US";
 
 	var popupButtonRed;
@@ -91,6 +92,7 @@
 	var popupButtonYellowText;
 	var popupButtonBlueText;
 	var orderings = [];
+	
 
 	module.implementing.loading.publics.load = function() {
 		dom = module.dependencies.dom.handle
@@ -106,6 +108,7 @@
 
 		customPositionsMap = customSortMap.getChannelMap();
 		customPositionsMapRevert = customSortMap.getChannelMapReverted();
+		genrePositionMap = customSortMap.getGenreMap();
 
 		okCancelList = dom.getListControllerNode("okCancelList", {
 			maxVisible : 8,
@@ -127,13 +130,13 @@
 
 		orderings.push( {
 			text : "Ucom Standard",
-			callback : setOrdering("Standard"),
+			callback : setOrdering("standard"),
 			disabled : "default"
 		});
 
 		orderings.push( {
 			text : "By genre",
-			callback : setOrdering("By genre"),
+			callback : setOrdering("genre"),
 			disabled : "false"
 		});
 
@@ -237,7 +240,7 @@
 		case 'ACTION_YELLOW':
 			if (listObj[okCancelList.getIndex()].disabled === "false") {
 				viewManager
-				 .show("am.ucom.iptv.channelsort.code.GenreSort");		
+				 .show("am.ucom.iptv.channelsort.code.GenreSort", genreSort);		
 			}
 			break;
 		case 'ACTION_BLUE':
@@ -245,7 +248,12 @@
 			break;
 		}
 	}
-
+	var genreSortOrder = [];
+	function genreSort(orderings){
+		for(var i = 0; i < orderings.length; i++)
+			genreSortOrder.push(orderings[0].position);
+	}
+	
 	function mapActionsFn() {
 		var P = function(S, R) {
 			S(true)
@@ -344,17 +352,37 @@
 	}
 
 	function setOrdering(type) {
-		if (type == "Standard") {
+		if (type == "standard") {
 			return function() {
 				orderChannels(buildChannelsObjectStandart);
 			}
-		} else {
+		} 
+		if (type == "genre") {
+			return function() {
+				orderChannels(buildChannelsObjectGenre);
+			}
+		}
+		else {
 			return function() {
 				showInfoPopup(lang.channelsOrderWrongMethodChosen);
 			}
 		}
 	}
 
+	function buildChannelsObjectGenre(channelsInfo){
+		var objStr = {};
+		var str = "";
+		for ( var i = 0; i < genreSortOrder.length; i++) {
+			var currentGenre = genrePositionMap[genreSortOrder[i].position];
+			for ( var j = 0; j < currentGenre.length; j++) {				
+				str += currentGenre[j+1] + " ";
+				objStr[new String(i + 1)] = currentGenre[j+1];
+			}
+		}		
+		showInfoPopup(str);
+		return objStr;			
+	}
+	
 	function buildChannelsObjectStandart(channelsInfo) {
 		var objStr = {};
 		channelsInfo.sort(sortByCustomMap);

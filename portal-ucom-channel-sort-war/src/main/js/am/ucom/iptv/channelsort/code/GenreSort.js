@@ -69,6 +69,7 @@
 	var okCancelTitle;
 	var okCancelDescription;
 	var listObj;
+	var callback;
 
 	var customSortMap;
 	var customPositionsMap;
@@ -113,6 +114,7 @@
 			position : 1,
 			text : "Public Cannels",
 			image : "publicChannels"
+			
 		});
 		orderings.push( {
 			position : 2,
@@ -205,11 +207,11 @@
 		case 'ACTION_EXIT':
 			mgr.hide(module.id);
 			break;
-		case 'ACTION_OK':
-			mgr.hide(module.id);
-			if (listObj[okCancelList.getIndex()].callback) {
-				listObj[okCancelList.getIndex()].callback()
+		case 'ACTION_OK':			
+			if (callback) {
+				callback(orderings)
 			}
+			mgr.hide(module.id);
 			break;
 		case 'ACTION_RED':
 			swapListItems(okCancelList.getIndex(), 0);
@@ -248,8 +250,9 @@
 		listObj[to].image = currentImage;
 		okCancelList.init(listObj.length, to);
 	}
-
+	
 	module.implementing.view.publics.onShow = function(args) {
+		callback = args;
 		okCancelList.init(listObj.length, 0)
 	};
 	module.implementing.view.publics.onInput = function(event) {
