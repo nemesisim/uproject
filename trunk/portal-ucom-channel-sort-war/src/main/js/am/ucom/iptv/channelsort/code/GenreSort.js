@@ -105,16 +105,16 @@
 		okCancelTitle = dom.getTextNode("genereHeaderTitle");
 		okCancelDescription = dom.getTextNode("genereHeaderDescription");
 
-		popupButtonRedText = dom.getTextNode("popupButtonRedText");
-		popupButtonGreenText = dom.getTextNode("popupButtonGreenText");
-		popupButtonYellowText = dom.getTextNode("popupButtonYellowText");
-		popupButtonBlueText = dom.getTextNode("popupButtonBlueText");
+		popupButtonRedText = dom.getTextNode("genreButtonRedText");
+		popupButtonGreenText = dom.getTextNode("genreButtonGreenText");
+		popupButtonYellowText = dom.getTextNode("genreButtonYellowText");
+		popupButtonBlueText = dom.getTextNode("genreButtonBlueText");
 
 		orderings.push( {
 			position : 1,
 			text : "Public Cannels",
 			image : "publicChannels"
-			
+
 		});
 		orderings.push( {
 			position : 2,
@@ -207,7 +207,7 @@
 		case 'ACTION_EXIT':
 			mgr.hide(module.id);
 			break;
-		case 'ACTION_OK':			
+		case 'ACTION_OK':
 			if (callback) {
 				callback(orderings)
 			}
@@ -250,9 +250,9 @@
 		listObj[to].image = currentImage;
 		okCancelList.init(listObj.length, to);
 	}
-	
+
 	module.implementing.view.publics.onShow = function(args) {
-		callback = args;
+		callback = args.callback;
 		okCancelList.init(listObj.length, 0)
 	};
 	module.implementing.view.publics.onInput = function(event) {
@@ -342,9 +342,7 @@
 				performAction("ACTION_BLUE");
 			},
 			keyEvents : [ "KEY_BLUE" ]
-		}
-
-		];
+		} ];
 		return actions;
 	}
 
