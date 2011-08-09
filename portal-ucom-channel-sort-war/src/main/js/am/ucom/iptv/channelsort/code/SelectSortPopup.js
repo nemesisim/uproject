@@ -74,7 +74,6 @@
 	var okCancelList;
 	var okCancelTitle;
 	var okCancelDescription;
-	var listObj;
 
 	var customSortMap;
 	var customPositionsMap;
@@ -105,7 +104,8 @@
 		log = module.dependencies.log.handle;
 		viewManager = module.dependencies.viewManager.handle;
 		customSortMap = module.dependencies.customPositionsMap.handle;
-
+		module.resources.html.handle.firstChild.id = "select_sort_popup";
+		
 		customPositionsMap = customSortMap.getChannelMap();
 		customPositionsMapRevert = customSortMap.getChannelMapReverted();
 		genrePositionMap = customSortMap.getGenreMap();
@@ -157,7 +157,6 @@
 			callback : setOrdering("Custom 3"),
 			disabled : "true"
 		});
-		listObj = orderings;
 		okCancelTitle.setText("Channel management");
 		okCancelDescription.setText("Sorting");
 
@@ -168,6 +167,10 @@
 
 		actionMgr.mapActions(module.id, mapActionsFn());
 	};
+	module.implementing.view.publics.onShow = function(args) {
+		showPopupButtons(orderings[0]);
+		okCancelList.init(orderings.length, 0)
+	};	
 	module.implementing.loading.publics.unload = function() {
 	};
 	module.implementing.view.publics.onFocus = function() {
@@ -179,8 +182,8 @@
 		okCancelList.clear();
 	};
 
-	function I(P, Q) {
-		var R = listObj[Q];
+	function I(P, index) {
+		var R = orderings[index];
 		P.okCancelListInnerItem.setText(R.text || "\u00A0");
 		P.okCancelListInnerItem.clearClass();
 		if (R.id) {
@@ -212,35 +215,35 @@
 		switch (action) {
 		case 'ACTION_PREVIOUS':
 			okCancelList.onPreviousKey(args.event);
-			showPopupButtons(listObj[okCancelList.getIndex()]);
+			showPopupButtons(orderings[okCancelList.getIndex()]);
 			break;
 		case 'ACTION_NEXT':
 			okCancelList.onNextKey(args.event);
-			showPopupButtons(listObj[okCancelList.getIndex()]);
+			showPopupButtons(orderings[okCancelList.getIndex()]);
 			break;
 		case 'ACTION_EXIT':
 			mgr.hide(module.id);
 			break;
 		case 'ACTION_OK':			
 			mgr.hide(module.id);
-			if (listObj[okCancelList.getIndex()].callback) {
-				listObj[okCancelList.getIndex()].callback()
+			if (orderings[okCancelList.getIndex()].callback) {
+				orderings[okCancelList.getIndex()].callback()
 			}
 			break;
 		case 'ACTION_RED':
-			if (listObj[okCancelList.getIndex()].disabled === "true") {
+			if (orderings[okCancelList.getIndex()].disabled === "true") {
 
 			}
 			break;
 		case 'ACTION_GREEN':
-			if (listObj[okCancelList.getIndex()].disabled === "false") {
-				alert("G" + listObj[okCancelList.getIndex()].text);
+			if (orderings[okCancelList.getIndex()].disabled === "false") {
+				alert("G" + orderings[okCancelList.getIndex()].text);
 			}
 			break;
 		case 'ACTION_YELLOW':
-			if (listObj[okCancelList.getIndex()].disabled === "false") {
+			if (orderings[okCancelList.getIndex()].disabled === "false") {
 				viewManager
-				 .show("am.ucom.iptv.channelsort.code.GenreSort", genreSort);		
+				 .show("am.ucom.iptv.channelsort.code.GenreSort", {"callback" : genreSort});		
 			}
 			break;
 		case 'ACTION_BLUE':
@@ -250,6 +253,7 @@
 	}
 	var genreSortOrder = [];
 	function genreSort(orderings){
+		viewManager.show(module.id);
 		for(var i = 0; i < orderings.length; i++)
 			genreSortOrder.push(orderings[0].position);
 	}
@@ -352,13 +356,14 @@
 	}
 
 	function setOrdering(type) {
-		if (type == "standard") {
+		if (type === "standard") {
 			return function() {
 				orderChannels(buildChannelsObjectStandart);
 			}
 		} 
-		if (type == "genre") {
+		else if (type === "genre") {
 			return function() {
+				alert("genre");
 				orderChannels(buildChannelsObjectGenre);
 			}
 		}
@@ -379,7 +384,7 @@
 				objStr[new String(i + 1)] = currentGenre[j+1];
 			}
 		}		
-		showInfoPopup(str);
+		alert("str = " + str);
 		return objStr;			
 	}
 	
@@ -405,13 +410,6 @@
 			return 0;
 		}
 	}
-
-	module.implementing.view.publics.onShow = function(args) {
-		showPopupButtons(listObj[0]);
-
-		module.resources.html.handle.firstChild.id = args.id;
-		okCancelList.init(listObj.length, 0)
-	};
 	module.implementing.view.publics.onInput = function(event) {
 		actionMgr.matchInput(module.id, event);
 		return true;
