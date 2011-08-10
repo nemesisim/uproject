@@ -235,15 +235,23 @@
 		var currentImage = selected.image;
 		if (from < to)
 			for ( var i = from; i < to; i++) {
-				listObj[i].text = listObj[i + 1].text;
-				listObj[i].position = listObj[i + 1].position;
-				listObj[i].image = listObj[i + 1].image;
+				if (listObj[i + 1]) {
+					listObj[i].text = listObj[i + 1].text;
+					listObj[i].position = listObj[i + 1].position;
+					listObj[i].image = listObj[i + 1].image;
+				} else {
+					return;
+				}
 			}
 		else
 			for ( var i = from; i > to; i--) {
-				listObj[i].text = listObj[i - 1].text;
-				listObj[i].position = listObj[i - 1].position;
-				listObj[i].image = listObj[i - 1].image;
+				if (listObj[i - 1]) {
+					listObj[i].text = listObj[i - 1].text;
+					listObj[i].position = listObj[i - 1].position;
+					listObj[i].image = listObj[i - 1].image;
+				} else {
+					return;
+				}
 			}
 		listObj[to].text = currentText;
 		listObj[to].position = currentPosition;

@@ -224,11 +224,11 @@
 		case 'ACTION_EXIT':
 			mgr.hide(module.id);
 			break;
-		case 'ACTION_OK':			
-			mgr.hide(module.id);
+		case 'ACTION_OK':						
 			if (orderings[okCancelList.getIndex()].callback) {
 				orderings[okCancelList.getIndex()].callback()
 			}
+			mgr.hide(module.id);
 			break;
 		case 'ACTION_RED':
 			if (orderings[okCancelList.getIndex()].disabled === "true") {
@@ -255,7 +255,7 @@
 	function genreSort(orderings){
 		viewManager.show(module.id);
 		for(var i = 0; i < orderings.length; i++)
-			genreSortOrder.push(orderings[0].position);
+			genreSortOrder.push(orderings[i].position);
 	}
 	
 	function mapActionsFn() {
@@ -330,9 +330,7 @@
 				performAction("ACTION_BLUE");
 			},
 			keyEvents : [ "KEY_BLUE" ]
-		}
-
-		];
+		}];
 		return actions;
 	}
 
@@ -358,12 +356,13 @@
 	function setOrdering(type) {
 		if (type === "standard") {
 			return function() {
+				alert("standard");
 				orderChannels(buildChannelsObjectStandart);
 			}
 		} 
 		else if (type === "genre") {
 			return function() {
-				alert("genre");
+				alert("gt = " + genreSortOrder.length)
 				orderChannels(buildChannelsObjectGenre);
 			}
 		}
@@ -378,10 +377,10 @@
 		var objStr = {};
 		var str = "";
 		for ( var i = 0; i < genreSortOrder.length; i++) {
-			var currentGenre = genrePositionMap[genreSortOrder[i].position];
+			var currentGenre = genrePositionMap[genreSortOrder[i]];
 			for ( var j = 0; j < currentGenre.length; j++) {				
-				str += currentGenre[j+1] + " ";
-				objStr[new String(i + 1)] = currentGenre[j+1];
+				str += currentGenre[j] + " ";
+				objStr[new String(i + 1)] = currentGenre[j];
 			}
 		}		
 		alert("str = " + str);
