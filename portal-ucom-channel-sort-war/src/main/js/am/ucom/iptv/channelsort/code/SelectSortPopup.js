@@ -237,7 +237,7 @@
 			break;
 		case 'ACTION_GREEN':
 			if (orderings[okCancelList.getIndex()].disabled === "false") {
-				alert("G" + orderings[okCancelList.getIndex()].text);
+				//alert("G" + orderings[okCancelList.getIndex()].text);
 			}
 			break;
 		case 'ACTION_YELLOW':
@@ -356,13 +356,11 @@
 	function setOrdering(type) {
 		if (type === "standard") {
 			return function() {
-				alert("standard");
 				orderChannels(buildChannelsObjectStandart);
 			}
 		} 
 		else if (type === "genre") {
 			return function() {
-				alert("gt = " + genreSortOrder.length)
 				orderChannels(buildChannelsObjectGenre);
 			}
 		}
@@ -374,17 +372,21 @@
 	}
 
 	function buildChannelsObjectGenre(channelsInfo){
-		var objStr = {};
+		var revertedMap = {};
 		var str = "";
 		for ( var i = 0; i < genreSortOrder.length; i++) {
 			var currentGenre = genrePositionMap[genreSortOrder[i]];
 			for ( var j = 0; j < currentGenre.length; j++) {				
 				str += currentGenre[j] + " ";
-				objStr[new String(i + 1)] = currentGenre[j];
+				revertedMap[new String(currentGenre[j])] = i;
 			}
-		}		
-		alert("str = " + str);
-		return objStr;			
+		}
+//		var objStr = {};
+//		for ( var i = 0; i < channelsInfo.length; i++) {
+//			objStr[new String(i + 1)] = revertedMap[channelsInfo[i].channelId];
+//		}
+//		alert("str = " + str);
+		return revertedMap;			
 	}
 	
 	function buildChannelsObjectStandart(channelsInfo) {
