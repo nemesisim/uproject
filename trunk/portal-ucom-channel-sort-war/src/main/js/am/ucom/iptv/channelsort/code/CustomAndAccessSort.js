@@ -1,6 +1,6 @@
 (function() {
 	var module = {
-		id : "am.ucom.iptv.channelsort.code.GenreSort",
+		id : "am.ucom.iptv.channelsort.code.CustomAndAccessSort",
 		version : [ 1, 0 ],
 		type : "code",
 		implementing : {
@@ -53,7 +53,7 @@
 		resources : {
 			html : {
 				type : "html",
-				url : "/am/ucom/iptv/channelsort/view/genre.html"
+				url : "/am/ucom/iptv/channelsort/view/custom.html"
 			}
 		}
 	};
@@ -65,7 +65,8 @@
 	var log;
 	var actionMgr;
 	var broadcastTV;
-	var okCancelList;
+	var customSortList;
+	var customSortAccessList;
 	var okCancelTitle;
 	var okCancelDescription;
 	var listObj;
@@ -97,18 +98,25 @@
 		customPositionsMapRevert = customSortMap.getChannelMapReverted();
 		module.resources.html.handle.firstChild.id = "genre_sort_view";
 
-		okCancelList = dom.getListControllerNode("okCancelList", {
-			maxVisible : 9,
+		customSortList = dom.getListControllerNode("customSortList", {
+			maxVisible : 10,
 			pageSize : 1,
 			paintItem : paintItem
 		});
-		okCancelTitle = dom.getTextNode("genereHeaderTitle");
-		okCancelDescription = dom.getTextNode("genereHeaderDescription");
+		
+		customSortAccessList = dom.getListControllerNode("customSortAccessList", {
+			maxVisible : 10,
+			pageSize : 1,
+			paintItem : paintItemAccess
+		});
+		
+		okCancelTitle = dom.getTextNode("customHeaderTitle");
+		okCancelDescription = dom.getTextNode("customHeaderDescription");
 
-		popupButtonRedText = dom.getTextNode("genreButtonRedText");
-		popupButtonGreenText = dom.getTextNode("genreButtonGreenText");
-		popupButtonYellowText = dom.getTextNode("genreButtonYellowText");
-		popupButtonBlueText = dom.getTextNode("genreButtonBlueText");
+		popupButtonRedText = dom.getTextNode("customButtonRedText");
+		popupButtonGreenText = dom.getTextNode("customButtonGreenText");
+		popupButtonYellowText = dom.getTextNode("customButtonYellowText");
+		popupButtonBlueText = dom.getTextNode("customButtonBlueText");
 		
 		orderings.push( {
 			position : 1,
@@ -165,7 +173,7 @@
 		popupButtonYellowText.setText("Move Up");
 		popupButtonBlueText.setText("Move Down");
 		
-		dom.getTextNode("genreExitLabel").setText("Exit");
+		dom.getTextNode("customExitLabel").setText("Exit");
 
 		actionMgr.mapActions(module.id, mapActionsFn());
 	};
@@ -177,21 +185,33 @@
 		mgr.hide(module.id);
 	};
 	module.implementing.view.publics.onHide = function() {
-		okCancelList.clear();
+		customSortList.clear();
 	};
 
 	function paintItem(P, Q) {
 		var R = listObj[Q];
-		P.okCancelListInnerItem.setText(R.position + ". " + R.text);
-		P.okCancelListInnerItem.clearClass();
-		P.okCancelListInnerItem.addClass(R.image);
+		P.customSortListInnerItem.setText(R.position + ". " + R.text);
+		P.customSortListInnerItem.clearClass();
+//		P.customSortListInnerItem.addClass(R.image);
 		if (R.id) {
-			P.okCancelListInnerItem.addClass("selectPopupOption_" + R.id)
+			P.customSortListInnerItem.addClass("selectPopupOption_" + R.id)
 		}
 		if (R.enabled) {
-			P.okCancelListInnerItem.addClass("enabled")
+			P.customSortListInnerItem.addClass("enabled")
 		}
 	}
+	function paintItemAccess(P, Q) {
+		var R = listObj[Q];
+		P.customSortAccessListInnerItem.setText(R.position + ". " + R.text);
+		P.customSortAccessListInnerItem.clearClass();
+//		P.customSortAccessListInnerItem.addClass(R.image);
+		if (R.id) {
+			P.customSortAccessListInnerItem.addClass("selectPopupOption_" + R.id)
+		}
+		if (R.enabled) {
+			P.customSortAccessListInnerItem.addClass("enabled")
+		}
+	}	
 	function showPopupButtons(selectedObj) {
 
 	}
@@ -199,12 +219,12 @@
 	function performAction(action, args) {
 		switch (action) {
 		case 'ACTION_PREVIOUS':
-			okCancelList.onPreviousKey(args.event);
-			showPopupButtons(listObj[okCancelList.getIndex()]);
+			customSortList.onPreviousKey(args.event);
+			showPopupButtons(listObj[customSortList.getIndex()]);
 			break;
 		case 'ACTION_NEXT':
-			okCancelList.onNextKey(args.event);
-			showPopupButtons(listObj[okCancelList.getIndex()]);
+			customSortList.onNextKey(args.event);
+			showPopupButtons(listObj[customSortList.getIndex()]);
 			break;
 		case 'ACTION_EXIT':
 			mgr.hide(module.id);
@@ -216,16 +236,16 @@
 			mgr.hide(module.id);
 			break;
 		case 'ACTION_RED':
-			swapListItems(okCancelList.getIndex(), 0);
+			swapListItems(customSortList.getIndex(), 0);
 			break;
 		case 'ACTION_GREEN':
-			swapListItems(okCancelList.getIndex(), 8);
+			swapListItems(customSortList.getIndex(), 8);
 			break;
 		case 'ACTION_YELLOW':
-			swapListItems(okCancelList.getIndex(), okCancelList.getIndex() - 1);
+			swapListItems(customSortList.getIndex(), customSortList.getIndex() - 1);
 			break;
 		case 'ACTION_BLUE':
-			swapListItems(okCancelList.getIndex(), okCancelList.getIndex() + 1);
+			swapListItems(customSortList.getIndex(), customSortList.getIndex() + 1);
 			break;
 		}
 	}
@@ -258,12 +278,13 @@
 		listObj[to].text = currentText;
 		listObj[to].position = currentPosition;
 		listObj[to].image = currentImage;
-		okCancelList.init(listObj.length, to);
+		customSortList.init(listObj.length, to);
 	}
 
 	module.implementing.view.publics.onShow = function(args) {
 		callback = args.callback;
-		okCancelList.init(listObj.length, 0)
+		customSortList.init(listObj.length, 0);
+		customSortAccessList.init(listObj.length, 0);
 	};
 	module.implementing.view.publics.onInput = function(event) {
 		actionMgr.matchInput(module.id, event);

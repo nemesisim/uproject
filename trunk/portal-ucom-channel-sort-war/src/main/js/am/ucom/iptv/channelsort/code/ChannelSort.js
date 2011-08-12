@@ -173,11 +173,7 @@
 						"am.ucom.iptv.channelsort.code.SelectSortPopup",
 						//"com.ericsson.iptv.portal.coreapps.common.popup.view.SelectWithInfoPopup",
 						{
-							id : "select_sort_popup",
-							title : lang.channelsReorderPopupTitle,
-							text : lang.channelsReorderPopupText,
-							dontShowCancel : false,
-							options : orderingTypes
+							"position" : 0
 						});
 	} 
 

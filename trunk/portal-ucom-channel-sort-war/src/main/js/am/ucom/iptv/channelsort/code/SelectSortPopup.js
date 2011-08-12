@@ -168,8 +168,8 @@
 		actionMgr.mapActions(module.id, mapActionsFn());
 	};
 	module.implementing.view.publics.onShow = function(args) {
-		showPopupButtons(orderings[0]);
-		okCancelList.init(orderings.length, 0)
+		showPopupButtons(orderings[args.position]);
+		okCancelList.init(orderings.length, args.position)
 	};	
 	module.implementing.loading.publics.unload = function() {
 	};
@@ -232,7 +232,8 @@
 			break;
 		case 'ACTION_RED':
 			if (orderings[okCancelList.getIndex()].disabled === "true") {
-
+				viewManager
+				 .show("am.ucom.iptv.channelsort.code.CustomAndAccessSort", {"callback" : genreSort});	
 			}
 			break;
 		case 'ACTION_GREEN':
@@ -253,7 +254,7 @@
 	}
 	var genreSortOrder = [];
 	function genreSort(orderings){
-		viewManager.show(module.id);
+		viewManager.show(module.id, {"position" : 1});
 		for(var i = 0; i < orderings.length; i++)
 			genreSortOrder.push(orderings[i].position);
 	}

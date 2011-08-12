@@ -111,6 +111,15 @@
 	background-image: url(images/genre.jpg);
 }
 
+#am_ucom_iptv_channelsort_code_CustomAndAccessSort .sortBackground {
+	background-image: url(images/custom.jpg);
+}
+
+#am_ucom_iptv_channelsort_code_CustomAndAccessSort td{
+	width: 200px;
+	margin: 20px; 
+}
+	
 #am_ucom_iptv_channelsort_code_GenreSort .sortPopup {
 	border-spacing: 0;
 	left: 223px;
@@ -196,4 +205,13 @@
 
 .adultChannels {
 	background-image: url(images/genre/icon_movieadultchannels.gif);
+}
+
+#genreExitLabel{
+    color: white;
+    font-weight: bold;
+    left: 421px;
+    position: absolute;
+    top: 519px;
+    width: 210px;
 }
