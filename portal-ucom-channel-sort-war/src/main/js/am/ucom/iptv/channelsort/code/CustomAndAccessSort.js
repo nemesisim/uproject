@@ -69,7 +69,6 @@
 	var customSortAccessList;
 	var okCancelTitle;
 	var okCancelDescription;
-	var listObj;
 	var callback;
 
 	var customSortMap;
@@ -83,6 +82,14 @@
 	var popupButtonBlueText;
 	var orderings = [];
 
+	function channelsList(channelsInfo) {
+		for ( var index = 0; index < channelsInfo.length; index++) {
+			orderings.push( {
+				position : channelsInfo[index].channelId,
+				text : channelsInfo[index].name
+			});
+		}
+	}
 	module.implementing.loading.publics.load = function() {
 		dom = module.dependencies.dom.handle
 				.getNodeFactory(module.resources.html.handle);
@@ -109,7 +116,7 @@
 			pageSize : 1,
 			paintItem : paintItemAccess
 		});
-		
+		customSortAccessList.hideSelector();
 		okCancelTitle = dom.getTextNode("customHeaderTitle");
 		okCancelDescription = dom.getTextNode("customHeaderDescription");
 
@@ -118,53 +125,12 @@
 		popupButtonYellowText = dom.getTextNode("customButtonYellowText");
 		popupButtonBlueText = dom.getTextNode("customButtonBlueText");
 		
-		orderings.push( {
-			position : 1,
-			text : "Public Cannels",
-			image : "publicChannels"
+		broadcastTV.getChannelList(function(channels) {
+			channelsList(channels.channelList);
+		}, function() {
 
-		});
-		orderings.push( {
-			position : 2,
-			text : "Music Channels",
-			image : "musicChannels"
-		});
-		orderings.push( {
-			position : 3,
-			text : "Entertainment Channels",
-			image : "entertainmentChannels"
-		});
-		orderings.push( {
-			position : 4,
-			text : "Educational Channels",
-			image : "educationalChannels"
-		});
-		orderings.push( {
-			position : 5,
-			text : "Kid's Channels",
-			image : "kidsChannels"
-		});
-		orderings.push( {
-			position : 6,
-			text : "News Channels",
-			image : "newsChannels"
-		});
-		orderings.push( {
-			position : 7,
-			text : "Sport Channels",
-			image : "sportsChannels"
-		});
-		orderings.push( {
-			position : 8,
-			text : "Movie Channels",
-			image : "movieChannels"
-		});
-		orderings.push( {
-			position : 9,
-			text : "Adult Channels",
-			image : "adultChannels"
-		});
-		listObj = orderings;
+		}, locale);
+
 		okCancelTitle.setText("Sort by Genre");
 		okCancelDescription.setText("Geners");
 
@@ -189,10 +155,9 @@
 	};
 
 	function paintItem(P, Q) {
-		var R = listObj[Q];
+		var R = orderings[Q];
 		P.customSortListInnerItem.setText(R.position + ". " + R.text);
 		P.customSortListInnerItem.clearClass();
-//		P.customSortListInnerItem.addClass(R.image);
 		if (R.id) {
 			P.customSortListInnerItem.addClass("selectPopupOption_" + R.id)
 		}
@@ -201,10 +166,9 @@
 		}
 	}
 	function paintItemAccess(P, Q) {
-		var R = listObj[Q];
+		var R = orderings[Q];
 		P.customSortAccessListInnerItem.setText(R.position + ". " + R.text);
 		P.customSortAccessListInnerItem.clearClass();
-//		P.customSortAccessListInnerItem.addClass(R.image);
 		if (R.id) {
 			P.customSortAccessListInnerItem.addClass("selectPopupOption_" + R.id)
 		}
@@ -212,20 +176,36 @@
 			P.customSortAccessListInnerItem.addClass("enabled")
 		}
 	}	
-	function showPopupButtons(selectedObj) {
-
+	function selectColumn(direction) {
+		if(direction === "right"){
+//			customSortList.getIndex();
+			customSortAccessList.showSelector();
+			customSortList.hideSelector();
+		}
+		if(direction === "left"){
+//			customSortAccessList.getIndex();
+			customSortAccessList.hideSelector();
+			customSortList.showSelector();
+		}
+//		alert(customSortList.getIndex() + "  =  " + customSortAccessList.getIndex());
 	}
 
 	function performAction(action, args) {
 		switch (action) {
 		case 'ACTION_PREVIOUS':
 			customSortList.onPreviousKey(args.event);
-			showPopupButtons(listObj[customSortList.getIndex()]);
+			customSortAccessList.onPreviousKey(args.event);
 			break;
 		case 'ACTION_NEXT':
 			customSortList.onNextKey(args.event);
-			showPopupButtons(listObj[customSortList.getIndex()]);
+			customSortAccessList.onNextKey(args.event);
 			break;
+		case 'ACTION_LEFT':
+			selectColumn("left");
+			break;
+		case 'ACTION_RIGHT':
+			selectColumn("right");
+			break;			
 		case 'ACTION_EXIT':
 			mgr.hide(module.id);
 			break;
@@ -251,40 +231,37 @@
 	}
 
 	function swapListItems(from, to) {
-		var selected = listObj[from];
+		var selected = orderings[from];
 		var currentText = selected.text;
 		var currentPosition = selected.position;
 		var currentImage = selected.image;
 		if (from < to)
 			for ( var i = from; i < to; i++) {
-				if (listObj[i + 1]) {
-					listObj[i].text = listObj[i + 1].text;
-					listObj[i].position = listObj[i + 1].position;
-					listObj[i].image = listObj[i + 1].image;
+				if (orderings[i + 1]) {
+					orderings[i].text = orderings[i + 1].text;
+					orderings[i].position = orderings[i + 1].position;
 				} else {
 					return;
 				}
 			}
 		else
 			for ( var i = from; i > to; i--) {
-				if (listObj[i - 1]) {
-					listObj[i].text = listObj[i - 1].text;
-					listObj[i].position = listObj[i - 1].position;
-					listObj[i].image = listObj[i - 1].image;
+				if (orderings[i - 1]) {
+					orderings[i].text = orderings[i - 1].text;
+					orderings[i].position = orderings[i - 1].position;
 				} else {
 					return;
 				}
 			}
-		listObj[to].text = currentText;
-		listObj[to].position = currentPosition;
-		listObj[to].image = currentImage;
-		customSortList.init(listObj.length, to);
+		orderings[to].text = currentText;
+		orderings[to].position = currentPosition;
+		customSortList.init(orderings.length, to);
 	}
 
 	module.implementing.view.publics.onShow = function(args) {
 		callback = args.callback;
-		customSortList.init(listObj.length, 0);
-		customSortAccessList.init(listObj.length, 0);
+		customSortList.init(orderings.length, 0);
+		customSortAccessList.init(orderings.length, 0);
 	};
 	module.implementing.view.publics.onInput = function(event) {
 		actionMgr.matchInput(module.id, event);
@@ -325,6 +302,26 @@
 				});
 			},
 			keyEvents : [ "KEY_DOWN" ]
+		}, {
+			id : "ACTION_LEFT",
+			localizedLabel : undefined,
+			isApplicable : P,
+			invoke : function(event) {
+				performAction("ACTION_LEFT", {
+					"event" : event
+				});
+			},
+			keyEvents : [ "KEY_LEFT" ]
+		}, {
+			id : "ACTION_RIGHT",
+			localizedLabel : undefined,
+			isApplicable : P,
+			invoke : function(event) {
+				performAction("ACTION_RIGHT", {
+					"event" : event
+				});
+			},
+			keyEvents : [ "KEY_RIGHT" ]
 		}, {
 			id : "ACTION_EXIT",
 			localizedLabel : undefined,
