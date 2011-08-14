@@ -111,15 +111,6 @@
 	background-image: url(images/genre.jpg);
 }
 
-#am_ucom_iptv_channelsort_code_CustomAndAccessSort .sortBackground {
-	background-image: url(images/custom.jpg);
-}
-
-#am_ucom_iptv_channelsort_code_CustomAndAccessSort td{
-	width: 200px;
-	margin: 20px; 
-}
-	
 #am_ucom_iptv_channelsort_code_GenreSort .sortPopup {
 	border-spacing: 0;
 	left: 223px;
@@ -207,11 +198,61 @@
 	background-image: url(images/genre/icon_movieadultchannels.gif);
 }
 
-#genreExitLabel{
+#genreExitLabel {
+	color: white;
+	font-weight: bold;
+	left: 421px;
+	position: absolute;
+	top: 519px;
+	width: 210px;
+}
+
+#am_ucom_iptv_channelsort_code_CustomAndAccessSort {
+	color: white;
+}
+#am_ucom_iptv_channelsort_code_CustomAndAccessSort .sortBackground {
+	background-image: url(images/custom.jpg);
+}
+
+#customButtonContainer {
     color: white;
     font-weight: bold;
-    left: 421px;
+    height: 17px;
+    left: 60px;
     position: absolute;
-    top: 519px;
-    width: 210px;
+    text-align: center;
+    top: 473px;
+    width: 340px;
+}
+
+#customButtonContainer td {
+	font-size: 12pt;
+	padding-top: 20px;
+	width: 10%;
+}
+
+#customExitLabel{
+    color: white;
+    font-weight: bold;
+    left: 586px;
+    position: absolute;
+    top: 497px;
+    width: 82px;
+}
+#am_ucom_iptv_channelsort_code_CustomAndAccessSort li {
+    height: 24px;
+    margin: 9px;
+    width: 267px;
+}
+.sortPopup .customSortContent{
+    border-spacing: 0;
+    left: 60px;
+    position: absolute;
+    top: 113px;
+}
+.sortPopup .customSortAccessContent{
+    border-spacing: 0;
+    left: 360px;
+    position: absolute;
+    top: 113px;
 }
