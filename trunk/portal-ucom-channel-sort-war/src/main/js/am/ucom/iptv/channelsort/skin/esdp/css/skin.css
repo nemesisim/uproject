@@ -6,43 +6,29 @@
 	font-size: 26px;
 	position: absolute;
 	top: 95px;
-	width: 200px;
+	width: 150px;
 	color: #fff;
+	left: 261px;
 }
 
 #am_ucom_iptv_channelsort_code_SelectSortPopup p {
 	position: absolute;
 	top: 175px;
 	color: #46DC46;
+	left: 261px;
 }
 
 #am_ucom_iptv_channelsort_code_SelectSortPopup ul {
-	position: absolute;
-	top: 225px;
-	width: 195px;
+    left: 261px;
+    padding-top: 5px;
+    position: absolute;
+    top: 221px;
+    width: 195px;
 }
 
 #am_ucom_iptv_channelsort_code_SelectSortPopup li {
 	height: 34px;
 	color: #fff;
-}
-
-#am_ucom_iptv_channelsort_code_SelectSortPopup .popupContent>ul {
-	border-top: 2px solid #088c08;
-	padding-top: 5px;
-	clear: both;
-}
-
-#am_ucom_iptv_channelsort_code_SelectSortPopup .view {
-	width: 100%;
-	height: 100%;
-	display: table;
-	position: absolute;
-	background-image: none;
-}
-
-#am_ucom_iptv_channelsort_code_SelectSortPopup .popupContent {
-	width: 200px;
 }
 
 .sortBackground {
@@ -57,10 +43,6 @@
 
 .sortPopup {
 	border-spacing: 0;
-	left: 248px;
-	position: absolute;
-	top: 105px;
-	width: 217px;
 }
 
 .sortPopupContent {
@@ -68,10 +50,11 @@
 }
 
 #buttonContainer {
-	height: 17px;
-	position: absolute;
-	top: 402px;
-	width: 210px;
+    height: 17px;
+    left: 258px;
+    position: absolute;
+    top: 402px;
+    width: 210px;
 }
 
 #buttonContainer td {
@@ -213,7 +196,27 @@
 #am_ucom_iptv_channelsort_code_CustomAndAccessSort .sortBackground {
 	background-image: url(images/custom.jpg);
 }
-
+#customHeaderTitle{
+    color: white;
+    font-weight: bold;
+    left: 86px;
+    position: absolute;
+    top: 20px;
+}
+#customChannelsLabel{
+    color: white;
+    font-weight: bold;
+    left: 88px;
+    position: absolute;
+    top: 93px;
+}
+#customAccessTypeLabel{
+    color: white;
+    font-weight: bold;
+    left: 385px;
+    position: absolute;
+    top: 93px;
+}
 #customButtonContainer {
     color: white;
     font-weight: bold;
@@ -236,8 +239,22 @@
     font-weight: bold;
     left: 586px;
     position: absolute;
-    top: 497px;
-    width: 82px;
+    top: 498px;
+}
+
+#customOkLabel{
+    color: white;
+    font-weight: bold;
+    left: 553px;
+    position: absolute;
+    top: 458px;
+}
+#customNavigateLabel{
+    color: white;
+    font-weight: bold;
+    left: 445px;
+    position: absolute;
+    top: 458px;
 }
 #am_ucom_iptv_channelsort_code_CustomAndAccessSort li {
     height: 24px;

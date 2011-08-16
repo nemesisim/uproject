@@ -91,7 +91,6 @@
 	var popupButtonYellowText;
 	var popupButtonBlueText;
 	var orderings = [];
-	
 
 	module.implementing.loading.publics.load = function() {
 		dom = module.dependencies.dom.handle
@@ -105,7 +104,7 @@
 		viewManager = module.dependencies.viewManager.handle;
 		customSortMap = module.dependencies.customPositionsMap.handle;
 		module.resources.html.handle.firstChild.id = "select_sort_popup";
-		
+
 		customPositionsMap = customSortMap.getChannelMap();
 		customPositionsMapRevert = customSortMap.getChannelMapReverted();
 		genrePositionMap = customSortMap.getGenreMap();
@@ -141,20 +140,20 @@
 		});
 
 		orderings.push( {
-			text : "Custom 1",
-			callback : setOrdering("Custom 1"),
+			text : "Utv1",
+			callback : setOrdering("Utv1"),
 			disabled : "true"
 		});
 
 		orderings.push( {
-			text : "Custom 2",
-			callback : setOrdering("Custom 2"),
+			text : "Utv2",
+			callback : setOrdering("Utv2"),
 			disabled : "true"
 		});
 
 		orderings.push( {
-			text : "Custom 3",
-			callback : setOrdering("Custom 3"),
+			text : "Utv3",
+			callback : setOrdering("Utv3"),
 			disabled : "true"
 		});
 		okCancelTitle.setText("Channel management");
@@ -170,7 +169,7 @@
 	module.implementing.view.publics.onShow = function(args) {
 		showPopupButtons(orderings[args.position]);
 		okCancelList.init(orderings.length, args.position)
-	};	
+	};
 	module.implementing.loading.publics.unload = function() {
 	};
 	module.implementing.view.publics.onFocus = function() {
@@ -224,7 +223,7 @@
 		case 'ACTION_EXIT':
 			mgr.hide(module.id);
 			break;
-		case 'ACTION_OK':						
+		case 'ACTION_OK':
 			if (orderings[okCancelList.getIndex()].callback) {
 				orderings[okCancelList.getIndex()].callback()
 			}
@@ -232,19 +231,24 @@
 			break;
 		case 'ACTION_RED':
 			if (orderings[okCancelList.getIndex()].disabled === "true") {
-				viewManager
-				 .show("am.ucom.iptv.channelsort.code.CustomAndAccessSort", {"callback" : genreSort});	
+				viewManager.show(
+						"am.ucom.iptv.channelsort.code.CustomAndAccessSort", {
+							"position" : okCancelList.getIndex(),
+							"callback" : customSortCallback,
+							"name" : orderings[okCancelList.getIndex()].text
+						});
 			}
 			break;
 		case 'ACTION_GREEN':
 			if (orderings[okCancelList.getIndex()].disabled === "false") {
-				//alert("G" + orderings[okCancelList.getIndex()].text);
+				// alert("G" + orderings[okCancelList.getIndex()].text);
 			}
 			break;
 		case 'ACTION_YELLOW':
 			if (orderings[okCancelList.getIndex()].disabled === "false") {
-				viewManager
-				 .show("am.ucom.iptv.channelsort.code.GenreSort", {"callback" : genreSort});		
+				viewManager.show("am.ucom.iptv.channelsort.code.GenreSort", {
+					"callback" : genreSort
+				});
 			}
 			break;
 		case 'ACTION_BLUE':
@@ -253,12 +257,18 @@
 		}
 	}
 	var genreSortOrder = [];
-	function genreSort(orderings){
-		viewManager.show(module.id, {"position" : 1});
-		for(var i = 0; i < orderings.length; i++)
+	function genreSort(orderings) {
+		viewManager.show(module.id, {
+			"position" : 1
+		});
+		for ( var i = 0; i < orderings.length; i++)
 			genreSortOrder.push(orderings[i].position);
 	}
-	
+	function customSortCallback(position) {
+		viewManager.show(module.id, {
+			"position" : position
+		});
+	}
 	function mapActionsFn() {
 		var P = function(S, R) {
 			S(true)
@@ -331,7 +341,7 @@
 				performAction("ACTION_BLUE");
 			},
 			keyEvents : [ "KEY_BLUE" ]
-		}];
+		} ];
 		return actions;
 	}
 
@@ -359,37 +369,35 @@
 			return function() {
 				orderChannels(buildChannelsObjectStandart);
 			}
-		} 
-		else if (type === "genre") {
+		} else if (type === "genre") {
 			return function() {
 				orderChannels(buildChannelsObjectGenre);
 			}
-		}
-		else {
+		} else {
 			return function() {
 				showInfoPopup(lang.channelsOrderWrongMethodChosen);
 			}
 		}
 	}
 
-	function buildChannelsObjectGenre(channelsInfo){
+	function buildChannelsObjectGenre(channelsInfo) {
 		var revertedMap = {};
 		var str = "";
 		for ( var i = 0; i < genreSortOrder.length; i++) {
 			var currentGenre = genrePositionMap[genreSortOrder[i]];
-			for ( var j = 0; j < currentGenre.length; j++) {				
+			for ( var j = 0; j < currentGenre.length; j++) {
 				str += currentGenre[j] + " ";
 				revertedMap[new String(currentGenre[j])] = i;
 			}
 		}
-//		var objStr = {};
-//		for ( var i = 0; i < channelsInfo.length; i++) {
-//			objStr[new String(i + 1)] = revertedMap[channelsInfo[i].channelId];
-//		}
-//		alert("str = " + str);
-		return revertedMap;			
+		// var objStr = {};
+		// for ( var i = 0; i < channelsInfo.length; i++) {
+		// objStr[new String(i + 1)] = revertedMap[channelsInfo[i].channelId];
+		// }
+		// alert("str = " + str);
+		return revertedMap;
 	}
-	
+
 	function buildChannelsObjectStandart(channelsInfo) {
 		var objStr = {};
 		channelsInfo.sort(sortByCustomMap);
