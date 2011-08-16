@@ -207,6 +207,9 @@
 			showPopupButtons(listObj[okCancelList.getIndex()]);
 			break;
 		case 'ACTION_EXIT':
+			if (callback) {
+				callback(orderings)
+			}			
 			mgr.hide(module.id);
 			break;
 		case 'ACTION_OK':
