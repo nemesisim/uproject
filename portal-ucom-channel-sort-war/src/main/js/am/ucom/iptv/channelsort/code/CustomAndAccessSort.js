@@ -81,7 +81,82 @@
 	var popupButtonYellowText;
 	var popupButtonBlueText;
 	var orderings = [];
-
+	var channels = {"	1	", "	Հ1	",
+			"	2	", "	Հ2	",
+			"	3	", "	Շանթ	",
+			"	4	", "	Արմենիա TV	",
+			"	5	", "	Կենտրոն	",
+			"	6	", "	12	",
+			"	7	", "	Երկիր Մեդիա	",
+			"	8	", "	ATV	",
+			"	9	", "	ԱՐ	",
+			"	10	", "	ОРТ	",
+			"	11	", "	Rossia 1	",
+			"	12	", "	РТР Планетa 	",
+			"	13	", "	HTB	",
+			"	14	", "	ДТВ	",
+			"	15	", "	TNT	",
+			"	16	", "	CTC	",
+			"	17	", "	Культура/Россия К 	",
+			"	18	", "	Դար 21	",
+			"	19	", "	Musicbox RU	",
+			"	20	", "	Муз ТВ 	",
+			"	21	", "	MTV	",
+			"	22	", "	MTV Dance	",
+			"	23	", "	Bridge TV (24 Techno)	",
+			"	24	", "	MCM Top	",
+			"	25	", "	Mezzo	",
+			"	26	", "	Охота и рыбалка	",
+			"	27	", "	Кухня ТВ	",
+			"	28	", "	Усадьба	",
+			"	29	", "	World Fashion channel	",
+			"	30	", "	Man TV	",
+			"	31	", "	Индия ТВ	",
+			"	32	", "	Коммедия ТВ	",
+			"	33	", "	HCT	",
+			"	34	", "	TLC	",
+			"	35	", "	National Geographic	",
+			"	36	", "	NAT GEO WILD	",
+			"	37	", "	Animal planet	",
+			"	38	", "	Discovery Channel	",
+			"	39	", "	Discovery World	",
+			"	40	", "	Discovery Science	",
+			"	41	", "	Travel Channel	",
+			"	42	", "	365 ДНЕЙ ТВ	",
+			"	43	", "	VIASAT HISTORY	",
+			"	44	", "	VIASAT EXPLORER	",
+			"	45	", "	English Club	",
+			"	46	", "	Disney channel	",
+			"	47	", "	Boomerang	",
+			"	48	", "	Tiji	",
+			"	49	", "	Gulli	",
+			"	50	", "	Cartoon Network	",
+			"	51	", "	Вести/Россия 24	",
+			"	52	", "	РБК	",
+			"	53	", "	Euronews	",
+			"	54	", "	CNN	",
+			"	55	", "	BBC World News	",
+			"	56	", "	France 24	",
+			"	57	", "	Deutsche Welle	",
+			"	58	", "	Eurosport	",
+			"	59	", "	Eurosport 2	",
+			"	60	", "	Спорт/Россия 2	",
+			"	61	", "	VIASAT SPORT	",
+			"	62	", "	НТВ+Наш футбол	",
+			"	63	", "	НТВ+ футбол	",
+			"	64	", "	НТВ+спорт online	",
+			"	65	", "	НТВ+ Теннис	",
+			"	66	", "	НТВ+ Баскетбол	",
+			"	67	", "	Авто плюс	",
+			"	68	", "	БОЕЦ ТВ 	",
+			"	69	", "	Кинохит	",
+			"	70	", "	Премьера	",
+			"	71	", "	VIASAT ТВ 1000	",
+			"	72	", "	VIASAT ТВ 1000 рус.	",
+			"	73	", "	FOX Life	",
+			"	74	", "	FOX CRIME	",
+			"	75	", "	Playboy TV	",
+			"	76	", "	Русская ночь 	"};
 	function channelsList(channelsInfo) {
 		for ( var index = 0; index < channelsInfo.length; index++) {
 			orderings.push( {
@@ -126,9 +201,10 @@
 		popupButtonBlueText = dom.getTextNode("customButtonBlueText");
 		
 		broadcastTV.getChannelList(function(channels) {
+			alert(channels.channelList.length)
 			channelsList(channels.channelList);
 		}, function() {
-
+			alert("fail");
 		}, locale);
 
 		okCancelTitle.setText("Sort by Genre");
