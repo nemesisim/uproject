@@ -1,7 +1,6 @@
 (function() {
 	var module = {
 		id : "am.ucom.iptv.channelsort.code.SelectSortPopup",
-		// id: "am.ucom.iptv.channelsort.common.popup.view.SelectWithInfoPopup",
 		version : [ 1, 0 ],
 		type : "code",
 		implementing : {
@@ -241,7 +240,6 @@
 			break;
 		case 'ACTION_GREEN':
 			if (orderings[okCancelList.getIndex()].disabled === "false") {
-				// alert("G" + orderings[okCancelList.getIndex()].text);
 			}
 			break;
 		case 'ACTION_YELLOW':

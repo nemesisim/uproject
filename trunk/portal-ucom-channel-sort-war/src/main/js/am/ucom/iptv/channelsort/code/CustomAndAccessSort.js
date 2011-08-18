@@ -267,25 +267,37 @@
 		}
 	}
 	function selectColumn(direction) {
-		if (direction === "right") {
-			customSortAccessList.showSelector();
-			customSortList.hideSelector();
+		if (direction === "right") {			
+			mgr.show(
+					"com.ericsson.iptv.portal.coreapps.common.popup.view.SelectPopup",
+						{
+							id : "customSort_accessPopup",
+							text : "Select Access",
+							enabled : "false",
+							callback : function() {
+								alert("Select Access");
+							},
+							options : ["Open", "Blocked", "Esiminch"]
+						});
+			
+//			customSortAccessList.showSelector();
+//			customSortList.hideSelector();
 		}
-		if (direction === "left") {
-			customSortAccessList.hideSelector();
-			customSortList.showSelector();
-		}
+//		if (direction === "left") {
+//			customSortAccessList.hideSelector();
+//			customSortList.showSelector();
+//		}
 	}
 
 	function performAction(action, args) {
 		switch (action) {
 		case 'ACTION_PREVIOUS':
 			customSortList.onPreviousKey(args.event);
-			customSortAccessList.onPreviousKey(args.event);
+//			customSortAccessList.onPreviousKey(args.event);
 			break;
 		case 'ACTION_NEXT':
 			customSortList.onNextKey(args.event);
-			customSortAccessList.onNextKey(args.event);
+//			customSortAccessList.onNextKey(args.event);
 			break;
 		case 'ACTION_LEFT':
 			selectColumn("left");
