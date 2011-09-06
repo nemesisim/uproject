@@ -300,10 +300,10 @@
 //			customSortAccessList.onNextKey(args.event);
 			break;
 		case 'ACTION_LEFT':
-			selectColumn("left");
+			//selectColumn("left");
 			break;
 		case 'ACTION_RIGHT':
-			selectColumn("right");
+			//selectColumn("right");
 			break;
 		case 'ACTION_EXIT':
 			if(callback)

@@ -73,12 +73,6 @@
 		broadcastTV = module.dependencies.broadcastTV.handle;
 		preferenceMgr = module.dependencies.preferenceMgr.handle;
 		customPositionsMap = module.dependencies.customPositionsMap.handle.channelPositionsMap;
-		//TODO:
-		// var str = "";
-		// for ( var index = 1; index < customPositionsMap.mapSize; index++) {
-		// str += channelsPositionsMap.index + ", ";
-		// }
-		// alert(str);
 
 		preferenceMgr.refresh(function() {
 			var pref = preferenceMgr
@@ -137,7 +131,6 @@
 				viewManager
 				 .show(
 						"am.ucom.iptv.channelsort.common.popup.view.SelectWithInfoPopup",
-						//"com.ericsson.iptv.portal.coreapps.common.popup.view.SelectWithInfoPopup",
 						{
 							id : "select_sort_popup",
 							title : lang.channelsReorderPopupTitle,
@@ -145,7 +138,6 @@
 							dontShowCancel : false,
 							options : orderingTypes
 						});				
-				//orderChannels(buildChannelsObjectDefault);
 			}
 		} else if (orderingType == "Alphabetical") {
 			return function() {
@@ -171,7 +163,6 @@
 		viewManager
 				.show(
 						"am.ucom.iptv.channelsort.code.SelectSortPopup",
-						//"com.ericsson.iptv.portal.coreapps.common.popup.view.SelectWithInfoPopup",
 						{
 							"position" : 0
 						});
