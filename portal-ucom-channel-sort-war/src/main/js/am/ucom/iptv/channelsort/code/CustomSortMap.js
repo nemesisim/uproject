@@ -41,7 +41,17 @@
 								   "6" : ["020", "005", "027", "053", "052", "051", "024"], 
 								   "7" : ["008", "017", "016", "015", "029", "028", "018", "019", "065", "013", "043"], 
 								   "8" : ["042", "044", "049", "047", "032", "033"], 
-								   "9" : ["022", "030" ]}
+								   "9" : ["022", "030" ]};
+	
+	var genresMap = { "public" : {text : "Public Cannels", image : "publicChannels"},
+		"music" : {text : "Music Channels", image : "musicChannels"},
+		"entertainment" : {text : "Entertainment Channels", image : "entertainmentChannels"},
+		"educational" : {text : "Educational Channels", image : "educationalChannels"},
+		"kids" : {text : "Kid's Channels", image : "kidsChannels"},
+		"news" : {text : "News Channels", image : "newsChannels"},
+		"sports" : {text : "Sport Channels", image : "sportsChannels"},
+		"movie" : {text : "Movie Channels", image : "movieChannels"},
+		"adult" : {text : "Adult Channels", image : "adultChannels"}};
 	
 	var channelPositionsMapFullRevert = {};	
 	var channelPositionsMapFamilyRevert = {};
@@ -51,7 +61,9 @@
 	module.publics.getGenreMap = function(){
 		return channelPositionsMapGenre;
 	}
-	
+	module.publics.getGenresMap = function(){
+		return genresMap;
+	}	
 	module.publics.getChannelMap = function(){
 		if(region == "UTV_Full")
 			return channelPositionsMapFull;
@@ -78,7 +90,6 @@
 		preferenceMgr = module.dependencies.preferenceMgr.handle;
 		log = module.dependencies.log.handle;
 		region = preferenceMgr.get("com.ericsson.iptv.portal.user.region");
-		log.info("region =" + region);
 
 		for(prop in channelPositionsMapFull)
 			channelPositionsMapFullRevert[channelPositionsMapFull[prop]] = prop;	
