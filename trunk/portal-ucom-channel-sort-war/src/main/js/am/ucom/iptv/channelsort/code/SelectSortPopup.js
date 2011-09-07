@@ -244,8 +244,10 @@
 			break;
 		case 'ACTION_YELLOW':
 			if (orderings[okCancelList.getIndex()].disabled === "false") {
+				var genreOrderList = {"2" : "public", "8" : "music", "4" : "entertainment", "6" : "educational", "5" : "kids", "3" : "news", "7" : "sports", "1" : "movie", "9" : "adult"};
 				viewManager.show("am.ucom.iptv.channelsort.code.GenreSort", {
-					"callback" : genreSort
+					"callback" : genreSort,
+					"orderList" : genreOrderList
 				});
 			}
 			break;
@@ -259,8 +261,15 @@
 		viewManager.show(module.id, {
 			"position" : 1
 		});
-		for ( var i = 0; i < orderings.length; i++)
+		var str = "";
+		for ( var i = 0; i < orderings.length; i++){
+			str += '"' + orderings[i].position + '" : "'+ orderings[i].genre + '"';
+			if(i < orderings.length - 1)
+				str += ", ";
 			genreSortOrder.push(orderings[i].position);
+		}
+		log.error(str);
+		alert("str = " + str);
 	}
 	function customSortCallback(position) {
 		viewManager.show(module.id, {

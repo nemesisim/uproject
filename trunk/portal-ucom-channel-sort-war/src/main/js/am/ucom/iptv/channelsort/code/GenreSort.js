@@ -68,12 +68,10 @@
 	var okCancelList;
 	var okCancelTitle;
 	var okCancelDescription;
-	var listObj;
 	var callback;
 
 	var customSortMap;
-	var customPositionsMap;
-	var customPositionsMapRevert = {};
+	var getGenresMap;
 	var locale = "en-US";
 
 	var popupButtonRedText;
@@ -93,8 +91,8 @@
 		log = module.dependencies.log.handle;
 		customSortMap = module.dependencies.customPositionsMap.handle;
 
-		customPositionsMap = customSortMap.getChannelMap();
-		customPositionsMapRevert = customSortMap.getChannelMapReverted();
+		getGenresMap = customSortMap.getGenresMap();
+
 		module.resources.html.handle.firstChild.id = "genre_sort_view";
 
 		okCancelList = dom.getListControllerNode("okCancelList", {
@@ -109,54 +107,7 @@
 		popupButtonGreenText = dom.getTextNode("genreButtonGreenText");
 		popupButtonYellowText = dom.getTextNode("genreButtonYellowText");
 		popupButtonBlueText = dom.getTextNode("genreButtonBlueText");
-		
-		orderings.push( {
-			position : 1,
-			text : "Public Cannels",
-			image : "publicChannels"
 
-		});
-		orderings.push( {
-			position : 2,
-			text : "Music Channels",
-			image : "musicChannels"
-		});
-		orderings.push( {
-			position : 3,
-			text : "Entertainment Channels",
-			image : "entertainmentChannels"
-		});
-		orderings.push( {
-			position : 4,
-			text : "Educational Channels",
-			image : "educationalChannels"
-		});
-		orderings.push( {
-			position : 5,
-			text : "Kid's Channels",
-			image : "kidsChannels"
-		});
-		orderings.push( {
-			position : 6,
-			text : "News Channels",
-			image : "newsChannels"
-		});
-		orderings.push( {
-			position : 7,
-			text : "Sport Channels",
-			image : "sportsChannels"
-		});
-		orderings.push( {
-			position : 8,
-			text : "Movie Channels",
-			image : "movieChannels"
-		});
-		orderings.push( {
-			position : 9,
-			text : "Adult Channels",
-			image : "adultChannels"
-		});
-		listObj = orderings;
 		okCancelTitle.setText("Sort by Genre");
 		okCancelDescription.setText("Geners");
 
@@ -164,7 +115,7 @@
 		popupButtonGreenText.setText("Set Last");
 		popupButtonYellowText.setText("Move Up");
 		popupButtonBlueText.setText("Move Down");
-		
+
 		dom.getTextNode("genreExitLabel").setText("Exit");
 
 		actionMgr.mapActions(module.id, mapActionsFn());
@@ -181,7 +132,7 @@
 	};
 
 	function paintItem(P, Q) {
-		var R = listObj[Q];
+		var R = orderings[Q];
 		P.okCancelListInnerItem.setText(R.position + ". " + R.text);
 		P.okCancelListInnerItem.clearClass();
 		P.okCancelListInnerItem.addClass(R.image);
@@ -200,16 +151,16 @@
 		switch (action) {
 		case 'ACTION_PREVIOUS':
 			okCancelList.onPreviousKey(args.event);
-			showPopupButtons(listObj[okCancelList.getIndex()]);
+			showPopupButtons(orderings[okCancelList.getIndex()]);
 			break;
 		case 'ACTION_NEXT':
 			okCancelList.onNextKey(args.event);
-			showPopupButtons(listObj[okCancelList.getIndex()]);
+			showPopupButtons(orderings[okCancelList.getIndex()]);
 			break;
 		case 'ACTION_EXIT':
 			if (callback) {
 				callback(orderings)
-			}			
+			}
 			mgr.hide(module.id);
 			break;
 		case 'ACTION_OK':
@@ -234,39 +185,68 @@
 	}
 
 	function swapListItems(from, to) {
-		var selected = listObj[from];
+		var selected = orderings[from];
 		var currentText = selected.text;
 		var currentPosition = selected.position;
 		var currentImage = selected.image;
 		if (from < to)
 			for ( var i = from; i < to; i++) {
-				if (listObj[i + 1]) {
-					listObj[i].text = listObj[i + 1].text;
-					listObj[i].position = listObj[i + 1].position;
-					listObj[i].image = listObj[i + 1].image;
+				if (orderings[i + 1]) {
+					orderings[i].text = orderings[i + 1].text;
+					orderings[i].position = orderings[i + 1].position;
+					orderings[i].image = orderings[i + 1].image;
 				} else {
 					return;
 				}
 			}
 		else
 			for ( var i = from; i > to; i--) {
-				if (listObj[i - 1]) {
-					listObj[i].text = listObj[i - 1].text;
-					listObj[i].position = listObj[i - 1].position;
-					listObj[i].image = listObj[i - 1].image;
+				if (orderings[i - 1]) {
+					orderings[i].text = orderings[i - 1].text;
+					orderings[i].position = orderings[i - 1].position;
+					orderings[i].image = orderings[i - 1].image;
 				} else {
 					return;
 				}
 			}
-		listObj[to].text = currentText;
-		listObj[to].position = currentPosition;
-		listObj[to].image = currentImage;
-		okCancelList.init(listObj.length, to);
+		orderings[to].text = currentText;
+		orderings[to].position = currentPosition;
+		orderings[to].image = currentImage;
+		okCancelList.init(orderings.length, to);
 	}
-
+	var initOrderList = true;
 	module.implementing.view.publics.onShow = function(args) {
 		callback = args.callback;
-		okCancelList.init(listObj.length, 0)
+		if (initOrderList) {
+			var orderList = args.orderList;
+			if (orderList) {				
+				var index = 0;
+				for (var genreName in orderList) {
+					alert(getGenresMap[orderList[index]] + " : " + getGenresMap[orderList[index]].text);
+					orderings.push( {
+						position : index + 1,
+						text : getGenresMap[orderList[index]].text,
+						image : getGenresMap[orderList[index]].image,
+						genre : orderList[index]
+					});
+					index++;
+				}
+			}
+			else{
+				var index = 0;				
+				for (var genreName in getGenresMap) {
+					orderings.push( {
+						position : index + 1,
+						text : getGenresMap[genreName].text,
+						image : getGenresMap[genreName].image,
+						genre : genreName
+					});
+					index++;
+				}
+			}
+			initOrderList = false;
+		}
+		okCancelList.init(orderings.length, 0)
 	};
 	module.implementing.view.publics.onInput = function(event) {
 		actionMgr.matchInput(module.id, event);
