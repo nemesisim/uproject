@@ -43,15 +43,15 @@
 								   "8" : ["042", "044", "049", "047", "032", "033"], 
 								   "9" : ["022", "030" ]};
 	
-	var genresMap = { "public" : {text : "Public Cannels", image : "publicChannels"},
-		"music" : {text : "Music Channels", image : "musicChannels"},
-		"entertainment" : {text : "Entertainment Channels", image : "entertainmentChannels"},
-		"educational" : {text : "Educational Channels", image : "educationalChannels"},
-		"kids" : {text : "Kid's Channels", image : "kidsChannels"},
-		"news" : {text : "News Channels", image : "newsChannels"},
-		"sports" : {text : "Sport Channels", image : "sportsChannels"},
-		"movie" : {text : "Movie Channels", image : "movieChannels"},
-		"adult" : {text : "Adult Channels", image : "adultChannels"}};
+	var genresMap = { "1" : {text : "Public Cannels", image : "publicChannels"},
+		"2" : {text : "Music Channels", image : "musicChannels"},
+		"3" : {text : "Entertainment Channels", image : "entertainmentChannels"},
+		"4" : {text : "Educational Channels", image : "educationalChannels"},
+		"5" : {text : "Kid's Channels", image : "kidsChannels"},
+		"6" : {text : "News Channels", image : "newsChannels"},
+		"7" : {text : "Sport Channels", image : "sportsChannels"},
+		"8" : {text : "Movie Channels", image : "movieChannels"},
+		"9" : {text : "Adult Channels", image : "adultChannels"}};
 	
 	var channelPositionsMapFullRevert = {};	
 	var channelPositionsMapFamilyRevert = {};

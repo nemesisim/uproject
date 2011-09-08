@@ -13,6 +13,11 @@
 				id : "com.ericsson.iptv.portal.fw.interfaces.ViewIF",
 				version : [ 1, 0 ],
 				publics : {}
+			},
+			preferenceDefinitionIF : {
+				id : "com.ericsson.iptv.portal.fw.interfaces.PreferenceDefinitionIF",
+				version : [ 1, 0 ],
+				publics : {}
 			}
 		},
 		dependencies : {
@@ -51,6 +56,10 @@
 			viewManager : {
 				id : "com.ericsson.iptv.portal.fw.core.ViewManager",
 				version : [ 1, 0 ]
+			},
+			preferenceMgr : {
+				id : "com.ericsson.iptv.portal.fw.lib.PreferenceMgr",
+				version : [ 1, 0 ]
 			}
 		},
 		publics : {},
@@ -67,13 +76,15 @@
 	var lang;
 	var css;
 	var log;
+	var preferenceMgr;
 	var actionMgr;
 	var viewManager;
 	var broadcastTV;
 	var okCancelList;
 	var okCancelTitle;
 	var okCancelDescription;
-
+	var genreOrderList;
+	
 	var customSortMap;
 	var customPositionsMap;
 	var customPositionsMapRevert = {};
@@ -103,7 +114,8 @@
 		viewManager = module.dependencies.viewManager.handle;
 		customSortMap = module.dependencies.customPositionsMap.handle;
 		module.resources.html.handle.firstChild.id = "select_sort_popup";
-
+		preferenceMgr = module.dependencies.preferenceMgr.handle;
+		
 		customPositionsMap = customSortMap.getChannelMap();
 		customPositionsMapRevert = customSortMap.getChannelMapReverted();
 		genrePositionMap = customSortMap.getGenreMap();
@@ -126,6 +138,27 @@
 		popupButtonYellowText = dom.getTextNode("popupButtonYellowText");
 		popupButtonBlueText = dom.getTextNode("popupButtonBlueText");
 
+		// definition for content block preference
+		module.implementing.preferenceDefinitionIF.publics.parameters = {
+			"am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference" : {
+				"displaytext" : "Genre Order",
+				"type" : "STRING",
+				"basis" : "USER",
+				"writeRights" : "NONE",
+				"default" : "",
+				"position" : 9001
+			}
+		};
+		
+		preferenceMgr.refresh(function() {
+			var genrePref = preferenceMgr
+					.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference")
+			if (genrePref) {
+				genreOrderList = genrePref;
+			}
+		}, function() {
+		});
+		
 		orderings.push( {
 			text : "Ucom Standard",
 			callback : setOrdering("standard"),
@@ -243,8 +276,7 @@
 			}
 			break;
 		case 'ACTION_YELLOW':
-			if (orderings[okCancelList.getIndex()].disabled === "false") {
-				var genreOrderList = {"2" : "public", "8" : "music", "4" : "entertainment", "6" : "educational", "5" : "kids", "3" : "news", "7" : "sports", "1" : "movie", "9" : "adult"};
+			if (orderings[okCancelList.getIndex()].disabled === "false") {				
 				viewManager.show("am.ucom.iptv.channelsort.code.GenreSort", {
 					"callback" : genreSort,
 					"orderList" : genreOrderList
@@ -263,13 +295,19 @@
 		});
 		var str = "";
 		for ( var i = 0; i < orderings.length; i++){
-			str += '"' + orderings[i].position + '" : "'+ orderings[i].genre + '"';
+			str += orderings[i].position;
 			if(i < orderings.length - 1)
-				str += ", ";
+				str += ",";
 			genreSortOrder.push(orderings[i].position);
 		}
-		log.error(str);
-		alert("str = " + str);
+		preferenceMgr
+		.put("am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference",
+				str, "USER");
+		preferenceMgr.persist(function() {
+			showInfoPopup(lang.messageEnteredPinIncorrect);
+		}, function() {
+			showInfoPopup(lang.messageEnteredPinIncorrect);
+		});
 	}
 	function customSortCallback(position) {
 		viewManager.show(module.id, {
@@ -434,5 +472,6 @@
 	module.implementing.view.publics.getDomNode = function() {
 		return module.resources.html.handle;
 	};
+	module.implementing.preferenceDefinitionIF.publics.parameters = {};
 	return module;
 });
