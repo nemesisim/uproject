@@ -69,6 +69,7 @@
 	var okCancelTitle;
 	var okCancelDescription;
 	var callback;
+	var index = 0;
 
 	var customSortMap;
 	var getGenresMap;
@@ -133,7 +134,8 @@
 
 	function paintItem(P, Q) {
 		var R = orderings[Q];
-		P.okCancelListInnerItem.setText(R.position + ". " + R.text);
+		index = (index % 9) + 1;
+		P.okCancelListInnerItem.setText(index + ". " + R.text);
 		P.okCancelListInnerItem.clearClass();
 		P.okCancelListInnerItem.addClass(R.image);
 		if (R.id) {
@@ -218,30 +220,26 @@
 	module.implementing.view.publics.onShow = function(args) {
 		callback = args.callback;
 		if (initOrderList) {
-			var orderList = args.orderList;
-			if (orderList) {				
-				var index = 0;
-				for (var genreName in orderList) {
-					alert(getGenresMap[orderList[index]] + " : " + getGenresMap[orderList[index]].text);
+			if (args.orderList) {
+				var positionIndex = 0;
+				var orderList = args.orderList.split(",");
+				while (positionIndex < orderList.length) {
 					orderings.push( {
-						position : index + 1,
-						text : getGenresMap[orderList[index]].text,
-						image : getGenresMap[orderList[index]].image,
-						genre : orderList[index]
+						position : orderList[positionIndex],
+						text : getGenresMap[orderList[positionIndex]].text,
+						image : getGenresMap[orderList[positionIndex]].image
 					});
-					index++;
+					positionIndex++;
 				}
-			}
-			else{
-				var index = 0;				
-				for (var genreName in getGenresMap) {
+			} else {
+				var positionIndex = 0;
+				for ( var genreName in getGenresMap) {
 					orderings.push( {
-						position : index + 1,
+						position : positionIndex + 1,
 						text : getGenresMap[genreName].text,
-						image : getGenresMap[genreName].image,
-						genre : genreName
+						image : getGenresMap[genreName].image
 					});
-					index++;
+					positionIndex++;
 				}
 			}
 			initOrderList = false;
