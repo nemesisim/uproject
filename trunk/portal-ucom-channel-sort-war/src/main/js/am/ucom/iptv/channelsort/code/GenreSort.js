@@ -145,19 +145,14 @@
 			P.okCancelListInnerItem.addClass("enabled")
 		}
 	}
-	function showPopupButtons(selectedObj) {
-
-	}
 
 	function performAction(action, args) {
 		switch (action) {
 		case 'ACTION_PREVIOUS':
 			okCancelList.onPreviousKey(args.event);
-			showPopupButtons(orderings[okCancelList.getIndex()]);
 			break;
 		case 'ACTION_NEXT':
 			okCancelList.onNextKey(args.event);
-			showPopupButtons(orderings[okCancelList.getIndex()]);
 			break;
 		case 'ACTION_EXIT':
 			if (callback) {
@@ -216,33 +211,30 @@
 		orderings[to].image = currentImage;
 		okCancelList.init(orderings.length, to);
 	}
-	var initOrderList = true;
+
 	module.implementing.view.publics.onShow = function(args) {
 		callback = args.callback;
-		if (initOrderList) {
-			if (args.orderList) {
-				var positionIndex = 0;
-				var orderList = args.orderList.split(",");
-				while (positionIndex < orderList.length) {
-					orderings.push( {
-						position : orderList[positionIndex],
-						text : getGenresMap[orderList[positionIndex]].text,
-						image : getGenresMap[orderList[positionIndex]].image
-					});
-					positionIndex++;
-				}
-			} else {
-				var positionIndex = 0;
-				for ( var genreName in getGenresMap) {
-					orderings.push( {
-						position : positionIndex + 1,
-						text : getGenresMap[genreName].text,
-						image : getGenresMap[genreName].image
-					});
-					positionIndex++;
-				}
+		if (args.orderList) {
+			var positionIndex = 0;
+			var orderList = args.orderList.split(",");
+			while (positionIndex < orderList.length) {
+				orderings.push( {
+					position : orderList[positionIndex],
+					text : getGenresMap[orderList[positionIndex]].text,
+					image : getGenresMap[orderList[positionIndex]].image
+				});
+				positionIndex++;
 			}
-			initOrderList = false;
+		} else {
+			var positionIndex = 0;
+			for ( var genreName in getGenresMap) {
+				orderings.push( {
+					position : positionIndex + 1,
+					text : getGenresMap[genreName].text,
+					image : getGenresMap[genreName].image
+				});
+				positionIndex++;
+			}
 		}
 		okCancelList.init(orderings.length, 0)
 	};

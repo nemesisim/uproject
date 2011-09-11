@@ -75,11 +75,14 @@
 	var customOkLabel;
 	var customNavigateLabel;
 	var callback;
+	var channelsNames;
+	var accessLevels;
 
 	var customSortMap;
 	var customPositionsMap;
 	var customPositionsMapRevert = {};
 	var locale = "en-US";
+	var initOrderList = true;
 
 	var popupButtonRedText;
 	var popupButtonGreenText;
@@ -88,84 +91,6 @@
 	var channelsOrder = [];
 	var channelsAccessOrder = [];
 	var callbackPosition;
-	var channelsNames = {
-		"1":{"name" : "Հ1", "access":"Open"},
-		"2":{"name" : "Հ2", "access":"Open"},
-		"3":{"name" : "Շանթ", "access":"Open"},
-		"4":{"name" : "Արմենիա TV", "access":"Open"},
-		"5":{"name" : "Կենտրոն", "access":"Open"},
-		"6":{"name" : "12", "access":"Open"},
-		"7":{"name" : "Երկիր Մեդիա", "access":"Open"},
-		"8":{"name" : "ATV", "access":"Open"},
-		"9":{"name" : "ԱՐ", "access":"Open"},
-		"10":{"name" : "ОРТ", "access":"Open"},
-		"11":{"name" : "Rossia 1", "access":"Open"},
-		"12":{"name" : "РТР Планетa ", "access":"Open"},
-		"13":{"name" : "HTB", "access":"Open"},
-		"14":{"name" : "ДТВ", "access":"Open"},
-		"15":{"name" : "TNT", "access":"Open"},
-		"16":{"name" : "CTC", "access":"Open"},
-		"17":{"name" : "Культура/Россия К ", "access":"Open"},
-		"18":{"name" : "Դար 21", "access":"Open"},
-		"19":{"name" : "Musicbox RU", "access":"Open"},
-		"20":{"name" : "Муз ТВ ", "access":"Open"},
-		"21":{"name" : "MTV", "access":"Open"},
-		"22":{"name" : "MTV Dance", "access":"Open"},
-		"23":{"name" : "Bridge TV (24 Techno)", "access":"Open"},
-		"24":{"name" : "MCM Top", "access":"Open"},
-		"25":{"name" : "Mezzo", "access":"Open"},
-		"26":{"name" : "Охота и рыбалка", "access":"Open"},
-		"27":{"name" : "Кухня ТВ", "access":"Open"},
-		"28":{"name" : "Усадьба", "access":"Open"},
-		"29":{"name" : "World Fashion channel", "access":"Open"},
-		"30":{"name" : "Man TV", "access":"Open"},
-		"31":{"name" : "Индия ТВ", "access":"Open"},
-		"32":{"name" : "Коммедия ТВ", "access":"Open"},
-		"33":{"name" : "HCT", "access":"Open"},
-		"34":{"name" : "TLC", "access":"Open"},
-		"35":{"name" : "National Geographic", "access":"Open"},
-		"36":{"name" : "NAT GEO WILD", "access":"Open"},
-		"37":{"name" : "Animal planet", "access":"Open"},
-		"38":{"name" : "Discovery Channel", "access":"Open"},
-		"39":{"name" : "Discovery World", "access":"Open"},
-		"40":{"name" : "Discovery Science", "access":"Open"},
-		"41":{"name" : "Travel Channel", "access":"Open"},
-		"42":{"name" : "365 ДНЕЙ ТВ", "access":"Open"},
-		"43":{"name" : "VIASAT HISTORY", "access":"Open"},
-		"44":{"name" : "VIASAT EXPLORER", "access":"Open"},
-		"45":{"name" : "English Club", "access":"Open"},
-		"46":{"name" : "Disney channel", "access":"Open"},
-		"47":{"name" : "Boomerang", "access":"Open"},
-		"48":{"name" : "Tiji", "access":"Open"},
-		"49":{"name" : "Gulli", "access":"Open"},
-		"50":{"name" : "Cartoon Network", "access":"Open"},
-		"51":{"name" : "Вести/Россия 24", "access":"Open"},
-		"52":{"name" : "РБК", "access":"Open"},
-		"53":{"name" : "Euronews", "access":"Open"},
-		"54":{"name" : "CNN", "access":"Open"},
-		"55":{"name" : "BBC World News", "access":"Open"},
-		"56":{"name" : "France 24", "access":"Open"},
-		"57":{"name" : "Deutsche Welle", "access":"Open"},
-		"58":{"name" : "Eurosport", "access":"Open"},
-		"59":{"name" : "Eurosport 2", "access":"Open"},
-		"60":{"name" : "Спорт/Россия 2", "access":"Open"},
-		"61":{"name" : "VIASAT SPORT", "access":"Open"},
-		"62":{"name" : "НТВ+Наш футбол", "access":"Open"},
-		"63":{"name" : "НТВ+ футбол", "access":"Open"},
-		"64":{"name" : "НТВ+спорт online", "access":"Open"},
-		"65":{"name" : "НТВ+ Теннис", "access":"Open"},
-		"66":{"name" : "НТВ+ Баскетбол", "access":"Open"},
-		"67":{"name" : "Авто плюс", "access":"Open"},
-		"68":{"name" : "БОЕЦ ТВ ", "access":"Open"},
-		"69":{"name" : "Кинохит", "access":"Open"},
-		"70":{"name" : "Премьера", "access":"Open"},
-		"71":{"name" : "VIASAT ТВ 1000", "access":"Open"},
-		"72":{"name" : "VIASAT ТВ 1000 рус.", "access":"Open"},
-		"73":{"name" : "FOX Life", "access":"Open"},
-		"74":{"name" : "FOX CRIME", "access":"Open"},
-		"75":{"name" : "Playboy TV", "access":"Require Password"},
-		"76":{"name" : "Русская ночь ", "access":"Require Password"}
-	};
 
 	module.implementing.loading.publics.load = function() {
 		dom = module.dependencies.dom.handle
@@ -180,7 +105,10 @@
 
 		customPositionsMap = customSortMap.getChannelMap();
 		customPositionsMapRevert = customSortMap.getChannelMapReverted();
-		module.resources.html.handle.firstChild.id = "genre_sort_view";
+		channelsNames = customSortMap.getChannelsNames();
+		accessLevels = customSortMap.getAccessLevels();
+
+		module.resources.html.handle.firstChild.id = "custom_sort_view";
 
 		customSortList = dom.getListControllerNode("customSortList", {
 			maxVisible : 10,
@@ -189,7 +117,7 @@
 		});
 
 		customSortAccessList = dom.getListControllerNode(
-			"customSortAccessList", {
+				"customSortAccessList", {
 					maxVisible : 10,
 					pageSize : 1,
 					paintItem : paintItemAccess
@@ -207,17 +135,7 @@
 		popupButtonYellowText = dom.getTextNode("customButtonYellowText");
 		popupButtonBlueText = dom.getTextNode("customButtonBlueText");
 
-		for ( var index = 0; index < 76; index++) {
-			channelsOrder.push( {
-				position : (index + 1),
-				text : channelsNames["" + (index + 1)].name
-			});
-			channelsAccessOrder.push( {
-				text : channelsNames["" + (index + 1)].access
-			});
-		}
-		
-		channelLabel = "Sorting options for "	
+		channelLabel = "Sorting options for "
 		customChannelsLabel.setText("Channels");
 		customAccessTypeLabel.setText("Access Type");
 		customOkLabel.setText("Rename");
@@ -227,7 +145,7 @@
 		popupButtonGreenText.setText("Set Last");
 		popupButtonYellowText.setText("Move Up");
 		popupButtonBlueText.setText("Move Down");
-		
+
 		dom.getTextNode("customExitLabel").setText("Save/Exit");
 
 		actionMgr.mapActions(module.id, mapActionsFn());
@@ -241,6 +159,7 @@
 	};
 	module.implementing.view.publics.onHide = function() {
 		customSortList.clear();
+		customSortAccessList.clear();
 	};
 
 	function paintItem(P, Q) {
@@ -267,71 +186,79 @@
 		}
 	}
 	function selectColumn(direction) {
-		if (direction === "right") {			
-			mgr.show(
-					"com.ericsson.iptv.portal.coreapps.common.popup.view.SelectPopup",
-						{
-							id : "customSort_accessPopup",
-							text : "Select Access",
-							enabled : "false",
-							callback : function() {
-								alert("Select Access");
-							},
-							options : ["Open", "Blocked", "Esiminch"]
-						});
-			
-//			customSortAccessList.showSelector();
-//			customSortList.hideSelector();
+		if (direction === "right") {
+			mgr
+					.show(
+							"com.ericsson.iptv.portal.coreapps.common.popup.view.SelectPopup",
+							{
+								id : "customSort_accessPopup",
+								text : "Select Access",
+								enabled : "false",
+								callback : function() {
+									alert("Select Access");
+								},
+								options : [ "Open", "Blocked", "Esiminch" ]
+							});
+
+			// customSortAccessList.showSelector();
+			// customSortList.hideSelector();
 		}
-//		if (direction === "left") {
-//			customSortAccessList.hideSelector();
-//			customSortList.showSelector();
-//		}
+		// if (direction === "left") {
+		// customSortAccessList.hideSelector();
+		// customSortList.showSelector();
+		// }
 	}
 
 	function performAction(action, args) {
 		switch (action) {
 		case 'ACTION_PREVIOUS':
 			customSortList.onPreviousKey(args.event);
-//			customSortAccessList.onPreviousKey(args.event);
+			customSortAccessList.onPreviousKey(args.event);
 			break;
 		case 'ACTION_NEXT':
 			customSortList.onNextKey(args.event);
-//			customSortAccessList.onNextKey(args.event);
+			customSortAccessList.onNextKey(args.event);
 			break;
 		case 'ACTION_LEFT':
-			//selectColumn("left");
+			// selectColumn("left");
 			break;
 		case 'ACTION_RIGHT':
-			//selectColumn("right");
+			// selectColumn("right");
 			break;
 		case 'ACTION_EXIT':
-			if(callback)
-				callback(callbackPosition);
+			if (callback)
+				callback(callbackPosition, channelName, channelsOrder,
+						channelsAccessOrder);
 			mgr.hide(module.id);
 			break;
 		case 'ACTION_OK':
-			mgr.show(
-				"com.ericsson.iptv.portal.coreapps.common.popup.view.InputPopup",
-					{
-						id : "customSort_inputPopup",
-						title : "Change Name",
-						text : "Change sorting type name",
-						value : channelName,
-						type : "STRING",
-						callback : function(value) {
-							if(value)
-								channelName = value;	
-							mgr
-							 .show("am.ucom.iptv.channelsort.code.CustomAndAccessSort", {"callback" : callback, "name" : channelName});							
-						}
-					});
+			mgr
+					.show(
+							"com.ericsson.iptv.portal.coreapps.common.popup.view.InputPopup",
+							{
+								id : "customSort_inputPopup",
+								title : "Change Name",
+								text : "Change sorting type name",
+								value : channelName,
+								type : "STRING",
+								callback : function(value) {
+									if (value)
+										channelName = value;
+									mgr
+											.show(
+													"am.ucom.iptv.channelsort.code.CustomAndAccessSort",
+													{
+														"callback" : callback,
+														"name" : channelName
+													});
+								}
+							});
 			break;
 		case 'ACTION_RED':
 			swapListItems(customSortList.getIndex(), 0);
 			break;
 		case 'ACTION_GREEN':
-			swapListItems(customSortList.getIndex(), channelsOrder.length-1);
+			swapListItems(customSortList.getIndex(), channelsOrder.length - 1);
 			break;
 		case 'ACTION_YELLOW':
 			swapListItems(customSortList.getIndex(),
@@ -348,13 +275,14 @@
 		var selected = channelsOrder[from];
 		var currentText = selected.text;
 		var currentPosition = selected.position;
-		var currentAccess = channelsAccessOrder[from].text;;
+		var currentAccess = channelsAccessOrder[from].text;
+		;
 		if (from < to)
 			for ( var i = from; i < to; i++) {
 				if (channelsOrder[i + 1]) {
 					channelsOrder[i].text = channelsOrder[i + 1].text;
 					channelsOrder[i].position = channelsOrder[i + 1].position;
-					channelsAccessOrder[i].text = channelsAccessOrder[i+1].text;
+					channelsAccessOrder[i].text = channelsAccessOrder[i + 1].text;
 				} else {
 					return;
 				}
@@ -364,7 +292,7 @@
 				if (channelsOrder[i - 1]) {
 					channelsOrder[i].text = channelsOrder[i - 1].text;
 					channelsOrder[i].position = channelsOrder[i - 1].position;
-					channelsAccessOrder[i].text = channelsAccessOrder[i-1].text;
+					channelsAccessOrder[i].text = channelsAccessOrder[i - 1].text;
 				} else {
 					return;
 				}
@@ -378,8 +306,37 @@
 
 	module.implementing.view.publics.onShow = function(args) {
 		callback = args.callback;
-		channelName = args.name; 
 		callbackPosition = args.position;
+		if (args.orderList) {
+			var positionIndex = 1;
+			var orderList = args.orderList.split(",");
+			channelName = orderList[0];
+			while (positionIndex < orderList.length) {
+				var item = orderList[positionIndex].split("-");
+				channelsOrder.push( {
+					position : item[0],
+					text : channelsNames[item[0]].name
+				});
+				channelsAccessOrder.push( {
+					text : accessLevels[item[1]],
+					access : item[1]
+				});
+				positionIndex++;
+			}
+		} else {
+			channelName = args.name;
+			for ( var chNumber in channelsNames) {
+				var channelObject = channelsNames[chNumber];
+				channelsOrder.push( {
+					position : chNumber,
+					text : channelObject.name
+				});
+				channelsAccessOrder.push( {
+					text : accessLevels[channelObject.access],
+					access : channelObject.access
+				});
+			}
+		}
 		okCancelTitle.setText(channelLabel + channelName);
 		customSortList.init(channelsOrder.length, 0);
 		customSortAccessList.init(channelsAccessOrder.length, 0);
@@ -409,7 +366,7 @@
 			isApplicable : P,
 			invoke : function(event) {
 				performAction("ACTION_PREVIOUS", {
-				"event" : event
+					"event" : event
 				});
 			},
 			keyEvents : [ "KEY_UP" ]
@@ -419,7 +376,7 @@
 			isApplicable : P,
 			invoke : function(event) {
 				performAction("ACTION_NEXT", {
-				"event" : event
+					"event" : event
 				});
 			},
 			keyEvents : [ "KEY_DOWN" ]
@@ -429,7 +386,7 @@
 			isApplicable : P,
 			invoke : function(event) {
 				performAction("ACTION_LEFT", {
-				"event" : event
+					"event" : event
 				});
 			},
 			keyEvents : [ "KEY_LEFT" ]
@@ -439,7 +396,7 @@
 			isApplicable : P,
 			invoke : function(event) {
 				performAction("ACTION_RIGHT", {
-				"event" : event
+					"event" : event
 				});
 			},
 			keyEvents : [ "KEY_RIGHT" ]

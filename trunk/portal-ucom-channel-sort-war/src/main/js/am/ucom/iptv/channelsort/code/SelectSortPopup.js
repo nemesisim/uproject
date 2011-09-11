@@ -84,7 +84,10 @@
 	var okCancelTitle;
 	var okCancelDescription;
 	var genreOrderList;
-	
+	var custom1;
+	var custom2;
+	var custom3;
+
 	var customSortMap;
 	var customPositionsMap;
 	var customPositionsMapRevert = {};
@@ -115,7 +118,7 @@
 		customSortMap = module.dependencies.customPositionsMap.handle;
 		module.resources.html.handle.firstChild.id = "select_sort_popup";
 		preferenceMgr = module.dependencies.preferenceMgr.handle;
-		
+
 		customPositionsMap = customSortMap.getChannelMap();
 		customPositionsMapRevert = customSortMap.getChannelMapReverted();
 		genrePositionMap = customSortMap.getGenreMap();
@@ -149,16 +152,62 @@
 				"position" : 9001
 			}
 		};
-		
-		preferenceMgr.refresh(function() {
-			var genrePref = preferenceMgr
-					.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference")
-			if (genrePref) {
-				genreOrderList = genrePref;
+		module.implementing.preferenceDefinitionIF.publics.parameters = {
+			"am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference" : {
+				"displaytext" : "Custom 1",
+				"type" : "STRING",
+				"basis" : "USER",
+				"writeRights" : "NONE",
+				"default" : "",
+				"position" : 9002
 			}
-		}, function() {
-		});
-		
+		};
+		module.implementing.preferenceDefinitionIF.publics.parameters = {
+			"am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference" : {
+				"displaytext" : "Custom 2",
+				"type" : "STRING",
+				"basis" : "USER",
+				"writeRights" : "NONE",
+				"default" : "",
+				"position" : 9003
+			}
+		};
+		module.implementing.preferenceDefinitionIF.publics.parameters = {
+			"am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference" : {
+				"displaytext" : "Custom 3",
+				"type" : "STRING",
+				"basis" : "USER",
+				"writeRights" : "NONE",
+				"default" : "",
+				"position" : 9004
+			}
+		};
+		preferenceMgr
+				.refresh(
+						function() {
+							var pref = preferenceMgr
+									.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference");
+							if (pref) {
+								genreOrderList = pref;
+							}
+							pref = preferenceMgr
+									.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference");
+							if (pref) {
+								custom1 = pref;
+							}
+							pref = preferenceMgr
+									.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference");
+							if (pref) {
+								custom2 = pref;
+							}
+							pref = preferenceMgr
+									.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference");
+							if (pref) {
+								custom3 = pref;
+							}
+						}, function() {
+						});
+
 		orderings.push( {
 			text : "Ucom Standard",
 			callback : setOrdering("standard"),
@@ -170,24 +219,39 @@
 			callback : setOrdering("genre"),
 			disabled : "false"
 		});
-
-		orderings.push( {
-			text : "Utv1",
-			callback : setOrdering("Utv1"),
-			disabled : "true"
-		});
-
-		orderings.push( {
-			text : "Utv2",
-			callback : setOrdering("Utv2"),
-			disabled : "true"
-		});
-
-		orderings.push( {
-			text : "Utv3",
-			callback : setOrdering("Utv3"),
-			disabled : "true"
-		});
+		var disabled = "true";
+		if (custom1)
+			disabled = "false";
+		orderings
+				.push( {
+					text : "Utv1",
+					callback : setOrdering("Utv1"),
+					disabled : disabled,
+					custom : custom1,
+					preference : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference"
+				});
+		disabled = "true";
+		if (custom2)
+			disabled = "false";
+		orderings
+				.push( {
+					text : "Utv2",
+					callback : setOrdering("Utv2"),
+					disabled : disabled,
+					custom : custom2,
+					preference : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference"
+				});
+		disabled = "true";
+		if (custom3)
+			disabled = "false";
+		orderings
+				.push( {
+					text : "Utv3",
+					callback : setOrdering("Utv3"),
+					disabled : disabled,
+					custom : custom3,
+					preference : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference"
+				});
 		okCancelTitle.setText("Channel management");
 		okCancelDescription.setText("Sorting");
 
@@ -273,14 +337,23 @@
 			break;
 		case 'ACTION_GREEN':
 			if (orderings[okCancelList.getIndex()].disabled === "false") {
+				// var customOrderPref =
+				// "Utv123,4-o,2-o,3-o,1-o,5-o,6-o,7-o,8-o,9-o,10-o,11-o,12-o,13-o,14-o,15-o,16-o,17-o,18-o,19-o,20-o,21-o,22-o,23-o,24-o,25-o,26-o,27-o,28-o,29-o,30-o,31-o,32-o,33-o,34-o,35-o,36-o,37-o,38-o,39-o,40-o,41-o,42-o,43-o,44-o,45-o,46-o,47-o,48-o,49-o,50-o,51-o,52-o,53-o,54-o,55-o,56-o,57-o,58-o,59-o,60-o,61-o,62-o,63-o,64-o,65-o,66-o,67-o,68-o,69-o,70-o,71-o,72-o,73-o,74-b,75-r,76-r";
 			}
 			break;
 		case 'ACTION_YELLOW':
-			if (orderings[okCancelList.getIndex()].disabled === "false") {				
+			if (orderings[okCancelList.getIndex()].disabled === "false") {
 				viewManager.show("am.ucom.iptv.channelsort.code.GenreSort", {
 					"callback" : genreSort,
 					"orderList" : genreOrderList
 				});
+				viewManager.show(
+						"am.ucom.iptv.channelsort.code.CustomAndAccessSort", {
+							"position" : okCancelList.getIndex(),
+							"callback" : customSortCallback,
+							"name" : orderings[okCancelList.getIndex()].text,
+							"orderList" : customOrderPref
+						});
 			}
 			break;
 		case 'ACTION_BLUE':
@@ -288,31 +361,52 @@
 			break;
 		}
 	}
+	function customSortCallback(position, channelName, channelsOrder,
+			channelsAccessOrder) {
+		viewManager.show(module.id, {
+			"position" : position
+		});
+		var str = channelName + ","
+		for ( var i = 0; i < channelsOrder.length; i++) {
+			str += channelsOrder[i].position + "-"
+					+ channelsAccessOrder[i].access;
+			if (i < channelsOrder.length - 1)
+				str += ",";
+		}
+
+		preferenceMgr.put(orderings[position].preference, str, "USER");
+		preferenceMgr.persist(function() {
+				if(position == 2)
+					custom1 = str;
+				if(position == 3)
+					custom2 = str;
+				if(position == 4)
+					custom3 = str;
+			}, function() {
+				alert("Impossible");
+			});
+	}
 	var genreSortOrder = [];
 	function genreSort(orderings) {
 		viewManager.show(module.id, {
 			"position" : 1
 		});
 		var str = "";
-		for ( var i = 0; i < orderings.length; i++){
+		for ( var i = 0; i < orderings.length; i++) {
 			str += orderings[i].position;
-			if(i < orderings.length - 1)
+			if (i < orderings.length - 1)
 				str += ",";
 			genreSortOrder.push(orderings[i].position);
 		}
 		preferenceMgr
-		.put("am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference",
-				str, "USER");
+				.put(
+						"am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference",
+						str, "USER");
 		preferenceMgr.persist(function() {
-			showInfoPopup(lang.messageEnteredPinIncorrect);
-		}, function() {
-			showInfoPopup(lang.messageEnteredPinIncorrect);
-		});
-	}
-	function customSortCallback(position) {
-		viewManager.show(module.id, {
-			"position" : position
-		});
+			// showInfoPopup(lang.messageEnteredPinIncorrect);
+			}, function() {
+				// showInfoPopup(lang.messageEnteredPinIncorrect);
+			});
 	}
 	function mapActionsFn() {
 		var P = function(S, R) {

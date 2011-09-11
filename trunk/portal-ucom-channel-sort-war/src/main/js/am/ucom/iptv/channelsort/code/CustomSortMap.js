@@ -52,7 +52,90 @@
 		"7" : {text : "Sport Channels", image : "sportsChannels"},
 		"8" : {text : "Movie Channels", image : "movieChannels"},
 		"9" : {text : "Adult Channels", image : "adultChannels"}};
-	
+
+	var channelsNames = {
+			"1":{"name" : "Հ1", "access":"o"},
+			"2":{"name" : "Հ2", "access":"o"},
+			"3":{"name" : "Շանթ", "access":"o"},
+			"4":{"name" : "Արմենիա TV", "access":"o"},
+			"5":{"name" : "Կենտրոն", "access":"o"},
+			"6":{"name" : "12", "access":"o"},
+			"7":{"name" : "Երկիր Մեդիա", "access":"o"},
+			"8":{"name" : "ATV", "access":"o"},
+			"9":{"name" : "ԱՐ", "access":"o"},
+			"10":{"name" : "ОРТ", "access":"o"},
+			"11":{"name" : "Rossia 1", "access":"o"},
+			"12":{"name" : "РТР Планетa ", "access":"o"},
+			"13":{"name" : "HTB", "access":"o"},
+			"14":{"name" : "ДТВ", "access":"o"},
+			"15":{"name" : "TNT", "access":"o"},
+			"16":{"name" : "CTC", "access":"o"},
+			"17":{"name" : "Культура/Россия К ", "access":"o"},
+			"18":{"name" : "Դար 21", "access":"o"},
+			"19":{"name" : "Musicbox RU", "access":"o"},
+			"20":{"name" : "Муз ТВ ", "access":"o"},
+			"21":{"name" : "MTV", "access":"o"},
+			"22":{"name" : "MTV Dance", "access":"o"},
+			"23":{"name" : "Bridge TV (24 Techno)", "access":"o"},
+			"24":{"name" : "MCM Top", "access":"o"},
+			"25":{"name" : "Mezzo", "access":"o"},
+			"26":{"name" : "Охота и рыбалка", "access":"o"},
+			"27":{"name" : "Кухня ТВ", "access":"o"},
+			"28":{"name" : "Усадьба", "access":"o"},
+			"29":{"name" : "World Fashion channel", "access":"o"},
+			"30":{"name" : "Man TV", "access":"o"},
+			"31":{"name" : "Индия ТВ", "access":"o"},
+			"32":{"name" : "Коммедия ТВ", "access":"o"},
+			"33":{"name" : "HCT", "access":"o"},
+			"34":{"name" : "TLC", "access":"o"},
+			"35":{"name" : "National Geographic", "access":"o"},
+			"36":{"name" : "NAT GEO WILD", "access":"o"},
+			"37":{"name" : "Animal planet", "access":"o"},
+			"38":{"name" : "Discovery Channel", "access":"o"},
+			"39":{"name" : "Discovery World", "access":"o"},
+			"40":{"name" : "Discovery Science", "access":"o"},
+			"41":{"name" : "Travel Channel", "access":"o"},
+			"42":{"name" : "365 ДНЕЙ ТВ", "access":"o"},
+			"43":{"name" : "VIASAT HISTORY", "access":"o"},
+			"44":{"name" : "VIASAT EXPLORER", "access":"o"},
+			"45":{"name" : "English Club", "access":"o"},
+			"46":{"name" : "Disney channel", "access":"o"},
+			"47":{"name" : "Boomerang", "access":"o"},
+			"48":{"name" : "Tiji", "access":"o"},
+			"49":{"name" : "Gulli", "access":"o"},
+			"50":{"name" : "Cartoon Network", "access":"o"},
+			"51":{"name" : "Вести/Россия 24", "access":"o"},
+			"52":{"name" : "РБК", "access":"o"},
+			"53":{"name" : "Euronews", "access":"o"},
+			"54":{"name" : "CNN", "access":"o"},
+			"55":{"name" : "BBC World News", "access":"o"},
+			"56":{"name" : "France 24", "access":"o"},
+			"57":{"name" : "Deutsche Welle", "access":"o"},
+			"58":{"name" : "Eurosport", "access":"o"},
+			"59":{"name" : "Eurosport 2", "access":"o"},
+			"60":{"name" : "Спорт/Россия 2", "access":"o"},
+			"61":{"name" : "VIASAT SPORT", "access":"o"},
+			"62":{"name" : "НТВ+Наш футбол", "access":"o"},
+			"63":{"name" : "НТВ+ футбол", "access":"o"},
+			"64":{"name" : "НТВ+спорт online", "access":"o"},
+			"65":{"name" : "НТВ+ Теннис", "access":"o"},
+			"66":{"name" : "НТВ+ Баскетбол", "access":"o"},
+			"67":{"name" : "Авто плюс", "access":"o"},
+			"68":{"name" : "БОЕЦ ТВ ", "access":"o"},
+			"69":{"name" : "Кинохит", "access":"o"},
+			"70":{"name" : "Премьера", "access":"o"},
+			"71":{"name" : "VIASAT ТВ 1000", "access":"o"},
+			"72":{"name" : "VIASAT ТВ 1000 рус.", "access":"o"},
+			"73":{"name" : "FOX Life", "access":"o"},
+			"74":{"name" : "FOX CRIME", "access":"b"},
+			"75":{"name" : "Playboy TV", "access":"r"},
+			"76":{"name" : "Русская ночь ", "access":"r"}
+		};
+	var accessLevels = {
+		"o" : "Open",
+		"r" : "Require Password",
+		"b" : "Blocked"
+	}
 	var channelPositionsMapFullRevert = {};	
 	var channelPositionsMapFamilyRevert = {};
 	var channelPositionsMapEconomRevert = {};
@@ -63,6 +146,12 @@
 	}
 	module.publics.getGenresMap = function(){
 		return genresMap;
+	}	
+	module.publics.getChannelsNames = function(){
+		return channelsNames;
+	}
+	module.publics.getAccessLevels = function(){
+		return accessLevels;
 	}	
 	module.publics.getChannelMap = function(){
 		if(region == "UTV_Full")
