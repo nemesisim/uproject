@@ -249,7 +249,8 @@
 													"am.ucom.iptv.channelsort.code.CustomAndAccessSort",
 													{
 														"callback" : callback,
-														"name" : channelName
+														"name" : channelName,
+														"position" : callbackPosition
 													});
 								}
 							});
@@ -276,7 +277,7 @@
 		var currentText = selected.text;
 		var currentPosition = selected.position;
 		var currentAccess = channelsAccessOrder[from].text;
-		;
+		
 		if (from < to)
 			for ( var i = from; i < to; i++) {
 				if (channelsOrder[i + 1]) {
