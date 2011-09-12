@@ -308,12 +308,14 @@
 	module.implementing.view.publics.onShow = function(args) {
 		callback = args.callback;
 		callbackPosition = args.position;
+		channelsOrder = [];
+		channelsAccessOrder = [];
 		if (args.orderList) {
-			var positionIndex = 1;
-			var orderList = args.orderList.split(",");
-			channelName = orderList[0];
-			while (positionIndex < orderList.length) {
-				var item = orderList[positionIndex].split("-");
+			var positionIndex = 1;			
+			var orderListObj = args.orderList.split(",");
+			channelName = orderListObj[0];			
+			while (positionIndex < orderListObj.length) {
+				var item = orderListObj[positionIndex].split("-");
 				channelsOrder.push( {
 					position : item[0],
 					text : channelsNames[item[0]].name
