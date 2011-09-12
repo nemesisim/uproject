@@ -141,7 +141,7 @@
 	var channelPositionsMapEconomRevert = {};
 	var channelPositionsMapBasicRevert = {};
 	
-	module.publics.getGenreMap = function(){
+	module.publics.getGenresPositionsMap = function(){
 		return channelPositionsMapGenre;
 	}
 	module.publics.getGenresMap = function(){

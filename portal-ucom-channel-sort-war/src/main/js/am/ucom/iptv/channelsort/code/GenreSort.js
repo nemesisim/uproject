@@ -214,6 +214,7 @@
 
 	module.implementing.view.publics.onShow = function(args) {
 		callback = args.callback;
+		orderings = [];
 		if (args.orderList) {
 			var positionIndex = 0;
 			var orderList = args.orderList.split(",");
