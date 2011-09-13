@@ -92,6 +92,7 @@
 	var custom1;
 	var custom2;
 	var custom3;
+	var userChannelList = {};
 
 	var customSortMap;
 	var customPositionsMap;
@@ -165,6 +166,13 @@
 		popupButtonYellowText = dom.getTextNode("popupButtonYellowText");
 		popupButtonBlueText = dom.getTextNode("popupButtonBlueText");
 
+		broadcastTV.getChannelList(function(channels) {
+			for ( var i = 0; i < channels.channelList.length; i++) {
+				userChannelList[new String(channels.channelList[i].channelId)] = channels.channelList[i].channelId;
+			}
+		}, function() {
+		}, locale);	
+		
 		// definition for content block preference
 		module.implementing.preferenceDefinitionIF.publics.parameters = {
 			"am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference" : {
@@ -224,7 +232,7 @@
 							orderings
 									.push( {
 										text : chName,
-										callback : setOrdering("custom1"),
+										callback : setOrdering("standard"),
 										preferenceValue : prefValue,
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference"
 									});
@@ -235,7 +243,7 @@
 							orderings
 									.push( {
 										text : chName,
-										callback : setOrdering("custom2"),
+										callback : setOrdering("standard"),
 										preferenceValue : prefValue,
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference"
 									});
@@ -246,7 +254,7 @@
 							orderings
 									.push( {
 										text : chName,
-										callback : setOrdering("custom3"),
+										callback : setOrdering("standard"),
 										preferenceValue : prefValue,
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference"
 									});
@@ -320,10 +328,12 @@
 			mgr.hide(module.id);
 			break;
 		case 'ACTION_OK':
-			if (orderings[okCancelList.getIndex()].callback) {
-				orderings[okCancelList.getIndex()].callback()
+			if (orderings[okCancelList.getIndex()].preferenceValue) {
+				if (orderings[okCancelList.getIndex()].callback) {
+					orderings[okCancelList.getIndex()].callback()
+				}
+				mgr.hide(module.id);
 			}
-			mgr.hide(module.id);
 			break;
 		case 'ACTION_RED':
 			if (!orderings[okCancelList.getIndex()].preferenceValue) {
@@ -341,13 +351,14 @@
 										"position" : okCancelList.getIndex(),
 										"callback" : customSortCallback,
 										"name" : orderings[okCancelList
-												.getIndex()].text
+												.getIndex()].text,
+										"channelList" : userChannelList		
 									});
 				}				
 			}
 			break;
 		case 'ACTION_GREEN':
-			if (orderings[okCancelList.getIndex()].preferenceValue) {
+			if (orderings[okCancelList.getIndex()].preferenceValue && orderings[okCancelList.getIndex()].preferenceValue != "default") {
 				preferenceMgr.put(
 						orderings[okCancelList.getIndex()].preferenceName,
 						undefined, "USER");
@@ -367,7 +378,7 @@
 			}
 			break;
 		case 'ACTION_YELLOW':
-			if (orderings[okCancelList.getIndex()].preferenceValue) {
+			if (orderings[okCancelList.getIndex()].preferenceValue && orderings[okCancelList.getIndex()].preferenceValue != "default") {
 				if (okCancelList.getIndex() == 1)
 					viewManager
 							.show("am.ucom.iptv.channelsort.code.GenreSort",
@@ -386,7 +397,8 @@
 										"name" : orderings[okCancelList
 												.getIndex()].text,
 										"orderList" : orderings[okCancelList
-												.getIndex()].preferenceValue
+												.getIndex()].preferenceValue,
+										"channelList" : userChannelList		
 									});
 				}
 			}
@@ -440,13 +452,13 @@
 			alert("Impossible");
 		});		
 	}
-
+	
 	function orderChannels(orderMethod) {
 		broadcastTV.getChannelList(function(channels) {
 			broadcastTV.setChannelList(function() {
-				//showInfoPopup(lang.channelsOrderChannelsListSorted);
+				// showInfoPopup(lang.channelsOrderChannelsListSorted);
 			}, function() {
-				//showInfoPopup(lang.channelsOrderUnableToSetChannelsList);
+				// showInfoPopup(lang.channelsOrderUnableToSetChannelsList);
 			}, orderMethod(channels.channelList));
 		}, function() {
 			showInfoPopup(lang.channelsOrderUnableToGetChannelsList);
@@ -462,9 +474,15 @@
 			return function() {
 				orderChannels(buildChannelsObjectGenre);
 			}
-		} else {
+		} 
+		else if (type === "custom") {
 			return function() {
-				showInfoPopup(lang.channelsOrderWrongMethodChosen);
+				orderChannels(buildChannelsObjectCustom);
+			}
+		} 		
+		else {
+			return function() {
+				// showInfoPopup(lang.channelsOrderWrongMethodChosen);
 			}
 		}
 	}
@@ -476,54 +494,75 @@
 		if (genreSortOrder.length > 0){			
 			for(var j = 0; j < genreSortOrder.length; j++){
 				for(var i = 0; i < genrePositionMap[genreSortOrder[j]].length; i++){
-					genreBuildMap[new String(genrePositionMap[genreSortOrder[j]][i])] = cursorIndex;
-//					str += genrePositionMap[genreSortOrder[j]][i] + "-";
-					cursorIndex++;
+					var channelId = parseInt(genrePositionMap[genreSortOrder[j]][i], 10);
+					if(userChannelList[channelId]){
+						genreBuildMap[new String(cursorIndex)] = genrePositionMap[genreSortOrder[j]][i];
+						cursorIndex++;
+					}
 				}
 			}
-
 		}
 		else{
 			for(genreItem in genrePositionMap){
 				for(var i = 0; i < genrePositionMap[genreItem].length; i++){
-					genreBuildMap[new String(genrePositionMap[genreItem][i])] = cursorIndex;
-//					str += genrePositionMap[genreItem][i] + "+";
-					cursorIndex++;
+					var channelId = parseInt(genrePositionMap[genreItem][i], 10);
+					if(userChannelList[channelId]){
+						genreBuildMap[new String(cursorIndex)] = genrePositionMap[genreItem][i];
+						cursorIndex++;
+					}
 				}				
 			}
 		}
-//		showInfoPopup("str = " + str);
+// for ( prop in genreBuildMap) {
+// str += prop + ":" + genreBuildMap[prop] + ","
+// }
+// showInfoPopup("str = " + str);
+		
+		return genreBuildMap;
+	}
+	var userCustomSortMap = {};
+	function buildChannelsObjectCustom(channelsInfo) {
 		var objStr = {};
-		channelsInfo.sort(sortByGenreMap);
+		var positionIndex = 1;
+		var customPrefObj = orderings[okCancelList.getIndex()].preferenceValue.split(",");
+		while (positionIndex < orderListObj.length) {
+			var item = customPrefObj[positionIndex].split("-");
+			userCustomSortMap[item[0]] = positionIndex; 
+			positionIndex ++;
+		}
+		channelsInfo.sort(sortByStandartMap);
 		for ( var i = 0; i < channelsInfo.length; i++) {
 			objStr[new String(i + 1)] = channelsInfo[i].channelId;
 		}
+		for ( prop in objStr) {
+		str += prop + ":" + objStr[prop] + ","
+		}
+		showInfoPopup("str = " + str);
 		return objStr;
 	}
 
-	function sortByGenreMap(channelInfo1, channelInfo2) {
+	function sortByCustomMap(channelInfo1, channelInfo2) {
 		try {
 			var prop = "channelId";
-			var int1 = parseInt(genreBuildMap[channelInfo1[prop]],
-					10);
-			var int2 = parseInt(genreBuildMap[channelInfo2[prop]],
-					10);
+			var int1 = userCustomSortMap[parseInt(channelInfo1[prop], 10)];
+			var int2 = userCustomSortMap[parseInt(channelInfo2[prop], 10)];
 			return int1 - int2;
 		} catch (e) {
 			log.error(e);
 			return 0;
 		}
 	}
+	
 	function buildChannelsObjectStandart(channelsInfo) {
 		var objStr = {};
-		channelsInfo.sort(sortByCustomMap);
+		channelsInfo.sort(sortByStandartMap);
 		for ( var i = 0; i < channelsInfo.length; i++) {
 			objStr[new String(i + 1)] = channelsInfo[i].channelId;
 		}
 		return objStr;
 	}
 
-	function sortByCustomMap(channelInfo1, channelInfo2) {
+	function sortByStandartMap(channelInfo1, channelInfo2) {
 		try {
 			var prop = "channelId";
 			var int1 = parseInt(customPositionsMapRevert[channelInfo1[prop]],

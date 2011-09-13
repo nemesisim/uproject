@@ -277,7 +277,7 @@
 		var currentText = selected.text;
 		var currentPosition = selected.position;
 		var currentAccess = channelsAccessOrder[from].text;
-		
+
 		if (from < to)
 			for ( var i = from; i < to; i++) {
 				if (channelsOrder[i + 1]) {
@@ -310,34 +310,39 @@
 		callbackPosition = args.position;
 		channelsOrder = [];
 		channelsAccessOrder = [];
+		var channelList = args.channelList;
 		if (args.orderList) {
-			var positionIndex = 1;			
+			var positionIndex = 1;
 			var orderListObj = args.orderList.split(",");
-			channelName = orderListObj[0];			
+			channelName = orderListObj[0];
 			while (positionIndex < orderListObj.length) {
 				var item = orderListObj[positionIndex].split("-");
-				channelsOrder.push( {
-					position : item[0],
-					text : channelsNames[item[0]].name
-				});
-				channelsAccessOrder.push( {
-					text : accessLevels[item[1]],
-					access : item[1]
-				});
+				if (channelList[item[0]]) {
+					channelsOrder.push( {
+						position : item[0],
+						text : channelsNames[item[0]].name
+					});
+					channelsAccessOrder.push( {
+						text : accessLevels[item[1]],
+						access : item[1]
+					});
+				}
 				positionIndex++;
 			}
 		} else {
 			channelName = args.name;
 			for ( var chNumber in channelsNames) {
 				var channelObject = channelsNames[chNumber];
-				channelsOrder.push( {
-					position : chNumber,
-					text : channelObject.name
-				});
-				channelsAccessOrder.push( {
-					text : accessLevels[channelObject.access],
-					access : channelObject.access
-				});
+				if (channelList[chNumber]) {
+					channelsOrder.push( {
+						position : chNumber,
+						text : channelObject.name
+					});
+					channelsAccessOrder.push( {
+						text : accessLevels[channelObject.access],
+						access : channelObject.access
+					});
+				}
 			}
 		}
 		okCancelTitle.setText(channelLabel + channelName);
