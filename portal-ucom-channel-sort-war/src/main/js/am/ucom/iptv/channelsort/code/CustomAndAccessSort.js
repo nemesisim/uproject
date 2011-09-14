@@ -135,18 +135,18 @@
 		popupButtonYellowText = dom.getTextNode("customButtonYellowText");
 		popupButtonBlueText = dom.getTextNode("customButtonBlueText");
 
-		channelLabel = "Sorting options for "
-		customChannelsLabel.setText("Channels");
-		customAccessTypeLabel.setText("Access Type");
-		customOkLabel.setText("Rename");
-		customNavigateLabel.setText("Navigate");
+		channelLabel = lang.labelSortingOptionsFor;
+		customChannelsLabel.setText(lang.labelChannels);
+		customAccessTypeLabel.setText(lang.labelAccessType);
+		customOkLabel.setText(lang.labelRename);
+		customNavigateLabel.setText(lang.labelNavigate);
 
-		popupButtonRedText.setText("Set First");
-		popupButtonGreenText.setText("Set Last");
-		popupButtonYellowText.setText("Move Up");
-		popupButtonBlueText.setText("Move Down");
+		popupButtonRedText.setText(lang.labelSetFirst);
+		popupButtonGreenText.setText(lang.labelSetLast);
+		popupButtonYellowText.setText(lang.labelMoveUp);
+		popupButtonBlueText.setText(lang.labelMoveDown);
 
-		dom.getTextNode("customExitLabel").setText("Save/Exit");
+		dom.getTextNode("customExitLabel").setText(lang.labelExit);
 
 		actionMgr.mapActions(module.id, mapActionsFn());
 	};

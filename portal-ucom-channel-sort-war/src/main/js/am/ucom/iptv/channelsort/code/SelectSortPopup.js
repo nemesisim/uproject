@@ -93,6 +93,8 @@
 	var custom2;
 	var custom3;
 	var userChannelList = {};
+	var genreSortOrder = [];
+	var userCustomSortMap = {};
 
 	var customSortMap;
 	var customPositionsMap;
@@ -176,7 +178,7 @@
 		// definition for content block preference
 		module.implementing.preferenceDefinitionIF.publics.parameters = {
 			"am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference" : {
-				"displaytext" : "Genre Order",
+				"displaytext" : lang.preferenceNameGenreOrder,
 				"type" : "STRING",
 				"basis" : "USER",
 				"writeRights" : "NONE",
@@ -184,7 +186,7 @@
 				"position" : 9061
 			},
 			"am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference" : {
-				"displaytext" : "Custom 1",
+				"displaytext" : lang.preferenceNameCustom1,
 				"type" : "STRING",
 				"basis" : "USER",
 				"writeRights" : "NONE",
@@ -192,7 +194,7 @@
 				"position" : 9062
 			},
 			"am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference" : {
-				"displaytext" : "Custom 2",
+				"displaytext" : lang.preferenceNameCustom2,
 				"type" : "STRING",
 				"basis" : "USER",
 				"writeRights" : "NONE",
@@ -200,7 +202,7 @@
 				"position" : 9063
 			},
 			"am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference" : {
-				"displaytext" : "Custom 3",
+				"displaytext" : lang.preferenceNameCustom3,
 				"type" : "STRING",
 				"basis" : "USER",
 				"writeRights" : "NONE",
@@ -209,7 +211,7 @@
 			}
 		};
 		orderings.push( {
-			text : "Ucom Standard",
+			text : lang.channelsStandard,
 			callback : setOrdering("standard"),
 			preferenceValue : "default"
 		});
@@ -219,54 +221,54 @@
 						function() {
 							orderings
 									.push( {
-										text : "By genre",
+										text : lang.channelsByGenre,
 										callback : setOrdering("genre"),
 										preferenceValue : preferenceMgr
 												.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference"),
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference"
 									});
 							var prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference");
-							var chName = "Utv1";
+							var chName = lang.channelsUtv1;
 							if(prefValue && prefValue.length > 0)
 								chName = prefValue.split(",", 1);
 							orderings
 									.push( {
 										text : chName,
-										callback : setOrdering("standard"),
+										callback : setOrdering("custom", 2),
 										preferenceValue : prefValue,
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference"
 									});
 							prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference");
-							chName = "Utv2";
+							chName = lang.channelsUtv2;
 							if(prefValue && prefValue.length > 0)
 								chName = prefValue.split(",", 1);
 							orderings
 									.push( {
 										text : chName,
-										callback : setOrdering("standard"),
+										callback : setOrdering("custom", 3),
 										preferenceValue : prefValue,
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference"
 									});
 							prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference");
-							chName = "Utv3";
+							chName = lang.channelsUtv3;
 							if(prefValue && prefValue.length > 0)
 								chName = prefValue.split(",", 1);
 							orderings
 									.push( {
 										text : chName,
-										callback : setOrdering("standard"),
+										callback : setOrdering("custom", 4),
 										preferenceValue : prefValue,
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference"
 									});
 						}, function() {
 						});
-		okCancelTitle.setText("Channel management");
-		okCancelDescription.setText("Sorting");
+		okCancelTitle.setText(lang.selectSortPopupTitle);
+		okCancelDescription.setText(lang.selectSortPopupDescription);
 
-		popupButtonRedText.setText("Add");
-		popupButtonGreenText.setText("Remove");
-		popupButtonYellowText.setText("Edit");
-		popupButtonBlueText.setText("Cancel");
+		popupButtonRedText.setText(lang.sortAdd);
+		popupButtonGreenText.setText(lang.sortRemove);
+		popupButtonYellowText.setText(lang.sortEdit);
+		popupButtonBlueText.setText(lang.sortCancel);
 
 		actionMgr.mapActions(module.id, mapActionsFn());
 	};
@@ -373,7 +375,7 @@
 					okCancelList.init(orderings.length, okCancelList.getIndex());
 					showPopupButtons(orderings[okCancelList.getIndex()]);
 				}, function() {
-					alert("Impossible");
+					showInfoPopup(lang.channelsOrderUnableToSaveOrdering);
 				});
 			}
 			break;
@@ -428,10 +430,9 @@
 			okCancelList.init(orderings.length, position);
 			showPopupButtons(orderings[position]);
 		}, function() {
-			alert("Impossible");
+			showInfoPopup(lang.channelsOrderUnableToSaveOrdering);
 		});
-	}
-	var genreSortOrder = [];
+	}	
 	function genreSortCallback(orderingsArray) {
 		viewManager.show(module.id, {
 			"position" : 1
@@ -449,23 +450,23 @@
 			genreSortOrder = str.split(",");
 			showPopupButtons(orderings[1]);
 		}, function() {
-			alert("Impossible");
+			showInfoPopup(lang.channelsOrderUnableToSaveOrdering);
 		});		
 	}
 	
-	function orderChannels(orderMethod) {
+	function orderChannels(orderMethod, position) {
 		broadcastTV.getChannelList(function(channels) {
 			broadcastTV.setChannelList(function() {
-				// showInfoPopup(lang.channelsOrderChannelsListSorted);
+				showInfoPopup(lang.channelsOrderChannelsListSorted);
 			}, function() {
-				// showInfoPopup(lang.channelsOrderUnableToSetChannelsList);
-			}, orderMethod(channels.channelList));
+				showInfoPopup(lang.channelsOrderUnableToSetChannelsList);
+			}, orderMethod(channels.channelList, position));
 		}, function() {
 			showInfoPopup(lang.channelsOrderUnableToGetChannelsList);
 		}, locale);
 	}
 
-	function setOrdering(type) {
+	function setOrdering(type, position) {
 		if (type === "standard") {
 			return function() {
 				orderChannels(buildChannelsObjectStandart);
@@ -477,12 +478,12 @@
 		} 
 		else if (type === "custom") {
 			return function() {
-				orderChannels(buildChannelsObjectCustom);
+				orderChannels(buildChannelsObjectCustom, position);
 			}
 		} 		
 		else {
 			return function() {
-				// showInfoPopup(lang.channelsOrderWrongMethodChosen);
+				showInfoPopup(lang.channelsOrderWrongMethodChosen);
 			}
 		}
 	}
@@ -513,39 +514,38 @@
 				}				
 			}
 		}
-// for ( prop in genreBuildMap) {
-// str += prop + ":" + genreBuildMap[prop] + ","
-// }
-// showInfoPopup("str = " + str);
-		
 		return genreBuildMap;
 	}
-	var userCustomSortMap = {};
-	function buildChannelsObjectCustom(channelsInfo) {
+	function buildChannelsObjectCustom(channelsInfo, position) {
 		var objStr = {};
 		var positionIndex = 1;
-		var customPrefObj = orderings[okCancelList.getIndex()].preferenceValue.split(",");
-		while (positionIndex < orderListObj.length) {
+		var customPrefObj = orderings[position].preferenceValue.split(",");
+		var str = "";
+		while (positionIndex < customPrefObj.length) {
 			var item = customPrefObj[positionIndex].split("-");
 			userCustomSortMap[item[0]] = positionIndex; 
 			positionIndex ++;
 		}
-		channelsInfo.sort(sortByStandartMap);
+		channelsInfo.sort(sortByCustomMap);
 		for ( var i = 0; i < channelsInfo.length; i++) {
 			objStr[new String(i + 1)] = channelsInfo[i].channelId;
 		}
-		for ( prop in objStr) {
-		str += prop + ":" + objStr[prop] + ","
-		}
-		showInfoPopup("str = " + str);
+// for (var i = 0; i < channelsInfo.length; i++) {
+// str += userCustomSortMap[parseInt(channelsInfo[i]["channelId"], 10)] + ":"
+// +channelsInfo[i]["channelId"] +", ";
+// }
+// str += "+++++++++++"
+// for(prop in objStr){
+// str += prop + ":" + objStr[prop] + ", ";
+// }
+// showInfoPopup("str = " + str);
 		return objStr;
 	}
 
 	function sortByCustomMap(channelInfo1, channelInfo2) {
 		try {
-			var prop = "channelId";
-			var int1 = userCustomSortMap[parseInt(channelInfo1[prop], 10)];
-			var int2 = userCustomSortMap[parseInt(channelInfo2[prop], 10)];
+			var int1 = userCustomSortMap[parseInt(channelInfo1["channelId"], 10)];
+			var int2 = userCustomSortMap[parseInt(channelInfo2["channelId"], 10)];
 			return int1 - int2;
 		} catch (e) {
 			log.error(e);

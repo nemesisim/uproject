@@ -109,15 +109,15 @@
 		popupButtonYellowText = dom.getTextNode("genreButtonYellowText");
 		popupButtonBlueText = dom.getTextNode("genreButtonBlueText");
 
-		okCancelTitle.setText("Sort by Genre");
-		okCancelDescription.setText("Geners");
+		okCancelTitle.setText(lang.genreSortTitle);
+		okCancelDescription.setText(lang.genreSortDescription);
 
-		popupButtonRedText.setText("Set First");
-		popupButtonGreenText.setText("Set Last");
-		popupButtonYellowText.setText("Move Up");
-		popupButtonBlueText.setText("Move Down");
+		popupButtonRedText.setText(lang.labelSetFirst);
+		popupButtonGreenText.setText(lang.labelSetLast);
+		popupButtonYellowText.setText(lang.labelMoveUp);
+		popupButtonBlueText.setText(lang.labelMoveDown);
 
-		dom.getTextNode("genreExitLabel").setText("Exit");
+		dom.getTextNode("genreExitLabel").setText(lang.labelExit);
 
 		actionMgr.mapActions(module.id, mapActionsFn());
 	};
