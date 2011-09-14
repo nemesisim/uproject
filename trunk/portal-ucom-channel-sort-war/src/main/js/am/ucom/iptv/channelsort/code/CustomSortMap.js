@@ -20,13 +20,18 @@
 			preferenceMgr : {
 				id : "com.ericsson.iptv.portal.fw.lib.PreferenceMgr",
 				version : [ 1, 0 ]
+			},
+			lang : {
+				id : "am.ucom.iptv.channelsort.lang.interfaces.LangIF",
+				version : [ 1, 0 ]
 			}
 		},
 		publics : {}
 	};
 	var preferenceMgr;
 	var region;
-	var log
+	var log;
+	var lang;
 	
 	var channelPositionsMapFull={"1" : "067", "2" : "071", "3" : "069", "4" : "068", "5" : "075", "6" : "072", "7" : "073", "8" : "074", "9" : "070", "10" : "076", "11" : "058", "12" : "064", "13" : "023", "14" : "045", "15" : "046", "16" : "048", "17" : "009", "18" : "012", "19" : "007", "20" : "006", "21" : "036", "22" : "037", "23" : "059", "24" : "063", "25" : "021", "26" : "038", "27" : "040", "28" : "026", "29" : "035", "30" : "066", "31" : "025", "32" : "003", "33" : "054", "34" : "050", "35" : "031", "36" : "060", "37" : "061", "38" : "041", "39" : "062", "40" : "004", "41" : "055", "42" : "002", "43" : "001", "44" : "057", "45" : "056", "46" : "039", "47" : "014", "48" : "034", "49" : "011", "50" : "010", "51" : "020", "52" : "005", "53" : "027", "54" : "053", "55" : "052", "56" : "051", "57" : "024", "58" : "008", "59" : "017", "60" : "016", "61" : "015", "62" : "029", "63" : "028", "64" : "018", "65" : "019", "66" : "065", "67" : "013", "68" : "043", "69" : "042", "70" : "044", "71" : "049", "72" : "047", "73" : "032", "74" : "033", "75" : "022", "76" : "030" }
 	var channelPositionsMapFamily={"1" : "067", "2" : "071", "3" : "069", "4" : "068", "5" : "075", "6" : "072", "7" : "073", "8" : "074", "9" : "070", "10" : "076", "11" : "058", "12" : "064", "13" : "023", "14" : "045", "15" : "007", "16" : "036", "17" : "037", "18" : "059", "19" : "063", "20" : "038", "21" : "026", "22" : "035", "23" : "066", "24" : "025", "25" : "003", "26" : "054", "27" : "050", "28" : "031", "29" : "060", "30" : "061", "31" : "041", "32" : "062", "33" : "055", "34" : "057", "35" : "056", "36" : "039", "37" : "014", "38" : "034", "39" : "027", "40" : "053", "41" : "051", "42" : "024", "43" : "017", "44" : "016", "45" : "015", "46" : "029", "47" : "028", "48" : "065", "49" : "032", "50" : "033", "51" : "022" }
@@ -43,15 +48,7 @@
 								   "8" : ["042", "044", "049", "047", "032", "033"], 
 								   "9" : ["022", "030" ]};
 	
-	var genresMap = { "1" : {text : "Public Cannels", image : "publicChannels"},
-		"2" : {text : "Music Channels", image : "musicChannels"},
-		"3" : {text : "Entertainment Channels", image : "entertainmentChannels"},
-		"4" : {text : "Educational Channels", image : "educationalChannels"},
-		"5" : {text : "Kid's Channels", image : "kidsChannels"},
-		"6" : {text : "News Channels", image : "newsChannels"},
-		"7" : {text : "Sport Channels", image : "sportsChannels"},
-		"8" : {text : "Movie Channels", image : "movieChannels"},
-		"9" : {text : "Adult Channels", image : "adultChannels"}};
+	var genresMap;
 
 	var channelsNames = {
 			"1":{"name" : "Հ1", "access":"o"},
@@ -131,11 +128,8 @@
 			"75":{"name" : "Playboy TV", "access":"r"},
 			"76":{"name" : "Русская ночь ", "access":"r"}
 		};
-	var accessLevels = {
-		"o" : "Open",
-		"r" : "Require Password",
-		"b" : "Blocked"
-	}
+	var accessLevels;
+	
 	var channelPositionsMapFullRevert = {};	
 	var channelPositionsMapFamilyRevert = {};
 	var channelPositionsMapEconomRevert = {};
@@ -179,7 +173,22 @@
 		preferenceMgr = module.dependencies.preferenceMgr.handle;
 		log = module.dependencies.log.handle;
 		region = preferenceMgr.get("com.ericsson.iptv.portal.user.region");
+		lang = module.dependencies.lang.handle;
 
+		genresMap = { "1" : {text : lang.genrePublicCannels, image : "publicChannels"},
+				"2" : {text : lang.genreMusicChannels, image : "musicChannels"},
+				"3" : {text : lang.genreEntertainmentChannels, image : "entertainmentChannels"},
+				"4" : {text : lang.genreEducationalChannels, image : "educationalChannels"},
+				"5" : {text : lang.genreKidsChannels, image : "kidsChannels"},
+				"6" : {text : lang.genreNewsChannels, image : "newsChannels"},
+				"7" : {text : lang.genreSportChannels, image : "sportsChannels"},
+				"8" : {text : lang.genreMovieChannels, image : "movieChannels"},
+				"9" : {text : lang.genreAdultChannels, image : "adultChannels"}};
+		accessLevels = {
+				"o" : lang.accessLevelOpen,
+				"r" : lang.accessLevelRequirePassword,
+				"b" : lang.accessLevelBlocked
+			};
 		for(prop in channelPositionsMapFull)
 			channelPositionsMapFullRevert[channelPositionsMapFull[prop]] = prop;	
 		for(prop in channelPositionsMapEconom)

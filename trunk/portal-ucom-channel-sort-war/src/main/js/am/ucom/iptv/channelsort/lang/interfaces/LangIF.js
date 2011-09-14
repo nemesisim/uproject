@@ -7,13 +7,55 @@
 
 		publics : {
 			channelsReorderMenuLabel : "",
-			channelsReorderPopupTitle : "",
-			channelsReorderPopupText : "",
 
-			channelsUnsorted : "",
 			channelsStandard : "",
-			channelsAlphabetical : "",
-			channelsSortUcom : "",
+			channelsByGenre : "",
+			channelsUtv1 : "",
+			channelsUtv2 : "",
+			channelsUtv3 : "",
+
+			selectSortPopupTitle : "",
+			selectSortPopupDescription : "",
+			genreSortTitle : "",
+			genreSortDescription : "",
+
+			sortAdd : "",
+			sortRemove : "",
+			sortEdit : "",
+			sortCancel : "",
+
+			preferenceNameGenreOrder : "",
+			preferenceNameCustom1 : "",
+			preferenceNameCustom2 : "",
+			preferenceNameCustom3 : "",
+
+			labelExit : "",
+			labelSetFirst : "",
+			labelSetLast : "",
+			labelMoveUp : "",
+			labelMoveDown : "",
+
+			labelSortingOptionsFor : "",
+			labelChannels : "",
+			labelAccessType : "",
+			labelRename : "",
+			labelNavigate : "",
+
+			accessLevelOpen : "",
+			accessLevelRequirePassword : "",
+			accessLevelBlocked : "",
+
+			genrePublicCannels : "",
+			genreMusicChannels : "",
+			genreEntertainmentChannels : "",
+			genreEducationalChannels : "",
+			genreKidsChannels : "",
+			genreNewsChannels : "",
+			genreSportChannels : "",
+			genreMovieChannels : "",
+			genreAdultChannels : "",
+
+			channelsOrderUnableToSaveOrdering : "",
 
 			channelsUnableToRefresh : "",
 			channelsOrderWrongMethodChosen : "",
