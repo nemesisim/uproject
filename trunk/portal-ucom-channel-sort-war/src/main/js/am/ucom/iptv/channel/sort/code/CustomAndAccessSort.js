@@ -208,70 +208,6 @@
 		// customSortList.showSelector();
 		// }
 	}
-
-	function performAction(action, args) {
-		switch (action) {
-		case 'ACTION_PREVIOUS':
-			customSortList.onPreviousKey(args.event);
-			customSortAccessList.onPreviousKey(args.event);
-			break;
-		case 'ACTION_NEXT':
-			customSortList.onNextKey(args.event);
-			customSortAccessList.onNextKey(args.event);
-			break;
-		case 'ACTION_LEFT':
-			// selectColumn("left");
-			break;
-		case 'ACTION_RIGHT':
-			// selectColumn("right");
-			break;
-		case 'ACTION_EXIT':
-			if (callback)
-				callback(callbackPosition, channelName, channelsOrder,
-						channelsAccessOrder);
-			mgr.hide(module.id);
-			break;
-		case 'ACTION_OK':
-			mgr
-					.show(
-							"com.ericsson.iptv.portal.coreapps.common.popup.view.InputPopup",
-							{
-								id : "customSort_inputPopup",
-								title : lang.popupChannelNameTitle,
-								text : lang.popupChannelNameText,
-								value : channelName,
-								type : "STRING",
-								callback : function(value) {
-									if (value)
-										channelName = value;
-									mgr
-											.show(
-													"am.ucom.iptv.channel.sort.code.CustomAndAccessSort",
-													{
-														"callback" : callback,
-														"name" : channelName,
-														"position" : callbackPosition
-													});
-								}
-							});
-			break;
-		case 'ACTION_RED':
-			swapListItems(customSortList.getIndex(), 0);
-			break;
-		case 'ACTION_GREEN':
-			swapListItems(customSortList.getIndex(), channelsOrder.length - 1);
-			break;
-		case 'ACTION_YELLOW':
-			swapListItems(customSortList.getIndex(),
-					customSortList.getIndex() - 1);
-			break;
-		case 'ACTION_BLUE':
-			swapListItems(customSortList.getIndex(),
-					customSortList.getIndex() + 1);
-			break;
-		}
-	}
-
 	function swapListItems(from, to) {
 		var selected = channelsOrder[from];
 		var currentText = selected.text;
@@ -304,17 +240,93 @@
 		customSortList.init(channelsOrder.length, to);
 		customSortAccessList.init(channelsAccessOrder.length, to);
 	}
-
+	
+	function performAction(action, args) {
+		switch (action) {
+		case 'ACTION_PREVIOUS':
+			customSortList.onPreviousKey(args.event);
+			customSortAccessList.onPreviousKey(args.event);
+			break;
+		case 'ACTION_NEXT':
+			customSortList.onNextKey(args.event);
+			customSortAccessList.onNextKey(args.event);
+			break;
+		case 'ACTION_LEFT':
+			// selectColumn("left");
+			break;
+		case 'ACTION_RIGHT':
+			// selectColumn("right");
+			break;
+		case 'ACTION_EXIT':
+			if (callback)
+				callback(callbackPosition, channelName, channelsOrder,
+						channelsAccessOrder);
+			mgr.hide(module.id);
+			break;
+		case 'ACTION_OK':
+			var str = channelName + ","
+			for ( var i = 0; i < channelsOrder.length; i++) {
+				str += channelsOrder[i].position + "-"
+						+ channelsAccessOrder[i].access;
+				if (i < channelsOrder.length - 1)
+					str += ",";
+			}			
+			mgr
+					.show(
+							"com.ericsson.iptv.portal.coreapps.common.popup.view.InputPopup",
+							{
+								id : "customSort_inputPopup",
+								title : lang.popupChannelNameTitle,
+								text : lang.popupChannelNameText,
+								value : channelName,
+								type : "STRING",
+								callback : function(value) {
+									if (value)
+										channelName = value;
+									mgr
+											.show(
+													"am.ucom.iptv.channel.sort.code.CustomAndAccessSort",
+													{
+														"callback" : callback,
+														"position" : callbackPosition,
+														"orderList" : str,
+														"name" : channelName,
+														"channelList" : channelList
+													});
+								}
+							});
+			break;
+		case 'ACTION_RED':
+			swapListItems(customSortList.getIndex(), 0);
+			break;
+		case 'ACTION_GREEN':
+			swapListItems(customSortList.getIndex(), channelsOrder.length - 1);
+			break;
+		case 'ACTION_YELLOW':
+			swapListItems(customSortList.getIndex(),
+					customSortList.getIndex() - 1);
+			break;
+		case 'ACTION_BLUE':
+			swapListItems(customSortList.getIndex(),
+					customSortList.getIndex() + 1);
+			break;
+		}
+	}
+	var channelList;
 	module.implementing.view.publics.onShow = function(args) {
 		callback = args.callback;
 		callbackPosition = args.position;
 		channelsOrder = [];
 		channelsAccessOrder = [];
-		var channelList = args.channelList;
+		if(args.channelList)
+			channelList = args.channelList;
 		if (args.orderList) {
 			var positionIndex = 1;
 			var orderListObj = args.orderList.split(",");
-			channelName = orderListObj[0];
+			if(args.name)
+				channelName = args.name;
+			else
+				channelName = orderListObj[0];
 			while (positionIndex < orderListObj.length) {
 				var item = orderListObj[positionIndex].split("-");
 				if (channelList[item[0]]) {
