@@ -160,12 +160,6 @@
 			}
 			mgr.hide(module.id);
 			break;
-		case 'ACTION_OK':
-			if (callback) {
-				callback(orderings)
-			}
-			mgr.hide(module.id);
-			break;
 		case 'ACTION_RED':
 			swapListItems(okCancelList.getIndex(), 0);
 			break;
