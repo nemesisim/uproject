@@ -117,9 +117,9 @@
 	var custom2;
 	var custom3;
 	var userChannelList = {};
-	var genreSortOrder = [];
 	var userCustomSortMap = {};
 
+	var tempGenreMap;
 	var customSortMap;
 	var customPositionsMap;
 	var customPositionsMapRevert = {};
@@ -256,10 +256,12 @@
 												.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference"),
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference"
 									});
-							var prefValue = lzw_decode(preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference"));
-							var chName = lang.channelsUtv1;
-							if(prefValue && prefValue.length > 0)
+							var prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference");
+							var chName = "...";
+							if(prefValue && prefValue.length > 0){
+								prefValue = lzw_decode(prefValue);
 								chName = prefValue.split(",", 1);
+							}
 							orderings
 									.push( {
 										text : chName,
@@ -267,10 +269,12 @@
 										preferenceValue : prefValue,
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference"
 									});
-							prefValue = lzw_decode(preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference"));
-							chName = lang.channelsUtv2;
-							if(prefValue && prefValue.length > 0)
+							prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference");
+							chName = "...";
+							if(prefValue && prefValue.length > 0){
+								prefValue = lzw_decode(prefValue);
 								chName = prefValue.split(",", 1);
+							}
 							orderings
 									.push( {
 										text : chName,
@@ -278,10 +282,12 @@
 										preferenceValue : prefValue,
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference"
 									});
-							prefValue = lzw_decode(preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference"));
-							chName = lang.channelsUtv3;
-							if(prefValue && prefValue.length > 0)
+							prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference");
+							chName = "...";
+							if(prefValue && prefValue.length > 0){
+								prefValue = lzw_decode(prefValue);
 								chName = prefValue.split(",", 1);
+							}
 							orderings
 									.push( {
 										text : chName,
@@ -372,7 +378,7 @@
 					viewManager
 							.show("am.ucom.iptv.channel.sort.code.GenreSort",
 									{
-										"callback" : genreSortCallback,
+										"callback" : approveGenreSavePopup,
 									});
 				else if (okCancelList.getIndex() > 1) {
 					viewManager
@@ -380,9 +386,8 @@
 									"am.ucom.iptv.channel.sort.code.CustomAndAccessSort",
 									{
 										"position" : okCancelList.getIndex(),
-										"callback" : customSortCallback,
-										"name" : orderings[okCancelList
-												.getIndex()].text,
+										"callback" : approveCustomSavePopup,
+										"name" : lang.channelsUtv,
 										"channelList" : userChannelList		
 									});
 				}				
@@ -390,22 +395,7 @@
 			break;
 		case 'ACTION_GREEN':
 			if (orderings[okCancelList.getIndex()].preferenceValue && orderings[okCancelList.getIndex()].preferenceValue != "default") {
-				preferenceMgr.put(
-						orderings[okCancelList.getIndex()].preferenceName,
-						undefined, "USER");
-				preferenceMgr.persist(function() {
-					orderings[okCancelList.getIndex()].preferenceValue = undefined;
-					if(okCancelList.getIndex() == 2)
-						orderings[okCancelList.getIndex()].text = "Utv1";
-					if(okCancelList.getIndex() == 3)
-						orderings[okCancelList.getIndex()].text = "Utv2";
-					if(okCancelList.getIndex() == 4)
-						orderings[okCancelList.getIndex()].text = "Utv3";
-					okCancelList.init(orderings.length, okCancelList.getIndex());
-					showPopupButtons(orderings[okCancelList.getIndex()]);
-				}, function() {
-					showInfoPopup(lang.channelsOrderUnableToSaveOrdering);
-				});
+				removeSortingPopup(okCancelList.getIndex());
 			}
 			break;
 		case 'ACTION_YELLOW':
@@ -414,7 +404,7 @@
 					viewManager
 							.show("am.ucom.iptv.channel.sort.code.GenreSort",
 									{
-										"callback" : genreSortCallback,
+										"callback" : approveGenreSavePopup,
 										"orderList" : orderings[okCancelList
 												.getIndex()].preferenceValue
 									});
@@ -424,7 +414,7 @@
 									"am.ucom.iptv.channel.sort.code.CustomAndAccessSort",
 									{
 										"position" : okCancelList.getIndex(),
-										"callback" : customSortCallback,
+										"callback" : approveCustomSavePopup,
 										"name" : orderings[okCancelList
 												.getIndex()].text,
 										"orderList" : orderings[okCancelList
@@ -439,49 +429,139 @@
 			break;
 		}
 	}
-	function customSortCallback(position, channelName, channelsOrder,
-			channelsAccessOrder) {
-		viewManager.show(module.id, {
-			"position" : position
-		});
-		var str = channelName + ","
-		for ( var i = 0; i < channelsOrder.length; i++) {
-			str += channelsOrder[i].position + "-"
-					+ channelsAccessOrder[i].access;
-			if (i < channelsOrder.length - 1)
-				str += ",";
-		}
-		log.error("old.str = " + str.length + " : " + str);
-		log.error("new.str = " + lzw_encode(str).length + " : " + lzw_encode(str));
-		preferenceMgr.put(orderings[position].preferenceName, lzw_encode(str), "USER");
-		preferenceMgr.persist(function() {
-			orderings[position].text = channelName;
-			orderings[position].preferenceValue = str;
-			okCancelList.init(orderings.length, position);
-			showPopupButtons(orderings[position]);
-		}, function() {
-			showInfoPopup(lang.channelsOrderUnableToSaveOrdering);
-		});
-	}	
-	function genreSortCallback(orderingsArray) {
-		viewManager.show(module.id, {
-			"position" : 1
-		});
-		var str = "";
-		for ( var i = 0; i < orderingsArray.length; i++) {
-			str += orderingsArray[i].position;
-			if (i < orderingsArray.length - 1)
-				str += ",";			
-		}
-		
-		preferenceMgr.put(orderings[1].preferenceName, str, "USER");
-		preferenceMgr.persist(function() {
-			orderings[1].preferenceValue = str;
-			genreSortOrder = str.split(",");
-			showPopupButtons(orderings[1]);
-		}, function() {
-			showInfoPopup(lang.channelsOrderUnableToSaveOrdering);
-		});		
+	function removeSortingPopup(position){
+		mgr.show(
+				"com.ericsson.iptv.portal.coreapps.common.popup.view.SelectWithInfoPopup",
+				{
+					id : "customSort_accessPopup",
+					title: lang.removeSortingTitle,
+					text : lang.removeSortingText,
+					dontShowCancel : "true",
+					selected : 0,				
+					options : [ {
+						id : 0,
+						text : lang.popupYes,
+						callback : function(){
+							preferenceMgr.put(
+									orderings[position].preferenceName,
+									undefined, "USER");
+							preferenceMgr.persist(function() {
+								orderings[position].preferenceValue = undefined;
+								if(position == 2)
+									orderings[position].text = "...";
+								if(position == 3)
+									orderings[position].text = "...";
+								if(position == 4)
+									orderings[position].text = "...";
+								okCancelList.init(orderings.length, position);
+								showPopupButtons(orderings[position]);
+							}, function() {
+								showInfoPopup(lang.channelsOrderUnableToSaveOrdering);
+							});
+							viewManager.show(module.id, {
+								"position" : position
+							});
+						}
+					}, {
+						id : 0,
+						text : lang.popupNo,
+						callback : function(){
+							viewManager.show(module.id, {
+								"position" : position
+							});
+						}
+					} ]
+				});			
+	}
+	function approveCustomSavePopup(position, channelName, channelsOrder,
+			channelsAccessOrder){	
+		mgr.show(
+			"com.ericsson.iptv.portal.coreapps.common.popup.view.SelectWithInfoPopup",
+			{
+				id : "customSort_accessPopup",
+				title: lang.saveSortingTitle,
+				text : lang.saveSortingText,
+				dontShowCancel : "true",
+				selected : 0,				
+				options : [ {
+					id : 0,
+					text : lang.popupYes,
+					callback : function(){
+						viewManager.show(module.id, {
+							"position" : position
+						});
+						var str = channelName + ","
+						for ( var i = 0; i < channelsOrder.length; i++) {
+							str += channelsOrder[i].position
+							// + "-" + channelsAccessOrder[i].access;
+							if (i < channelsOrder.length - 1)
+								str += ",";
+						}
+						log.error("old.str = " + str.length + " : " + str);
+						log.error("new.str = " + lzw_encode(str).length + " : " + lzw_encode(str));
+						preferenceMgr.put(orderings[position].preferenceName, lzw_encode(str), "USER");
+						preferenceMgr.persist(function() {
+							orderings[position].text = channelName;
+							orderings[position].preferenceValue = str;
+							okCancelList.init(orderings.length, position);
+							showPopupButtons(orderings[position]);
+						}, function() {
+							showInfoPopup(lang.channelsOrderUnableToSaveOrdering);
+						});
+					}
+				}, {
+					id : 0,
+					text : lang.popupNo,
+					callback : function(){
+						viewManager.show(module.id, {
+							"position" : position
+						});
+					}
+				} ]
+			});	
+	}
+	
+	function approveGenreSavePopup(orderingsArray){	
+		mgr.show(
+			"com.ericsson.iptv.portal.coreapps.common.popup.view.SelectWithInfoPopup",
+			{
+				id : "customSort_accessPopup",
+				title: lang.saveSortingTitle,
+				text : lang.saveSortingText,
+				dontShowCancel : "true",
+				selected : 0,				
+				options : [ {
+					id : 0,
+					text : lang.popupYes,
+					callback : function(){
+						viewManager.show(module.id, {
+							"position" : 1
+						});
+						var str = "";
+						for ( var i = 0; i < orderingsArray.length; i++) {
+							str += orderingsArray[i].position;
+							if (i < orderingsArray.length - 1)
+								str += ",";			
+						}
+						
+						preferenceMgr.put(orderings[1].preferenceName, str, "USER");
+						preferenceMgr.persist(function() {
+							orderings[1].preferenceValue = str;
+							showPopupButtons(orderings[1]);
+						}, function() {
+							showInfoPopup(lang.channelsOrderUnableToSaveOrdering);
+						});		
+					}
+				}, {
+					id : 0,
+					text : lang.popupNo,
+					callback : function(){
+						viewManager.show(module.id, {
+							"position" : 1
+						});
+					}
+				} ]
+			});	
 	}
 	
 	function orderChannels(orderMethod, position) {
@@ -517,49 +597,50 @@
 			}
 		}
 	}
-	
+
 	function buildChannelsObjectGenre(channelsInfo) {		
 		genrePositionMap = customSortMap.getGenresPositionsMap();
-		var genreBuildMap = {};
-		var str = "";
+		var genreSortOrder = orderings[1].preferenceValue.split(",");;
+		tempGenreMap = {};
 		var cursorIndex = 1;
-		if (genreSortOrder.length > 0){			
-			for(var j = 0; j < genreSortOrder.length; j++){
-				for(var i = 0; i < genrePositionMap[genreSortOrder[j]].length; i++){
-					var channelId = parseInt(genrePositionMap[genreSortOrder[j]][i], 10);
-					if(userChannelList[channelId]){
-						genreBuildMap[new String(cursorIndex)] = genrePositionMap[genreSortOrder[j]][i];
-						cursorIndex++;
-					}
-				}
+		for(var j = 0; j < genreSortOrder.length; j++){
+			for(var i = 0; i < genrePositionMap[genreSortOrder[j]].length; i++){					
+				tempGenreMap[parseInt(genrePositionMap[genreSortOrder[j]][i], 10)] = cursorIndex;
+				cursorIndex++;
 			}
 		}
-		else{
-			for(genreItem in genrePositionMap){
-				for(var i = 0; i < genrePositionMap[genreItem].length; i++){
-					var channelId = parseInt(genrePositionMap[genreItem][i], 10);
-					if(userChannelList[channelId]){
-						genreBuildMap[new String(cursorIndex)] = genrePositionMap[genreItem][i];
-						cursorIndex++;
-					}
-				}				
-			}
+		channelsInfo.sort(sortByGenreMap);
+		var objStr = {};
+		for ( var i = 0; i < channelsInfo.length; i++) {
+			objStr[new String(i + 1)] = channelsInfo[i].channelId;
 		}
+		var str = "";
+		for(prop in objStr){
+			str += objStr[prop] + ":" + prop + ", ";
+		}
+		log.error("genre:str = " + str);		
 
-		 for(prop in genreBuildMap){
-			 str += prop + ":" + genreBuildMap[prop] + ", ";
-		 }
-		 log.error("str = " + str);		
-		return genreBuildMap;
+		return objStr;
 	}
+	function sortByGenreMap(channelInfo1, channelInfo2) {
+		try {
+			var int1 = tempGenreMap[parseInt(channelInfo1["channelId"], 10)];
+			var int2 = tempGenreMap[parseInt(channelInfo2["channelId"], 10)];
+			return int1 - int2;
+		} catch (e) {
+			log.error(e);
+			return 0;
+		}
+	}	
 	function buildChannelsObjectCustom(channelsInfo, position) {
 		var objStr = {};
 		var positionIndex = 1;
 		var customPrefObj = orderings[position].preferenceValue.split(",");
 		var str = "";
 		while (positionIndex < customPrefObj.length) {
-			var item = customPrefObj[positionIndex].split("-");
-			userCustomSortMap[item[0]] = positionIndex; 
+// var item = customPrefObj[positionIndex].split("-");
+// userCustomSortMap[item[0]] = positionIndex;
+			userCustomSortMap[customPrefObj[positionIndex]] = positionIndex;
 			positionIndex ++;
 		}
 		channelsInfo.sort(sortByCustomMap);

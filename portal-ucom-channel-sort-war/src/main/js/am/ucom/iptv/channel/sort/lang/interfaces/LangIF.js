@@ -10,9 +10,7 @@
 
 			channelsStandard : "",
 			channelsByGenre : "",
-			channelsUtv1 : "",
-			channelsUtv2 : "",
-			channelsUtv3 : "",
+			channelsUtv : "",
 
 			selectSortPopupTitle : "",
 			selectSortPopupDescription : "",
@@ -57,6 +55,13 @@
 
 			popupChannelNameTitle : "",
 			popupChannelNameText : "",
+			
+			removeSortingTitle : "",
+			removeSortingText : "",
+			saveSortingTitle : "",
+			saveSortingText : "",
+			popupYes : "",
+			popupNo : "",
 			
 			channelsOrderUnableToSaveOrdering : "",
 

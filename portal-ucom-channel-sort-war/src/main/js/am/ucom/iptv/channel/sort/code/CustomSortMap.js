@@ -47,7 +47,7 @@
 								   "7" : ["008", "017", "016", "015", "029", "028", "018", "019", "065", "013", "043"], 
 								   "8" : ["042", "044", "049", "047", "032", "033"], 
 								   "9" : ["022", "030" ]};
-	
+
 	var genresMap;
 
 	var channelsNames = {
@@ -124,7 +124,7 @@
 			"71":{"name" : "VIASAT ТВ 1000", "access":"o"},
 			"72":{"name" : "VIASAT ТВ 1000 рус.", "access":"o"},
 			"73":{"name" : "FOX Life", "access":"o"},
-			"74":{"name" : "FOX CRIME", "access":"b"},
+			"74":{"name" : "FOX CRIME", "access":"o"},
 			"75":{"name" : "Playboy TV", "access":"r"},
 			"76":{"name" : "Русская ночь ", "access":"r"}
 		};

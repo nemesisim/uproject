@@ -266,8 +266,8 @@
 		case 'ACTION_OK':
 			var str = channelName + ","
 			for ( var i = 0; i < channelsOrder.length; i++) {
-				str += channelsOrder[i].position + "-"
-						+ channelsAccessOrder[i].access;
+				str += channelsOrder[i].position;
+				//+ "-"	+ channelsAccessOrder[i].access;
 				if (i < channelsOrder.length - 1)
 					str += ",";
 			}			
@@ -328,17 +328,27 @@
 			else
 				channelName = orderListObj[0];
 			while (positionIndex < orderListObj.length) {
-				var item = orderListObj[positionIndex].split("-");
-				if (channelList[item[0]]) {
+//				var item = orderListObj[positionIndex].split("-");
+//				if (channelList[item[0]]) {
+//					channelsOrder.push( {
+//						position : item[0],
+//						text : channelsNames[item[0]].name
+//					});
+//					channelsAccessOrder.push( {
+//						text : accessLevels[item[1]],
+//						access : item[1]
+//					});
+//				}
+				if (channelList[orderListObj[positionIndex]]) {
 					channelsOrder.push( {
-						position : item[0],
-						text : channelsNames[item[0]].name
+						position : orderListObj[positionIndex],
+						text : channelsNames[orderListObj[positionIndex]].name
 					});
 					channelsAccessOrder.push( {
-						text : accessLevels[item[1]],
-						access : item[1]
+						text : accessLevels[channelsNames[orderListObj[positionIndex]].access],
+						access : channelsNames[orderListObj[positionIndex]].access
 					});
-				}
+				}				
 				positionIndex++;
 			}
 		} else {

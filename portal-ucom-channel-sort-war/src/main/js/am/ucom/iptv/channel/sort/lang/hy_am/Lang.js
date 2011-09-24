@@ -23,9 +23,7 @@
 
 		channelsStandard : "Ucom Standard",
 		channelsByGenre : "By genre",
-		channelsUtv1 : "Utv1",
-		channelsUtv2 : "Utv2",
-		channelsUtv3 : "Utv3",
+		channelsUtv : "Utv",
 
 		selectSortPopupTitle : "Channel management",
 		selectSortPopupDescription : "Sorting",
@@ -70,6 +68,13 @@
 
 		popupChannelNameTitle : "Change Name",
 		popupChannelNameText : "Change sorting type name",
+		
+		removeSortingTitle : "Remove Sorting",
+		removeSortingText : "Are you sure you want to remove sorting?",
+		saveSortingTitle : "Save Sorting Changes",
+		saveSortingText : "Are you sure you want to save changes?",
+		popupYes : "Yes",
+		popupNo : "No",
 		
 		channelsOrderUnableToSaveOrdering : "Unable To Save Ordering",
 
