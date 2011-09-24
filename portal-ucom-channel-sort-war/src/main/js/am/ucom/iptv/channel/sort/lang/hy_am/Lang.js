@@ -19,6 +19,7 @@
 
 	module.implementing.lang.publics = {
 		channelsReorderMenuLabel : "Ալիքների դասավորում",
+		//channelsReorderMenuLabel : "Իրավական տեղեկատվություն",
 
 		channelsStandard : "Ucom Standard",
 		channelsByGenre : "By genre",

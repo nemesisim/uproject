@@ -9,6 +9,13 @@
 				version : [ 1, 0 ],
 				publics : {}
 			},
+// menu: {
+// id:
+// "com.ericsson.iptv.portal.coreapps.common.main.interfaces.MainMenuItemIF",
+// version: [ 1, 0 ],
+// statics: { },
+// publics: { }
+// },
 			loading : {
 				id : "com.ericsson.iptv.portal.fw.interfaces.LoadingIF",
 				version : [ 1, 0 ],
@@ -76,6 +83,23 @@
 		}
 	};
 
+
+// module.implementing.menu.statics.cssModule =
+// "am.ucom.iptv.channel.sort.skin.interfaces.SkinIF";
+// module.implementing.menu.statics.iconClass = "sortMenuIcon";
+// module.implementing.menu.statics.langModule =
+// "am.ucom.iptv.channel.sort.lang.interfaces.LangIF";
+// module.implementing.menu.statics.appNameKey = "channelsReorderMenuLabel";
+// module.implementing.menu.statics.parentNode =
+// "com.ericsson.iptv.portal.coreapps.mycontent.code.MyContent";
+// module.implementing.menu.statics.menuPosition = "6";
+// module.implementing.menu.publics.activate = function () {
+// viewManager
+// .show(module.id, {
+// "position" : 0
+// });
+// };
+    
 	var dom;
 	var mgr;
 	var lang;
@@ -114,14 +138,16 @@
 	var orderings = [];
 
 	module.implementing.broadcastActionProvider.publics.getActions = function() {
-		return [ {
+		return [ 
+		         {
 			id : "ACTION_REORDER_CHANNELS",
 			localizedLabel : lang.channelsReorderMenuLabel,
 			isApplicable : alwaysApplicable,
 			invoke : actionChannelSort,
 			keyEvents : [],
 			optionsMenuEvents : [ "KEY_OK" ]
-		} ];
+		}
+		         ];
 	};
 	function alwaysApplicable(success, failure, channelInfo, programInfo,
 			mediaPlayer) {
@@ -170,7 +196,10 @@
 
 		broadcastTV.getChannelList(function(channels) {
 			for ( var i = 0; i < channels.channelList.length; i++) {
-				userChannelList[new String(channels.channelList[i].channelId)] = channels.channelList[i].channelId;
+				// userChannelList[new
+				// String(channels.channelList[i].channelId)] =
+				// channels.channelList[i].channelId;
+				userChannelList[new String(parseInt(channels.channelList[i].channelId, 10))] = parseInt(channels.channelList[i].channelId, 10);				
 			}
 		}, function() {
 		}, locale);	
@@ -227,7 +256,7 @@
 												.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference"),
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference"
 									});
-							var prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference");
+							var prefValue = lzw_decode(preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference"));
 							var chName = lang.channelsUtv1;
 							if(prefValue && prefValue.length > 0)
 								chName = prefValue.split(",", 1);
@@ -238,7 +267,7 @@
 										preferenceValue : prefValue,
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference"
 									});
-							prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference");
+							prefValue = lzw_decode(preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference"));
 							chName = lang.channelsUtv2;
 							if(prefValue && prefValue.length > 0)
 								chName = prefValue.split(",", 1);
@@ -249,7 +278,7 @@
 										preferenceValue : prefValue,
 										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference"
 									});
-							prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference");
+							prefValue = lzw_decode(preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference"));
 							chName = lang.channelsUtv3;
 							if(prefValue && prefValue.length > 0)
 								chName = prefValue.split(",", 1);
@@ -422,8 +451,9 @@
 			if (i < channelsOrder.length - 1)
 				str += ",";
 		}
-
-		preferenceMgr.put(orderings[position].preferenceName, str, "USER");
+		log.error("old.str = " + str.length + " : " + str);
+		log.error("new.str = " + lzw_encode(str).length + " : " + lzw_encode(str));
+		preferenceMgr.put(orderings[position].preferenceName, lzw_encode(str), "USER");
 		preferenceMgr.persist(function() {
 			orderings[position].text = channelName;
 			orderings[position].preferenceValue = str;
@@ -487,9 +517,10 @@
 			}
 		}
 	}
-	var genreBuildMap = {};
+	
 	function buildChannelsObjectGenre(channelsInfo) {		
 		genrePositionMap = customSortMap.getGenresPositionsMap();
+		var genreBuildMap = {};
 		var str = "";
 		var cursorIndex = 1;
 		if (genreSortOrder.length > 0){			
@@ -514,6 +545,11 @@
 				}				
 			}
 		}
+
+		 for(prop in genreBuildMap){
+			 str += prop + ":" + genreBuildMap[prop] + ", ";
+		 }
+		 log.error("str = " + str);		
 		return genreBuildMap;
 	}
 	function buildChannelsObjectCustom(channelsInfo, position) {
@@ -666,5 +702,59 @@
 	};
 	
 	module.implementing.preferenceDefinitionIF.publics.parameters = {};
+	
+	// LZW-compress a string
+	function lzw_encode(s) {
+	    var dict = {};
+	    var data = (s + "").split("");
+	    var out = [];
+	    var currChar;
+	    var phrase = data[0];
+	    var code = 256;
+	    for (var i=1; i<data.length; i++) {
+	        currChar=data[i];
+	        if (dict[phrase + currChar] != null) {
+	            phrase += currChar;
+	        }
+	        else {
+	            out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+	            dict[phrase + currChar] = code;
+	            code++;
+	            phrase=currChar;
+	        }
+	    }
+	    out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+	    for (var i=0; i<out.length; i++) {
+	        out[i] = String.fromCharCode(out[i]);
+	    }
+	    return out.join("");
+	}
+
+	// Decompress an LZW-encoded string
+	function lzw_decode(s) {
+	    var dict = {};
+	    var data = (s + "").split("");
+	    var currChar = data[0];
+	    var oldPhrase = currChar;
+	    var out = [currChar];
+	    var code = 256;
+	    var phrase;
+	    for (var i=1; i<data.length; i++) {
+	        var currCode = data[i].charCodeAt(0);
+	        if (currCode < 256) {
+	            phrase = data[i];
+	        }
+	        else {
+	           phrase = dict[currCode] ? dict[currCode] : (oldPhrase + currChar);
+	        }
+	        out.push(phrase);
+	        currChar = phrase.charAt(0);
+	        dict[code] = oldPhrase + currChar;
+	        code++;
+	        oldPhrase = phrase;
+	    }
+	    return out.join("");
+	}
+
 	return module;
 });
