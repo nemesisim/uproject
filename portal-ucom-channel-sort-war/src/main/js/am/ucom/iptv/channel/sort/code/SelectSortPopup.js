@@ -636,26 +636,24 @@
 		var objStr = {};
 		var positionIndex = 1;
 		var customPrefObj = orderings[position].preferenceValue.split(",");
-		var str = "";
 		while (positionIndex < customPrefObj.length) {
 // var item = customPrefObj[positionIndex].split("-");
 // userCustomSortMap[item[0]] = positionIndex;
-			userCustomSortMap[customPrefObj[positionIndex]] = positionIndex;
+			userCustomSortMap[parseInt(customPositionsMap[customPrefObj[positionIndex]], 10)] = positionIndex;
 			positionIndex ++;
 		}
+		var str = "";
+		for(prop in userCustomSortMap)
+			str += userCustomSortMap[prop] + " : " + prop + ", ";
+		log.error("str1 = " + str);		
 		channelsInfo.sort(sortByCustomMap);
 		for ( var i = 0; i < channelsInfo.length; i++) {
 			objStr[new String(i + 1)] = channelsInfo[i].channelId;
 		}
-// for (var i = 0; i < channelsInfo.length; i++) {
-// str += userCustomSortMap[parseInt(channelsInfo[i]["channelId"], 10)] + ":"
-// +channelsInfo[i]["channelId"] +", ";
-// }
-// str += "+++++++++++"
-// for(prop in objStr){
-// str += prop + ":" + objStr[prop] + ", ";
-// }
-// showInfoPopup("str = " + str);
+		str = "";
+		for(prop in objStr)
+			str += objStr[prop] + " : " + prop + ", ";
+		log.error("str2 = " + str);
 		return objStr;
 	}
 
