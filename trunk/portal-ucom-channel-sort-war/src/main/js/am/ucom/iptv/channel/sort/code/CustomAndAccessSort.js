@@ -281,18 +281,20 @@
 								value : channelName,
 								type : "STRING",
 								callback : function(value) {
-									if (value)
-										channelName = value;
-									mgr
-											.show(
-													"am.ucom.iptv.channel.sort.code.CustomAndAccessSort",
-													{
-														"callback" : callback,
-														"position" : callbackPosition,
-														"orderList" : str,
-														"name" : channelName,
-														"channelList" : channelList
-													});
+									if (value){
+										if(value.length > 6)
+											channelName = value.substr(0, 6) + "..";
+										mgr
+												.show(
+														"am.ucom.iptv.channel.sort.code.CustomAndAccessSort",
+														{
+															"callback" : callback,
+															"position" : callbackPosition,
+															"orderList" : str,
+															"name" : channelName,
+															"channelList" : channelList
+														});
+									}
 								}
 							});
 			break;

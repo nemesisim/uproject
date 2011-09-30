@@ -134,8 +134,7 @@
 
 	function paintItem(P, Q) {
 		var R = orderings[Q];
-		index = (index % 9) + 1;
-		P.okCancelListInnerItem.setText(index + ". " + R.text);
+		P.okCancelListInnerItem.setText(R.position + ". " + R.text);
 		P.okCancelListInnerItem.clearClass();
 		P.okCancelListInnerItem.addClass(R.image);
 		if (R.id) {
