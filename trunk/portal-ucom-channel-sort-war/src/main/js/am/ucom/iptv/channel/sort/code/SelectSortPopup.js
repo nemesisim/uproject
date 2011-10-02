@@ -259,9 +259,19 @@
 							var prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference");
 							var chName = "...";
 							if(prefValue && prefValue.length > 0){
-								prefValue = lzw_decode(prefValue);
-								chName = prefValue.split(",", 1);
+								chName = prefValue.substring(0, prefValue.indexOf(","));
+								prefValue = prefValue.substring(prefValue.indexOf(",")+1, prefValue.length);
+								var str = "";
+								for ( var i = 0; i < prefValue.length; i++) {
+									str +=  prefValue.indexOf(i) + " | " + String.charCodeAt(prefValue.indexOf(i)) + ",";
+									// + "-" + channelsAccessOrder[i].access;
+									//if (i < channelsOrder.length - 1)
+										//str += ",";
+								}
+								prefValue = str;								
+								
 							}
+							alert(prefValue)
 							orderings
 									.push( {
 										text : chName,
@@ -492,13 +502,12 @@
 						});
 						var str = channelName + ","
 						for ( var i = 0; i < channelsOrder.length; i++) {
-							str += channelsOrder[i].position
+							str +=  String.fromCharCode(channelsOrder[i].position)
 							// + "-" + channelsAccessOrder[i].access;
-							if (i < channelsOrder.length - 1)
-								str += ",";
+							//if (i < channelsOrder.length - 1)
+								//str += ",";
 						}
 						log.error("old.str = " + str.length + " : " + str);
-						log.error("new.str = " + lzw_encode(str).length + " : " + lzw_encode(str));
 						preferenceMgr.put(orderings[position].preferenceName, lzw_encode(str), "USER");
 						preferenceMgr.persist(function() {
 							orderings[position].text = channelName;
@@ -539,9 +548,10 @@
 						});
 						var str = "";
 						for ( var i = 0; i < orderingsArray.length; i++) {
-							str += orderingsArray[i].position;
-							if (i < orderingsArray.length - 1)
-								str += ",";			
+//							str += orderingsArray[i].position;
+							str +=  String.fromCharCode(orderingsArray[i].position)
+//							if (i < orderingsArray.length - 1)
+//								str += ",";			
 						}
 						
 						preferenceMgr.put(orderings[1].preferenceName, str, "USER");

@@ -161,10 +161,11 @@
 		customSortList.clear();
 		customSortAccessList.clear();
 	};
-
+	var index = 0;
 	function paintItem(P, Q) {
 		var R = channelsOrder[Q];
-		P.customSortListInnerItem.setText(R.position + ". " + R.text);
+		index++;
+		P.customSortListInnerItem.setText(index + ". " + R.text);
 		P.customSortListInnerItem.clearClass();
 		if (R.id) {
 			P.customSortListInnerItem.addClass("selectPopupOption_" + R.id)
