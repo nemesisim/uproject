@@ -285,6 +285,8 @@
 									if (value){
 										if(value.length > 6)
 											channelName = value.substr(0, 6) + "..";
+										else
+											channelName = value;
 										mgr
 												.show(
 														"am.ucom.iptv.channel.sort.code.CustomAndAccessSort",
