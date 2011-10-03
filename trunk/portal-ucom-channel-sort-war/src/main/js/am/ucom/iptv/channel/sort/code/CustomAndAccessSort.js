@@ -161,11 +161,11 @@
 		customSortList.clear();
 		customSortAccessList.clear();
 	};
-	var index = 0;
+	var channelIndex = 0;
 	function paintItem(P, Q) {
 		var R = channelsOrder[Q];
-		index++;
-		P.customSortListInnerItem.setText(index + ". " + R.text);
+		channelIndex = (channelIndex % channelsOrder.length) + 1;
+		P.customSortListInnerItem.setText(channelIndex + ". " + R.text);
 		P.customSortListInnerItem.clearClass();
 		if (R.id) {
 			P.customSortListInnerItem.addClass("selectPopupOption_" + R.id)
@@ -173,7 +173,7 @@
 		if (R.enabled) {
 			P.customSortListInnerItem.addClass("enabled")
 		}
-	}
+	} 
 	function paintItemAccess(P, Q) {
 		var R = channelsAccessOrder[Q];
 		P.customSortAccessListInnerItem.setText(R.text);
@@ -456,7 +456,7 @@
 			invoke : function(event) {
 				performAction("ACTION_RED");
 			},
-			keyEvents : [ "KEY_INFO" ]
+			keyEvents : [ "KEY_RED_HACK", "KEY_INFO" ]
 		}, {
 			id : "ACTION_GREEN",
 			localizedLabel : undefined,

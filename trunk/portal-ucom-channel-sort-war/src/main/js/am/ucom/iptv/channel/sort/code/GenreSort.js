@@ -134,7 +134,7 @@
 
 	function paintItem(P, Q) {
 		var R = orderings[Q];
-		index ++;
+		index = (index % orderings.length) + 1;
 		P.okCancelListInnerItem.setText(index + ". " + R.text);
 		P.okCancelListInnerItem.clearClass();
 		P.okCancelListInnerItem.addClass(R.image);
@@ -295,7 +295,7 @@
 			invoke : function(event) {
 				performAction("ACTION_RED");
 			},
-			keyEvents : [ "KEY_INFO" ]
+			keyEvents : [ "KEY_RED_HACK", "KEY_INFO" ]
 		}, {
 			id : "ACTION_GREEN",
 			localizedLabel : undefined,

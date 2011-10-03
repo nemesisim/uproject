@@ -248,63 +248,17 @@
 		preferenceMgr
 				.refresh(
 						function() {
+							var genrePrefName = "am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference"; 
 							orderings
 									.push( {
 										text : lang.channelsByGenre,
 										callback : setOrdering("genre"),
-										preferenceValue : preferenceMgr
-												.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference"),
-										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.genrePreference"
+										preferenceValue : preferenceMgr.get(genrePrefName),
+										preferenceName : genrePrefName
 									});
-							var prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference");
-							var chName = "...";
-							if(prefValue && prefValue.length > 0){
-								chName = prefValue.substring(0, prefValue.indexOf(","));
-								prefValue = prefValue.substring(prefValue.indexOf(",")+1, prefValue.length);
-								var str = "";
-								for ( var i = 0; i < prefValue.length; i++) {
-									str +=  prefValue.indexOf(i) + " | " + String.charCodeAt(prefValue.indexOf(i)) + ",";
-									// + "-" + channelsAccessOrder[i].access;
-									//if (i < channelsOrder.length - 1)
-										//str += ",";
-								}
-								prefValue = str;								
-								
-							}
-							alert(prefValue)
-							orderings
-									.push( {
-										text : chName,
-										callback : setOrdering("custom", 2),
-										preferenceValue : prefValue,
-										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference"
-									});
-							prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference");
-							chName = "...";
-							if(prefValue && prefValue.length > 0){
-								prefValue = lzw_decode(prefValue);
-								chName = prefValue.split(",", 1);
-							}
-							orderings
-									.push( {
-										text : chName,
-										callback : setOrdering("custom", 3),
-										preferenceValue : prefValue,
-										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference"
-									});
-							prefValue = preferenceMgr.get("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference");
-							chName = "...";
-							if(prefValue && prefValue.length > 0){
-								prefValue = lzw_decode(prefValue);
-								chName = prefValue.split(",", 1);
-							}
-							orderings
-									.push( {
-										text : chName,
-										callback : setOrdering("custom", 4),
-										preferenceValue : prefValue,
-										preferenceName : "am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference"
-									});
+							loadPreference("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv1Preference", 1);
+							loadPreference("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv2Preference", 2);
+							loadPreference("am.ucom.portal.iptv.channel.sort.code.ChannelSort.utv3Preference", 3);
 						}, function() {
 						});
 		okCancelTitle.setText(lang.selectSortPopupTitle);
@@ -317,6 +271,7 @@
 
 		actionMgr.mapActions(module.id, mapActionsFn());
 	};
+
 	module.implementing.view.publics.onShow = function(args) {
 		showPopupButtons(orderings[args.position]);
 		okCancelList.init(orderings.length, args.position)
@@ -483,6 +438,30 @@
 					} ]
 				});			
 	}
+	function loadPreference(preferenceName, position){
+		var prefValue = preferenceMgr.get(preferenceName);
+		var chName = "...";
+		if(prefValue && prefValue.length > 0){
+			log.error("old.prefValue = " + prefValue);
+			chName = prefValue.substring(0, prefValue.indexOf(","));
+			prefValue = prefValue.substring(prefValue.indexOf(",")+1);
+			var str = "";
+			for ( var i = 0; i < prefValue.length; i++) {
+				str +=  prefValue.charCodeAt(i);
+				if (i < prefValue.length - 1)
+					str += ",";
+			}
+			prefValue = chName + "," + str;								
+			log.error("new.prefValue = " + prefValue);
+		}							
+		orderings
+				.push( {
+					text : chName,
+					callback : setOrdering("custom", position),
+					preferenceValue : prefValue,
+					preferenceName : preferenceName
+				});		
+	}	
 	function approveCustomSavePopup(position, channelName, channelsOrder,
 			channelsAccessOrder){	
 		mgr.show(
@@ -501,14 +480,16 @@
 							"position" : position
 						});
 						var str = channelName + ","
+						var strCharEncode = channelName + ",";
 						for ( var i = 0; i < channelsOrder.length; i++) {
-							str +=  String.fromCharCode(channelsOrder[i].position)
+							strCharEncode+=  String.fromCharCode(channelsOrder[i].position)
+							str += channelsOrder[i].position							
 							// + "-" + channelsAccessOrder[i].access;
-							//if (i < channelsOrder.length - 1)
-								//str += ",";
+							if (i < channelsOrder.length - 1)
+								str += ",";
 						}
-						log.error("old.str = " + str.length + " : " + str);
-						preferenceMgr.put(orderings[position].preferenceName, lzw_encode(str), "USER");
+						log.error("old.str = " + strCharEncode.length + " : " + strCharEncode);
+						preferenceMgr.put(orderings[position].preferenceName, strCharEncode, "USER");
 						preferenceMgr.persist(function() {
 							orderings[position].text = channelName;
 							orderings[position].preferenceValue = str;
@@ -747,7 +728,7 @@
 			invoke : function(event) {
 				performAction("ACTION_RED");
 			},
-			keyEvents : [ "KEY_INFO", "KEY_RED" ]
+			keyEvents : [ "KEY_INFO", "KEY_RED_HACK" ]
 		}, {
 			id : "ACTION_GREEN",
 			localizedLabel : undefined,
@@ -791,59 +772,6 @@
 	};
 	
 	module.implementing.preferenceDefinitionIF.publics.parameters = {};
-	
-	// LZW-compress a string
-	function lzw_encode(s) {
-	    var dict = {};
-	    var data = (s + "").split("");
-	    var out = [];
-	    var currChar;
-	    var phrase = data[0];
-	    var code = 256;
-	    for (var i=1; i<data.length; i++) {
-	        currChar=data[i];
-	        if (dict[phrase + currChar] != null) {
-	            phrase += currChar;
-	        }
-	        else {
-	            out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
-	            dict[phrase + currChar] = code;
-	            code++;
-	            phrase=currChar;
-	        }
-	    }
-	    out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
-	    for (var i=0; i<out.length; i++) {
-	        out[i] = String.fromCharCode(out[i]);
-	    }
-	    return out.join("");
-	}
-
-	// Decompress an LZW-encoded string
-	function lzw_decode(s) {
-	    var dict = {};
-	    var data = (s + "").split("");
-	    var currChar = data[0];
-	    var oldPhrase = currChar;
-	    var out = [currChar];
-	    var code = 256;
-	    var phrase;
-	    for (var i=1; i<data.length; i++) {
-	        var currCode = data[i].charCodeAt(0);
-	        if (currCode < 256) {
-	            phrase = data[i];
-	        }
-	        else {
-	           phrase = dict[currCode] ? dict[currCode] : (oldPhrase + currChar);
-	        }
-	        out.push(phrase);
-	        currChar = phrase.charAt(0);
-	        dict[code] = oldPhrase + currChar;
-	        code++;
-	        oldPhrase = phrase;
-	    }
-	    return out.join("");
-	}
 
 	return module;
 });
